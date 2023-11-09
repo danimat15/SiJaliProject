@@ -4,6 +4,7 @@ import 'package:sijaliproject/searching.dart';
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/dashboard.dart';
 import 'package:sijaliproject/sidebar.dart';
+import 'package:sijaliproject/bantuan.dart';
 
 class Home extends StatefulWidget {
   final Widget initialScreen;
@@ -180,7 +181,7 @@ class _HomeState extends State<Home> {
                     padding: EdgeInsets.all(0),
                     onPressed: () {
                       setState(() {
-                        currentScreen = const Dashboard();
+                        currentScreen = const Bantuan();
                         currentTab = 3;
                       });
                     },
