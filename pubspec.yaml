@@ -17,3 +17,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets: 
+  - images/welcome.png
+  - images/bg1-removebg-preview.png
+  - images/kritikSaran.png
