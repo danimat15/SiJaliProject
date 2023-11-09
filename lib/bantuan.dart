@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class Bantuan extends StatefulWidget {
   const Bantuan({super.key});
@@ -11,6 +12,16 @@ class Bantuan extends StatefulWidget {
 }
 
 class _BantuanState extends State<Bantuan> {
+  TextEditingController controllerDesc = TextEditingController();
+
+  void addData() {
+    var url = Uri.parse("http://192.168.0.10/sijali/insert-bantuan.php");
+
+    http.post(url, body: {
+      "deskripsi": controllerDesc.text,
+    });
+  }
+
   String selectedValue =
       'Usulan Kasus Batas'; //Nilai default yang dipilih dalam dropdown
   List<String> dropdownItems = [
@@ -147,6 +158,7 @@ class _BantuanState extends State<Bantuan> {
                             children: [
                               SizedBox(height: mediaQueryHeight * 0.02),
                               TextField(
+                                controller: controllerDesc,
                                 keyboardType: TextInputType.multiline,
                                 maxLines: 8,
                                 decoration:
@@ -229,6 +241,29 @@ class _BantuanState extends State<Bantuan> {
                           ),
                         ],
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.02),
+                      child: SizedBox(
+                          width: mediaQueryWidth * 0.85,
+                          child: MaterialButton(
+                            color: const Color(0xFFE55604),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            onPressed: () {
+                              addData();
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(mediaQueryHeight * 0.02),
+                              child: Text("Submit",
+                                  style: TextStyle(
+                                    color: const Color(0xFFFFFFFF),
+                                    fontSize: mediaQueryWidth * 0.06,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            ),
+                          )),
                     ),
                   ],
                 ),

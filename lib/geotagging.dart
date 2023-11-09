@@ -173,7 +173,7 @@ class _GeotaggingState extends State<Geotagging> {
                         ),
                       )),
                   SizedBox(height: screenWidth * 0.05),
-                  Container(
+                  SizedBox(
                       width: screenWidth * 0.85,
                       child: MaterialButton(
                         color: const Color(0xFFE55604),
