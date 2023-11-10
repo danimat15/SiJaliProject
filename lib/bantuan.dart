@@ -14,12 +14,60 @@ class Bantuan extends StatefulWidget {
 class _BantuanState extends State<Bantuan> {
   TextEditingController controllerDesc = TextEditingController();
 
-  void addData() {
+  void addData() async {
     var url = Uri.parse("http://192.168.0.10/sijali/insert-bantuan.php");
 
-    http.post(url, body: {
-      "deskripsi": controllerDesc.text,
-    });
+    try {
+      var response = await http.post(url, body: {
+        "jenis_bantuan": selectedValue,
+        "deskripsi": controllerDesc.text,
+      });
+
+      // Check if the data insertion was successful
+      if (response.statusCode == 200) {
+        // Show success notification
+        showSuccessNotification();
+
+        // Clear the form or perform any other actions as needed
+        clearForm();
+      } else {
+        // Show error notification
+        showErrorNotification();
+      }
+    } catch (error) {
+      // Handle network or other errors
+      print("Error: $error");
+      showErrorNotification();
+    }
+  }
+
+  void showSuccessNotification() {
+    final snackBar = SnackBar(
+      content: Text('Data added successfully!'),
+      backgroundColor: Colors.green,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showErrorNotification() {
+    final snackBar = SnackBar(
+      content: Text('Failed to add data'),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    // show notification on the top of the screen
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void clearForm() {
+    // Clear the form fields or reset any necessary state variables
+    controllerDesc.clear();
+    selectedValue = 'Usulan Kasus Batas';
+    image = null;
+    setState(() {});
   }
 
   String selectedValue =
