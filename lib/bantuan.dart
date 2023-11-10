@@ -18,10 +18,16 @@ class _BantuanState extends State<Bantuan> {
     var url = Uri.parse("http://192.168.0.10/sijali/insert-bantuan.php");
 
     try {
-      var response = await http.post(url, body: {
-        "jenis_bantuan": selectedValue,
-        "deskripsi": controllerDesc.text,
-      });
+      var request = http.MultipartRequest('POST', url);
+      request.fields['jenis_bantuan'] = selectedValue;
+      request.fields['deskripsi'] = controllerDesc.text;
+
+      if (image != null) {
+        var pic = await http.MultipartFile.fromPath("image", image!.path);
+        request.files.add(pic);
+      }
+
+      var response = await request.send();
 
       // Check if the data insertion was successful
       if (response.statusCode == 200) {
@@ -97,6 +103,14 @@ class _BantuanState extends State<Bantuan> {
       image = File(imagePicked.path);
       setState(() {});
     }
+  }
+
+  Future<void> resetImageGalery() async {
+    await getImageGalery(); // Buka galeri untuk memilih gambar
+  }
+
+  Future<void> resetImageFoto() async {
+    await getImageFoto(); // Buka galeri untuk memilih gambar
   }
 
   @override
@@ -179,16 +193,15 @@ class _BantuanState extends State<Bantuan> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.01),
+                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.02),
                       child: Column(children: [
                         Container(
                             alignment: Alignment.centerLeft,
                             margin: EdgeInsets.only(
-                                top: mediaQueryHeight * 0.03,
                                 left: mediaQueryWidth * 0.01,
                                 bottom: mediaQueryHeight * 0.01),
                             child: Text(
-                              'Deskripsi Kasus Batas',
+                              'Deskripsi Bantuan',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: mediaQueryHeight * 0.03,
@@ -204,34 +217,71 @@ class _BantuanState extends State<Bantuan> {
                           ),
                           child: Column(
                             children: [
-                              SizedBox(height: mediaQueryHeight * 0.02),
                               TextField(
                                 controller: controllerDesc,
                                 keyboardType: TextInputType.multiline,
                                 maxLines: 8,
-                                decoration:
-                                    InputDecoration(border: InputBorder.none),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Masukkan Deskripsi Bantuan...',
+                                  contentPadding: EdgeInsets.only(
+                                    top: mediaQueryHeight * 0.02,
+                                    left: mediaQueryWidth * 0.04,
+                                    right: mediaQueryWidth * 0.04,
+                                  ),
+                                ),
                               )
                             ],
                           ),
                         )
                       ]),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: mediaQueryHeight * 0.03,
-                          left: mediaQueryWidth * 0.01,
-                          bottom: mediaQueryHeight * 0.01),
-                      height: mediaQueryHeight * 0.3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xFFFFFFFF),
+                    Padding(
+                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.centerLeft,
+                              margin:
+                                  EdgeInsets.only(left: mediaQueryWidth * 0.01),
+                              child: Text(
+                                'Unggah Gambar',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: mediaQueryHeight * 0.03,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF26577C),
+                                ),
+                              )),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: mediaQueryHeight * 0.01,
+                              left: mediaQueryWidth * 0.01,
+                              bottom: mediaQueryHeight * 0.01,
+                            ),
+                            height: mediaQueryHeight * 0.3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color(0xFFFFFFFF),
+                            ),
+                            child: image != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.file(
+                                      image!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Container(), // Menampilkan Container kosong jika gambar tidak ada
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: mediaQueryHeight * 0.02,
-                          left: mediaQueryWidth * 0.01),
+                        top: mediaQueryHeight * 0.02,
+                        left: mediaQueryWidth * 0.01,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -242,18 +292,12 @@ class _BantuanState extends State<Bantuan> {
                             ),
                             onPressed: () async {
                               image != null
-                                  ? SizedBox(
-                                      height: mediaQueryHeight * 0.3,
-                                      width: mediaQueryWidth,
-                                      child: Image.file(
-                                        image!,
-                                        fit: BoxFit.cover,
-                                      ))
+                                  ? resetImageGalery()
                                   : await getImageGalery();
                             },
                             child: Padding(
                               padding: EdgeInsets.all(mediaQueryWidth * 0.03),
-                              child: Text("Dari Galery",
+                              child: Text("Dari Galeri",
                                   style: TextStyle(
                                     color: const Color(0xFFFFFFFF),
                                     fontSize: mediaQueryHeight * 0.02,
@@ -262,38 +306,31 @@ class _BantuanState extends State<Bantuan> {
                             ),
                           ),
                           MaterialButton(
-                            color: const Color(0xFF26577C),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            onPressed: () async {
-                              image != null
-                                  ? SizedBox(
-                                      height: mediaQueryHeight * 0.3,
-                                      width: mediaQueryWidth,
-                                      child: Image.file(
-                                        image!,
-                                        fit: BoxFit.cover,
-                                      ))
-                                  : await getImageFoto();
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(mediaQueryWidth * 0.03),
-                              child: Text("Dari Camera",
-                                  style: TextStyle(
-                                    color: const Color(0xFFFFFFFF),
-                                    fontSize: mediaQueryHeight * 0.02,
-                                    fontWeight: FontWeight.w500,
-                                  )),
-                            ),
-                          ),
+                              color: const Color(0xFF26577C),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              onPressed: () async {
+                                image != null
+                                    ? resetImageFoto()
+                                    : await getImageFoto();
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(mediaQueryWidth * 0.03),
+                                child: Text("Dari Camera",
+                                    style: TextStyle(
+                                      color: const Color(0xFFFFFFFF),
+                                      fontSize: mediaQueryHeight * 0.02,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              )),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.02),
+                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.09),
                       child: SizedBox(
-                          width: mediaQueryWidth * 0.85,
+                          width: mediaQueryWidth * 0.9,
                           child: MaterialButton(
                             color: const Color(0xFFE55604),
                             shape: RoundedRectangleBorder(
