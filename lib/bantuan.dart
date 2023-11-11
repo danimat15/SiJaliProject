@@ -23,8 +23,8 @@ class _BantuanState extends State<Bantuan> {
       request.fields['deskripsi'] = controllerDesc.text;
 
       if (image != null) {
-        var pic = await http.MultipartFile.fromPath("image", image!.path);
-        request.files.add(pic);
+        var imageFile = await http.MultipartFile.fromPath('foto', image!.path);
+        request.files.add(imageFile);
       }
 
       var response = await request.send();
@@ -49,7 +49,7 @@ class _BantuanState extends State<Bantuan> {
 
   void showSuccessNotification() {
     final snackBar = SnackBar(
-      content: Text('Data added successfully!'),
+      content: Text('Bantuan berhasil dikirimkan. Silakan cek pesan masuk'),
       backgroundColor: Colors.green,
       behavior: SnackBarBehavior.floating,
     );
@@ -59,7 +59,7 @@ class _BantuanState extends State<Bantuan> {
 
   void showErrorNotification() {
     final snackBar = SnackBar(
-      content: Text('Failed to add data'),
+      content: Text('Bantuan gagal dikirimkan. Silakan coba kembali'),
       backgroundColor: Colors.red,
       behavior: SnackBarBehavior.floating,
     );
@@ -272,7 +272,18 @@ class _BantuanState extends State<Bantuan> {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                : Container(), // Menampilkan Container kosong jika gambar tidak ada
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xFFFFFFFF),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'images/empty-image.jpg'),
+                                        fit: BoxFit.cover,
+                                        opacity: 0.5,
+                                      ),
+                                    ),
+                                  ), // Menampilkan Container kosong jika gambar tidak ada
                           ),
                         ],
                       ),

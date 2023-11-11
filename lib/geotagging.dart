@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Geotagging extends StatefulWidget {
   const Geotagging({super.key});
@@ -8,6 +11,103 @@ class Geotagging extends StatefulWidget {
 }
 
 class _GeotaggingState extends State<Geotagging> {
+  TextEditingController controllerLongitude = TextEditingController();
+  TextEditingController controllerLatitude = TextEditingController();
+
+  void addData() async {
+    var url = Uri.parse("http://192.168.0.10/sijali/insert-geotagging.php");
+
+    try {
+      var request = http.MultipartRequest('POST', url);
+      request.fields['jenis_usaha'] = selectedValue;
+      request.fields['longitude'] = controllerLongitude.text;
+      request.fields['latitude'] = controllerLatitude.text;
+
+      var response = await request.send();
+
+      // Check if the data insertion was successful
+      if (response.statusCode == 200) {
+        // Show success notification
+        showSuccessNotification();
+
+        // Clear the form or perform any other actions as needed
+        clearForm();
+      } else {
+        // Show error notification
+        showErrorNotification();
+      }
+    } catch (error) {
+      // Handle network or other errors
+      print("Error: $error");
+      showErrorNotification();
+    }
+  }
+
+  void showSuccessNotification() {
+    final snackBar = SnackBar(
+      content: Text('Bantuan berhasil dikirimkan. Silakan cek pesan masuk'),
+      backgroundColor: Colors.green,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showErrorNotification() {
+    final snackBar = SnackBar(
+      content: Text('Bantuan gagal dikirimkan. Silakan coba kembali'),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    // show notification on the top of the screen
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void clearForm() {
+    // Clear the form fields or reset any necessary state variables
+    controllerLongitude.clear();
+    controllerLatitude.clear();
+    selectedValue = 'Pedagang 1';
+    setState(() {});
+  }
+
+  void updateLocation(double longitude, double latitude) {
+    setState(() {
+      controllerLongitude.text = longitude.toString();
+      controllerLatitude.text = latitude.toString();
+    });
+  }
+
+  void getCurrentLocation() async {
+    // Check location permission status
+    var status = await Permission.location.status;
+
+    if (status == PermissionStatus.granted) {
+      try {
+        // Get current location
+        Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        );
+
+        // Update the location in the UI
+        updateLocation(position.longitude, position.latitude);
+      } catch (e) {
+        print("Error getting location: $e");
+        showErrorNotification();
+      }
+    } else {
+      // Request location permission if not granted
+      if (status == PermissionStatus.denied) {
+        await Permission.location.request();
+        getCurrentLocation(); // Retry getting location after requesting permission
+      } else {
+        // Show error notification if permission is denied
+        showErrorNotification();
+      }
+    }
+  }
+
   String selectedValue =
       'Pedagang 1'; //Nilai default yang dipilih dalam dropdown
   List<String> dropdownItems = ['Pedagang 1', 'Pedagang 2', 'Pedagang 3'];
@@ -93,7 +193,9 @@ class _GeotaggingState extends State<Geotagging> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          getCurrentLocation();
+                        },
                         child: Padding(
                           padding: EdgeInsets.all(screenHeight * 0.02),
                           child: Text("Ambil Lokasi",
@@ -133,6 +235,7 @@ class _GeotaggingState extends State<Geotagging> {
                           horizontal: 15,
                         ),
                         child: TextFormField(
+                          controller: controllerLongitude,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -167,6 +270,7 @@ class _GeotaggingState extends State<Geotagging> {
                           horizontal: 15,
                         ),
                         child: TextFormField(
+                          controller: controllerLatitude,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -180,7 +284,9 @@ class _GeotaggingState extends State<Geotagging> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          addData();
+                        },
                         child: Padding(
                           padding: EdgeInsets.all(screenHeight * 0.02),
                           child: Text("Submit",
