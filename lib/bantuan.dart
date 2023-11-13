@@ -15,7 +15,7 @@ class _BantuanState extends State<Bantuan> {
   TextEditingController controllerDesc = TextEditingController();
 
   void addData() async {
-    var url = Uri.parse("http://192.168.0.10/sijali/insert-bantuan.php");
+    var url = Uri.parse("http://192.168.110.58/sijali/insert-bantuan.php");
 
     try {
       var request = http.MultipartRequest('POST', url);
