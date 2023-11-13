@@ -45,6 +45,7 @@ class _GeotaggingState extends State<Geotagging> {
       if (response.statusCode == 200) {
         // Show success notification
         showSuccessNotification();
+        print(response.statusCode);
 
         // Clear the form or perform any other actions as needed
         clearForm();
