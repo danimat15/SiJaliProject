@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class KritikSaran extends StatefulWidget {
   const KritikSaran({super.key});
@@ -8,6 +10,49 @@ class KritikSaran extends StatefulWidget {
 }
 
 class _DashboardState extends State<KritikSaran> {
+  TextEditingController kritik = TextEditingController();
+  TextEditingController saran = TextEditingController();
+
+  Future<void> insertrecord() async {
+    if (kritik.text != "" || saran.text != "") {
+      try {
+        String uri = "http://192.168.110.58/sijali/insert-kritik-saran.php";
+        var res = await http.post(Uri.parse(uri),
+            body: {"kritik": kritik.text, "saran": saran.text});
+
+        // var response=jsonDecode(res.body);
+        // // String jsonsDataString = response.data.toString();
+        // if(response[]=="true") {
+        //   print("insert success!");
+        //   kritik.text = "";
+        //   saran.text = "";
+        // }
+        // else {
+        //   print("gagalll");
+        // }
+
+        if (res.headers['content-type']?.contains('application/json') ??
+            false) {
+          print("Non-JSON response: ${res.body}");
+          // Handle non-JSON response here, e.g., display an error message.
+        } else {
+          var response = jsonDecode(res.body);
+          if (response["success"] == "true") {
+            print("insert success!");
+            kritik.text = "";
+            saran.text = "";
+          } else {
+            print("gagal");
+          }
+        }
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print("tidak bole kosong!!!");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -79,6 +124,7 @@ class _DashboardState extends State<KritikSaran> {
                   color: Color(0xFFFFFFFF),
                 ),
                 child: TextField(
+                  controller: kritik,
                   maxLines: 4,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -119,6 +165,7 @@ class _DashboardState extends State<KritikSaran> {
                   color: Color(0xFFFFFFFF),
                 ),
                 child: TextField(
+                  controller: saran,
                   maxLines: 4,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -132,7 +179,9 @@ class _DashboardState extends State<KritikSaran> {
                   borderRadius: BorderRadius.circular(screenWidth * 0.02),
                   elevation: 5,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      insertrecord();
+                    },
                     child: Container(
                       width: screenWidth * 0.85, // Adjusted button width
                       height: screenHeight * 0.08, // Adjusted button height
