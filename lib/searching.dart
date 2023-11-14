@@ -1,238 +1,213 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class CustomContainer extends StatelessWidget {
+  final List<Map<String, dynamic>> filteredData;
+  final int index;
+
+  const CustomContainer(
+      {Key? key, required this.filteredData, required this.index})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
+    // Your existing code here
+    return Container(
+      margin: EdgeInsets.only(
+          top: mediaQueryHeight * 0.01, bottom: mediaQueryHeight * 0.01),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              height: mediaQueryHeight * 0.15,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  bottomLeft: Radius.circular(15),
+                ),
+                color: Colors.grey,
+              ),
+              child: Center(
+                child: Text(
+                  filteredData[index]['kd_kbli'],
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: mediaQueryHeight * 0.03,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: mediaQueryHeight * 0.15,
+            width: mediaQueryWidth * 0.66,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
+              color: Color(0xFFFFFFFF),
+            ),
+            child: Center(
+              child: Text(
+                filteredData[index]['uraian_kegiatan'],
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: mediaQueryHeight * 0.02,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class Searching extends StatefulWidget {
-  const Searching({super.key});
+  const Searching({Key? key}) : super(key: key);
 
   @override
   State<Searching> createState() => _SearchingState();
 }
 
 class _SearchingState extends State<Searching> {
+  TextEditingController searchController = TextEditingController();
+  Future<List<Map<String, dynamic>>>? futureData;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize futureData here
+    futureData = fetchData();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchData() async {
+    final response = await http.get(
+        Uri.parse('http://192.168.110.58/sijali/searching-kasus-batas.php'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.cast<Map<String, dynamic>>().toList();
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  List<Map<String, dynamic>> filterData(
+      List<Map<String, dynamic>> data, String query) {
+    return data
+        .where((map) =>
+            map['uraian_kegiatan'].toString().contains(query) ||
+            map['kd_kbli'].toString().contains(query))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
+    final mediaQueryWidht = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color(0xFFEBE4D1),
       body: Padding(
-        padding:
-            const EdgeInsets.only(left: 20, top: 30, right: 20, bottom: 10),
-        // padding: EdgeInsets.all(14),
+        padding: EdgeInsets.only(
+            left: mediaQueryWidht * 0.05,
+            top: mediaQueryHeight * 0.05,
+            right: mediaQueryWidht * 0.05,
+            bottom: mediaQueryHeight * 0.01),
         child: SingleChildScrollView(
-          child: Column(children: [
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                'PENCARIAN KASUS BATAS',
-                style: TextStyle(
-                  fontSize: mediaQueryHeight * 0.03,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF26577C),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'PENCARIAN KASUS BATAS',
+                  style: TextStyle(
+                    fontSize: mediaQueryHeight * 0.03,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF26577C),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5), // Warna bayangan
-                          spreadRadius: 2, // Menyebar bayangan
-                          blurRadius: 5, // Tingkat kabur bayangan
-                          offset:
-                              const Offset(3, 3), // Perpindahan bayangan (x, y)
+              SizedBox(height: mediaQueryHeight * 0.02),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(3, 3),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: searchController,
+                        onChanged: (query) {
+                          setState(() {
+                            futureData = fetchData(); // Reset futureData
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Search',
+                          hintStyle: TextStyle(
+                            fontSize: mediaQueryHeight * 0.02,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ],
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search',
-                        hintStyle: TextStyle(
-                          fontSize: 20,
-                          color: Colors.grey,
-                        ),
-                        //suffixIcon: const Icon(Icons.clear, color: Colors.grey),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: const Icon(Icons.search,
-                      color: Color(0xFF26577C), size: 40),
-                ),
-              ],
-            ),
-            Column(
-              // mainAxisSize: MainAxisSize
-              //     .min, // MainAxisSize.min agar Column hanya sebesar widget di dalamnya
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 50.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                      child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                            color: Colors.grey,
-                          )),
-                    ),
-                    Container(
-                        height: 100,
-                        width: 260,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: Color(0xFFFFFFFF),
-                        ))
-                  ]),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                      child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                            color: Colors.grey,
-                          )),
-                    ),
-                    Container(
-                        height: 100,
-                        width: 260,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: Color(0xFFFFFFFF),
-                        ))
-                  ]),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                      child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                            color: Colors.grey,
-                          )),
-                    ),
-                    Container(
-                        height: 100,
-                        width: 260,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: Color(0xFFFFFFFF),
-                        ))
-                  ]),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                      child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                            color: Colors.grey,
-                          )),
-                    ),
-                    Container(
-                        height: 100,
-                        width: 260,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: Color(0xFFFFFFFF),
-                        ))
-                  ]),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                      child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                            color: Colors.grey,
-                          )),
-                    ),
-                    Container(
-                        height: 100,
-                        width: 260,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: Color(0xFFFFFFFF),
-                        ))
-                  ]),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                      child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
-                            ),
-                            color: Colors.grey,
-                          )),
-                    ),
-                    Container(
-                        height: 100,
-                        width: 260,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: Color(0xFFFFFFFF),
-                        ))
-                  ]),
-                ),
-              ],
-            ),
-          ]),
-          // menampilkan hasil pencarian dalam bentuk box
+                  Container(
+                    padding: EdgeInsets.only(left: mediaQueryWidht * 0.02),
+                    child: Icon(Icons.search,
+                        color: Color(0xFF26577C),
+                        size: mediaQueryHeight * 0.04),
+                  ),
+                ],
+              ),
+              SizedBox(height: mediaQueryHeight * 0.02),
+              // Wrap ListView.builder with a Container for a fixed height
+              FutureBuilder<List<Map<String, dynamic>>>(
+                future: futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<Map<String, dynamic>> filteredData =
+                        filterData(snapshot.data!, searchController.text);
+                    return Container(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: filteredData.length,
+                        itemBuilder: (context, index) {
+                          return CustomContainer(
+                            filteredData: filteredData,
+                            index: index,
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
+              // ...
+            ],
+          ),
         ),
       ),
     );
