@@ -31,7 +31,7 @@ class _GeotaggingState extends State<Geotagging> {
   }
 
   void addData() async {
-    var url = Uri.parse("http://192.168.0.10/sijali/insert-geotagging.php");
+    var url = Uri.parse("http://192.168.110.58/sijali/insert-geotagging.php");
 
     try {
       var request = http.MultipartRequest('POST', url);
@@ -45,6 +45,7 @@ class _GeotaggingState extends State<Geotagging> {
       if (response.statusCode == 200) {
         // Show success notification
         showSuccessNotification();
+        print(response.statusCode);
 
         // Clear the form or perform any other actions as needed
         clearForm();
@@ -61,7 +62,7 @@ class _GeotaggingState extends State<Geotagging> {
 
   void showSuccessNotification() {
     final snackBar = SnackBar(
-      content: Text('Berhasil melalukan geotagging'),
+      content: Text('Berhasil melakukan geotagging'),
       backgroundColor: Colors.green,
       behavior: SnackBarBehavior.floating,
     );
@@ -71,7 +72,7 @@ class _GeotaggingState extends State<Geotagging> {
 
   void showErrorNotification() {
     final snackBar = SnackBar(
-      content: Text('Gagal melalukan geotagging'),
+      content: Text('Gagal melakukan geotagging'),
       backgroundColor: Colors.red,
       behavior: SnackBarBehavior.floating,
     );
