@@ -128,7 +128,7 @@ class _DashboardState extends State<KritikSaran> {
                   maxLines: 4,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: '',
+                    hintText: 'Masukkan kritik Anda disini',
                   ),
                 ),
               ),
@@ -169,12 +169,13 @@ class _DashboardState extends State<KritikSaran> {
                   maxLines: 4,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: '',
+                    hintText: 'Masukkan saran Anda disini',
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.all(screenWidth * 0.02),
+                margin: EdgeInsets.only(
+                    top: screenHeight * 0.02, bottom: screenHeight * 0.05),
                 child: Material(
                   borderRadius: BorderRadius.circular(screenWidth * 0.02),
                   elevation: 5,

@@ -339,7 +339,9 @@ class _BantuanState extends State<Bantuan> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.09),
+                      padding: EdgeInsets.only(
+                          top: mediaQueryHeight * 0.09,
+                          bottom: mediaQueryHeight * 0.03),
                       child: SizedBox(
                           width: mediaQueryWidth * 0.9,
                           child: MaterialButton(

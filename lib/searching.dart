@@ -16,8 +16,7 @@ class CustomContainer extends StatelessWidget {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     // Your existing code here
     return Container(
-      margin: EdgeInsets.only(
-          top: mediaQueryHeight * 0.01, bottom: mediaQueryHeight * 0.01),
+      margin: EdgeInsets.only(bottom: mediaQueryHeight * 0.02),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -53,6 +52,12 @@ class CustomContainer extends StatelessWidget {
               color: Color(0xFFFFFFFF),
             ),
             child: Center(
+                child: Padding(
+              padding: EdgeInsets.only(
+                  top: mediaQueryHeight * 0.02,
+                  left: mediaQueryWidth * 0.02,
+                  right: mediaQueryWidth * 0.02,
+                  bottom: mediaQueryHeight * 0.02),
               child: Text(
                 filteredData[index]['uraian_kegiatan'],
                 style: TextStyle(
@@ -60,7 +65,7 @@ class CustomContainer extends StatelessWidget {
                   fontSize: mediaQueryHeight * 0.02,
                 ),
               ),
-            ),
+            )),
           ),
         ],
       ),
@@ -87,8 +92,8 @@ class _SearchingState extends State<Searching> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(
-        Uri.parse('http://192.168.110.58/sijali/searching-kasus-batas.php'));
+    final response = await http
+        .get(Uri.parse('http://192.168.0.10/sijali/searching-kasus-batas.php'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
@@ -190,6 +195,7 @@ class _SearchingState extends State<Searching> {
                     List<Map<String, dynamic>> filteredData =
                         filterData(snapshot.data!, searchController.text);
                     return Container(
+                      margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
                       height: MediaQuery.of(context).size.height * 0.6,
                       child: ListView.builder(
                         shrinkWrap: true,

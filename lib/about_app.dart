@@ -15,10 +15,11 @@ class _DashboardState extends State<AboutApp> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Color(0xFFEBE4D1),
       drawer: const Sidebar(),
       body: SingleChildScrollView(
         child: Container(
-          color: Color(0xFFEBE4D1),
+          // color: Color(0xFFEBE4D1),
           padding: EdgeInsets.all(screenWidth * 0.02),
           child: Column(
             children: <Widget>[
@@ -51,8 +52,8 @@ class _DashboardState extends State<AboutApp> {
                   right: screenWidth * 0.05,
                   bottom: screenHeight * 0.05,
                 ),
-                height: screenHeight *
-                    0.8, // Adjusted container height to fill the screen height
+                // height: screenHeight *
+                //     0.8, // Adjusted container height to fill the screen height
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(screenWidth * 0.02),
                   color: Color(0xFFFFFFFF),
@@ -60,6 +61,11 @@ class _DashboardState extends State<AboutApp> {
                 child: SafeArea(
                   child: Container(
                     alignment: Alignment.center,
+                    padding: EdgeInsets.only(
+                        top: screenHeight * 0.02,
+                        left: screenWidth * 0.02,
+                        right: screenWidth * 0.02,
+                        bottom: screenHeight * 0.05),
                     child: Text(
                       "Aplikasi ini adalah aplikasi untuk membantu mitra dalam menentukan kode KBLI untuk UMKM yang termasuk dalam kasus batas. Aplikasi ini dikembangkan oleh mahasiswa Politeknik Statistika STIS, Program Studi Komputasi Statistik dengan Peminatan Sains Data kelas 3SD2 angkatan 63. \n \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam facilisis sem vel libero consectetur, sit amet gravida quam malesuada. Fusce nec ipsum eu libero commodo tincidunt. Phasellus lacinia orci ut dapibus. Quisque euismod nisl a sem hendrerit, a ultrices urna fringilla. Sed at lectus quam. Proin quis feugiat nisi, nec tincidunt dolor. In hac habitasse platea dictumst. Sed dignissim bibendum ante, id bibendum felis varius non. Curabitur id augue quis libero dapibus auctor eu eu ex. Sed efficitur efficitur dolor, at viverra justo blandit ut.",
                       textAlign: TextAlign.center,
