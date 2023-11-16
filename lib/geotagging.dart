@@ -31,7 +31,7 @@ class _GeotaggingState extends State<Geotagging> {
   }
 
   void addData() async {
-    var url = Uri.parse("http://192.168.0.10/sijali/insert-geotagging.php");
+    var url = Uri.parse("http://192.168.110.58/sijali/insert-geotagging.php");
 
     try {
       var request = http.MultipartRequest('POST', url);

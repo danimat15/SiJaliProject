@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   startLogin() async {
-    String apiurl = "http://192.168.110.234:8080/sijali/login.php"; //api url
+    String apiurl = "http://192.168.0.10/sijali/login.php"; //api url
 
     try {
       var response = await http.post(

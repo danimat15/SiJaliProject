@@ -92,8 +92,8 @@ class _SearchingState extends State<Searching> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http
-        .get(Uri.parse('http://192.168.0.10/sijali/searching-kasus-batas.php'));
+    final response = await http.get(
+        Uri.parse('http://192.168.110.58/sijali/searching-kasus-batas.php'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
