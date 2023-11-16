@@ -14,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String? errormsg;
   bool? error, showprogress;
-  String? username, password;
+  String? username, password, role;
 
   var _username = TextEditingController();
   var _password = TextEditingController();
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   startLogin() async {
-    String apiurl = "http://192.168.0.10/sijali/login.php"; //api url
+    String apiurl = "http://192.168.110.234:8080/sijali/login.php"; //api url
 
     try {
       var response = await http.post(
@@ -31,6 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: {
           'username': username!,
           'password': password!,
+          // 'role': role!,
         },
       );
 
@@ -66,9 +67,48 @@ class _LoginScreenState extends State<LoginScreen> {
             error = false;
             showprogress = false;
           });
+          role = jsondata["role"];
+          if (role == 'mitra') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (_) => Home(
+                  initialScreen: const Dashboard(),
+                  initialTab: 0,
+                ),
+              ),
+            );
+            print('mitra');
+          } else {
+            if (role == 'supervisor') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Home(
+                    initialScreen: const Dashboard(),
+                    initialTab: 0,
+                  ),
+                ),
+              );
+              print('supervisor');
+            } else {
+              if (role == 'admin') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => Home(
+                      initialScreen: const Dashboard(),
+                      initialTab: 0,
+                    ),
+                  ),
+                );
+                print('admin');
+              }
+            }
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Login successful."),
+              content: Text("$role Login successful."),
               duration: Duration(seconds: 2),
               backgroundColor: Colors.green,
               // adjust position of SnackBar
@@ -77,15 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
           );
 
           // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => Home(
-                initialScreen: const Dashboard(),
-                initialTab: 0,
-              ),
-            ),
-          );
         } else {
           showprogress = false;
           error = true;
