@@ -172,453 +172,452 @@ class _BantuanState extends State<Bantuan> {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        body: Container(
-            color: Color(0xFFEBE4D1),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: mediaQueryWidth * 0.08,
-                  left: mediaQueryWidth * 0.05,
-                  right: mediaQueryWidth * 0.05,
-                  bottom: mediaQueryWidth * 0.08),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
+      body: Container(
+        color: Color(0xFFEBE4D1),
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: mediaQueryWidth * 0.08,
+              left: mediaQueryWidth * 0.05,
+              right: mediaQueryWidth * 0.05,
+              bottom: mediaQueryWidth * 0.08),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(bottom: mediaQueryWidth * 0.05),
+                    child: Text(
+                      'BANTUAN',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: mediaQueryHeight * 0.04,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFE55604),
+                      ),
+                    )),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(
+                      top: mediaQueryHeight * 0.03,
+                      left: mediaQueryWidth * 0.01,
+                      bottom: mediaQueryHeight * 0.01),
+                  child: Text(
+                    'Jenis Bantuan',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: mediaQueryHeight * 0.03,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF26577C),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: mediaQueryHeight * 0.02),
+                  child: Container(
+                    // width: 350,
+
+                    height: mediaQueryHeight * 0.06,
+                    decoration: BoxDecoration(
+                      color:
+                          const Color(0xFFFFFFFF), // Untuk menambahkan border
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Untuk menambahkan sudut bulat
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3,
+                        horizontal: 15,
+                      ),
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: selectedValue,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedValue = newValue!;
+                          });
+                        },
+                        items: dropdownItems.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList(),
+                        underline: Container(),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: mediaQueryHeight * 0.02),
+                  child: Column(children: [
                     Container(
-                        margin: EdgeInsets.only(bottom: mediaQueryWidth * 0.05),
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(
+                            left: mediaQueryWidth * 0.01,
+                            bottom: mediaQueryHeight * 0.01),
                         child: Text(
-                          'BANTUAN',
+                          'Deskripsi Bantuan',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: mediaQueryHeight * 0.04,
+                            fontSize: mediaQueryHeight * 0.03,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFE55604),
+                            color: Color(0xFF26577C),
                           ),
                         )),
                     Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.only(
-                          top: mediaQueryHeight * 0.03,
-                          left: mediaQueryWidth * 0.01,
-                          bottom: mediaQueryHeight * 0.01),
-                      child: Text(
-                        'Jenis Bantuan',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: mediaQueryHeight * 0.03,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF26577C),
-                        ),
+                      // height: 180,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0xFFFFFFFF),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: mediaQueryHeight * 0.02),
-                      child: Container(
-                        // width: 350,
-
-                        height: mediaQueryHeight * 0.06,
-                        decoration: BoxDecoration(
-                          color: const Color(
-                              0xFFFFFFFF), // Untuk menambahkan border
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Untuk menambahkan sudut bulat
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 3,
-                            horizontal: 15,
-                          ),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: selectedValue,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedValue = newValue!;
-                              });
-                            },
-                            items: dropdownItems.map((String item) {
-                              return DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(item),
-                              );
-                            }).toList(),
-                            underline: Container(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.02),
-                      child: Column(children: [
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            margin: EdgeInsets.only(
-                                left: mediaQueryWidth * 0.01,
-                                bottom: mediaQueryHeight * 0.01),
-                            child: Text(
-                              'Deskripsi Bantuan',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryHeight * 0.03,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF26577C),
-                              ),
-                            )),
-                        Container(
-                          // height: 180,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xFFFFFFFF),
-                          ),
-                          child: Column(
-                            children: [
-                              TextField(
-                                controller: controllerDesc,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: 8,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Masukkan Deskripsi Bantuan...',
-                                  contentPadding: EdgeInsets.only(
-                                    top: mediaQueryHeight * 0.02,
-                                    left: mediaQueryWidth * 0.04,
-                                    right: mediaQueryWidth * 0.04,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ]),
-                    ),
-                    SizedBox(height: mediaQueryHeight * 0.02),
-                    if (selectedValue == 'Usulan Kasus Batas')
-                      Column(
-                        children: [
-                          SizedBox(height: mediaQueryHeight * 0.02),
-                          Container(
-                            width: mediaQueryWidth * 0.9,
-                            child: MaterialButton(
-                              color: const Color(0xFF26577C),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              onPressed: () async {
-                                _currentLocation = await _getCurrentLocation();
-                                controllerLongitude.text =
-                                    _currentLocation!.longitude.toString();
-                                controllerLatitude.text =
-                                    _currentLocation!.latitude.toString();
-                              },
-                              child: Padding(
-                                padding:
-                                    EdgeInsets.all(mediaQueryHeight * 0.02),
-                                child: Text(
-                                  "Ambil Lokasi",
-                                  style: TextStyle(
-                                    color: const Color(0xFFFFFFFF),
-                                    fontSize: mediaQueryHeight * 0.025,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: mediaQueryHeight * 0.02),
-                          // ... (Other relevant widgets related to location)
-                          // ...
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            margin: EdgeInsets.only(
-                                top: mediaQueryHeight * 0.02,
-                                left: mediaQueryWidth * 0.02,
-                                bottom: mediaQueryHeight * 0.01),
-                            child: Text(
-                              'Longitude',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryHeight * 0.03,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF26577C),
-                              ),
-                            ),
-                          ),
-                          Container(
-                              width: mediaQueryWidth * 0.9,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 3,
-                                  horizontal: 15,
-                                ),
-                                child: TextFormField(
-                                  controller: controllerLongitude,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              )),
-                          SizedBox(height: mediaQueryHeight * 0.02),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            margin: EdgeInsets.only(
-                                top: mediaQueryHeight * 0.02,
-                                left: mediaQueryWidth * 0.02,
-                                bottom: mediaQueryHeight * 0.01),
-                            child: Text(
-                              'Latitude',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryHeight * 0.03,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF26577C),
-                              ),
-                            ),
-                          ),
-                          Container(
-                              width: mediaQueryWidth * 0.9,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 3,
-                                  horizontal: 15,
-                                ),
-                                child: TextFormField(
-                                  controller: controllerLatitude,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
-                    // Container(
-                    //     width: mediaQueryWidth * 0.9,
-                    //     child: MaterialButton(
-                    //       color: const Color(0xFF26577C),
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //       ),
-                    //       onPressed: () async {
-                    //         _currentLocation = await _getCurrentLocation();
-                    //         controllerLongitude.text =
-                    //             _currentLocation!.longitude.toString();
-                    //         controllerLatitude.text =
-                    //             _currentLocation!.latitude.toString();
-                    //       },
-                    //       child: Padding(
-                    //         padding: EdgeInsets.all(mediaQueryHeight * 0.02),
-                    //         child: Text("Ambil Lokasi",
-                    //             style: TextStyle(
-                    //               color: const Color(0xFFFFFFFF),
-                    //               fontSize: mediaQueryHeight * 0.025,
-                    //               fontWeight: FontWeight.w500,
-                    //             )),
-                    //       ),
-                    //     )),
-                    // SizedBox(height: mediaQueryHeight * 0.02),
-                    // Container(
-                    //   alignment: Alignment.centerLeft,
-                    //   margin: EdgeInsets.only(
-                    //       top: mediaQueryHeight * 0.02,
-                    //       left: mediaQueryWidth * 0.02,
-                    //       bottom: mediaQueryHeight * 0.01),
-                    //   child: Text(
-                    //     'Longitude',
-                    //     textAlign: TextAlign.start,
-                    //     style: TextStyle(
-                    //       fontSize: mediaQueryHeight * 0.03,
-                    //       fontWeight: FontWeight.bold,
-                    //       color: Color(0xFF26577C),
-                    //     ),
-                    //   ),
-                    // ),
-                    // Container(
-                    //     width: mediaQueryWidth * 0.9,
-                    //     decoration: BoxDecoration(
-                    //       color: const Color(0xFFFFFFFF),
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.symmetric(
-                    //         vertical: 3,
-                    //         horizontal: 15,
-                    //       ),
-                    //       child: TextFormField(
-                    //         controller: controllerLongitude,
-                    //         decoration: const InputDecoration(
-                    //           border: InputBorder.none,
-                    //         ),
-                    //       ),
-                    //     )),
-                    // SizedBox(height: mediaQueryHeight * 0.02),
-                    // Container(
-                    //   alignment: Alignment.centerLeft,
-                    //   margin: EdgeInsets.only(
-                    //       top: mediaQueryHeight * 0.02,
-                    //       left: mediaQueryWidth * 0.02,
-                    //       bottom: mediaQueryHeight * 0.01),
-                    //   child: Text(
-                    //     'Latitude',
-                    //     textAlign: TextAlign.start,
-                    //     style: TextStyle(
-                    //       fontSize: mediaQueryHeight * 0.03,
-                    //       fontWeight: FontWeight.bold,
-                    //       color: Color(0xFF26577C),
-                    //     ),
-                    //   ),
-                    // ),
-                    // Container(
-                    //     width: mediaQueryWidth * 0.9,
-                    //     decoration: BoxDecoration(
-                    //       color: const Color(0xFFFFFFFF),
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.symmetric(
-                    //         vertical: 3,
-                    //         horizontal: 15,
-                    //       ),
-                    //       child: TextFormField(
-                    //         controller: controllerLatitude,
-                    //         decoration: const InputDecoration(
-                    //           border: InputBorder.none,
-                    //         ),
-                    //       ),
-                    //     )),
-                    Padding(
-                      padding: EdgeInsets.only(top: mediaQueryHeight * 0.04),
                       child: Column(
                         children: [
-                          Container(
-                              alignment: Alignment.centerLeft,
-                              margin:
-                                  EdgeInsets.only(left: mediaQueryWidth * 0.01),
-                              child: Text(
-                                'Unggah Gambar',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  fontSize: mediaQueryHeight * 0.03,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF26577C),
-                                ),
-                              )),
-                          Container(
-                            margin: EdgeInsets.only(
-                              top: mediaQueryHeight * 0.01,
-                              left: mediaQueryWidth * 0.01,
-                              bottom: mediaQueryHeight * 0.01,
-                            ),
-                            height: mediaQueryHeight * 0.3,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Color(0xFFFFFFFF),
-                            ),
-                            child: image != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.file(
-                                      image!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Color(0xFFFFFFFF),
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'images/empty-image.jpg'),
-                                        fit: BoxFit.cover,
-                                        opacity: 0.3,
-                                      ),
-                                    ),
-                                  ), // Menampilkan Container kosong jika gambar tidak ada
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: mediaQueryHeight * 0.02,
-                        left: mediaQueryWidth * 0.01,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          MaterialButton(
-                            color: const Color(0xFF26577C),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            onPressed: () async {
-                              image != null
-                                  ? resetImageGalery()
-                                  : await getImageGalery();
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(mediaQueryWidth * 0.03),
-                              child: Text("Dari Galeri",
-                                  style: TextStyle(
-                                    color: const Color(0xFFFFFFFF),
-                                    fontSize: mediaQueryHeight * 0.02,
-                                    fontWeight: FontWeight.w500,
-                                  )),
-                            ),
-                          ),
-                          MaterialButton(
-                              color: const Color(0xFF26577C),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          TextField(
+                            controller: controllerDesc,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 8,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Masukkan Deskripsi Bantuan...',
+                              contentPadding: EdgeInsets.only(
+                                top: mediaQueryHeight * 0.02,
+                                left: mediaQueryWidth * 0.04,
+                                right: mediaQueryWidth * 0.04,
                               ),
-                              onPressed: () async {
-                                image != null
-                                    ? resetImageFoto()
-                                    : await getImageFoto();
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(mediaQueryWidth * 0.03),
-                                child: Text("Dari Camera",
-                                    style: TextStyle(
-                                      color: const Color(0xFFFFFFFF),
-                                      fontSize: mediaQueryHeight * 0.02,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                              )),
+                            ),
+                          )
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: mediaQueryHeight * 0.09,
-                          bottom: mediaQueryHeight * 0.03),
-                      child: SizedBox(
-                          width: mediaQueryWidth * 0.9,
-                          child: MaterialButton(
-                            color: const Color(0xFFE55604),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                    )
+                  ]),
+                ),
+                SizedBox(height: mediaQueryHeight * 0.02),
+                if (selectedValue == 'Usulan Kasus Batas')
+                  Column(
+                    children: [
+                      SizedBox(height: mediaQueryHeight * 0.02),
+                      Container(
+                        width: mediaQueryWidth * 0.9,
+                        child: MaterialButton(
+                          color: const Color(0xFF26577C),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onPressed: () async {
+                            _currentLocation = await _getCurrentLocation();
+                            controllerLongitude.text =
+                                _currentLocation!.longitude.toString();
+                            controllerLatitude.text =
+                                _currentLocation!.latitude.toString();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(mediaQueryHeight * 0.02),
+                            child: Text(
+                              "Ambil Lokasi",
+                              style: TextStyle(
+                                color: const Color(0xFFFFFFFF),
+                                fontSize: mediaQueryHeight * 0.025,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                            onPressed: compressAndAddData,
-                            child: Padding(
-                              padding: EdgeInsets.all(mediaQueryHeight * 0.02),
-                              child: Text("Submit",
-                                  style: TextStyle(
-                                    color: const Color(0xFFFFFFFF),
-                                    fontSize: mediaQueryWidth * 0.06,
-                                    fontWeight: FontWeight.w500,
-                                  )),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: mediaQueryHeight * 0.02),
+                      // ... (Other relevant widgets related to location)
+                      // ...
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(
+                            top: mediaQueryHeight * 0.02,
+                            left: mediaQueryWidth * 0.02,
+                            bottom: mediaQueryHeight * 0.01),
+                        child: Text(
+                          'Longitude',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: mediaQueryHeight * 0.03,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF26577C),
+                          ),
+                        ),
+                      ),
+                      Container(
+                          width: mediaQueryWidth * 0.9,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 3,
+                              horizontal: 15,
+                            ),
+                            child: TextFormField(
+                              controller: controllerLongitude,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
                             ),
                           )),
-                    ),
-                  ],
+                      SizedBox(height: mediaQueryHeight * 0.02),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(
+                            top: mediaQueryHeight * 0.02,
+                            left: mediaQueryWidth * 0.02,
+                            bottom: mediaQueryHeight * 0.01),
+                        child: Text(
+                          'Latitude',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: mediaQueryHeight * 0.03,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF26577C),
+                          ),
+                        ),
+                      ),
+                      Container(
+                          width: mediaQueryWidth * 0.9,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 3,
+                              horizontal: 15,
+                            ),
+                            child: TextFormField(
+                              controller: controllerLatitude,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                // Container(
+                //     width: mediaQueryWidth * 0.9,
+                //     child: MaterialButton(
+                //       color: const Color(0xFF26577C),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //       ),
+                //       onPressed: () async {
+                //         _currentLocation = await _getCurrentLocation();
+                //         controllerLongitude.text =
+                //             _currentLocation!.longitude.toString();
+                //         controllerLatitude.text =
+                //             _currentLocation!.latitude.toString();
+                //       },
+                //       child: Padding(
+                //         padding: EdgeInsets.all(mediaQueryHeight * 0.02),
+                //         child: Text("Ambil Lokasi",
+                //             style: TextStyle(
+                //               color: const Color(0xFFFFFFFF),
+                //               fontSize: mediaQueryHeight * 0.025,
+                //               fontWeight: FontWeight.w500,
+                //             )),
+                //       ),
+                //     )),
+                // SizedBox(height: mediaQueryHeight * 0.02),
+                // Container(
+                //   alignment: Alignment.centerLeft,
+                //   margin: EdgeInsets.only(
+                //       top: mediaQueryHeight * 0.02,
+                //       left: mediaQueryWidth * 0.02,
+                //       bottom: mediaQueryHeight * 0.01),
+                //   child: Text(
+                //     'Longitude',
+                //     textAlign: TextAlign.start,
+                //     style: TextStyle(
+                //       fontSize: mediaQueryHeight * 0.03,
+                //       fontWeight: FontWeight.bold,
+                //       color: Color(0xFF26577C),
+                //     ),
+                //   ),
+                // ),
+                // Container(
+                //     width: mediaQueryWidth * 0.9,
+                //     decoration: BoxDecoration(
+                //       color: const Color(0xFFFFFFFF),
+                //       borderRadius: BorderRadius.circular(10),
+                //     ),
+                //     child: Padding(
+                //       padding: const EdgeInsets.symmetric(
+                //         vertical: 3,
+                //         horizontal: 15,
+                //       ),
+                //       child: TextFormField(
+                //         controller: controllerLongitude,
+                //         decoration: const InputDecoration(
+                //           border: InputBorder.none,
+                //         ),
+                //       ),
+                //     )),
+                // SizedBox(height: mediaQueryHeight * 0.02),
+                // Container(
+                //   alignment: Alignment.centerLeft,
+                //   margin: EdgeInsets.only(
+                //       top: mediaQueryHeight * 0.02,
+                //       left: mediaQueryWidth * 0.02,
+                //       bottom: mediaQueryHeight * 0.01),
+                //   child: Text(
+                //     'Latitude',
+                //     textAlign: TextAlign.start,
+                //     style: TextStyle(
+                //       fontSize: mediaQueryHeight * 0.03,
+                //       fontWeight: FontWeight.bold,
+                //       color: Color(0xFF26577C),
+                //     ),
+                //   ),
+                // ),
+                // Container(
+                //     width: mediaQueryWidth * 0.9,
+                //     decoration: BoxDecoration(
+                //       color: const Color(0xFFFFFFFF),
+                //       borderRadius: BorderRadius.circular(10),
+                //     ),
+                //     child: Padding(
+                //       padding: const EdgeInsets.symmetric(
+                //         vertical: 3,
+                //         horizontal: 15,
+                //       ),
+                //       child: TextFormField(
+                //         controller: controllerLatitude,
+                //         decoration: const InputDecoration(
+                //           border: InputBorder.none,
+                //         ),
+                //       ),
+                //     )),
+                Padding(
+                  padding: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+                  child: Column(
+                    children: [
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(left: mediaQueryWidth * 0.01),
+                          child: Text(
+                            'Unggah Gambar',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: mediaQueryHeight * 0.03,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF26577C),
+                            ),
+                          )),
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: mediaQueryHeight * 0.01,
+                          left: mediaQueryWidth * 0.01,
+                          bottom: mediaQueryHeight * 0.01,
+                        ),
+                        height: mediaQueryHeight * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xFFFFFFFF),
+                        ),
+                        child: image != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.file(
+                                  image!,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Color(0xFFFFFFFF),
+                                  image: DecorationImage(
+                                    image: AssetImage('images/empty-image.jpg'),
+                                    fit: BoxFit.cover,
+                                    opacity: 0.3,
+                                  ),
+                                ),
+                              ), // Menampilkan Container kosong jika gambar tidak ada
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )));
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: mediaQueryHeight * 0.02,
+                    left: mediaQueryWidth * 0.01,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MaterialButton(
+                        color: const Color(0xFF26577C),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: () async {
+                          image != null
+                              ? resetImageGalery()
+                              : await getImageGalery();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(mediaQueryWidth * 0.03),
+                          child: Text("Dari Galeri",
+                              style: TextStyle(
+                                color: const Color(0xFFFFFFFF),
+                                fontSize: mediaQueryHeight * 0.02,
+                                fontWeight: FontWeight.w500,
+                              )),
+                        ),
+                      ),
+                      MaterialButton(
+                          color: const Color(0xFF26577C),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onPressed: () async {
+                            image != null
+                                ? resetImageFoto()
+                                : await getImageFoto();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(mediaQueryWidth * 0.03),
+                            child: Text("Dari Camera",
+                                style: TextStyle(
+                                  color: const Color(0xFFFFFFFF),
+                                  fontSize: mediaQueryHeight * 0.02,
+                                  fontWeight: FontWeight.w500,
+                                )),
+                          )),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: mediaQueryHeight * 0.09,
+                      bottom: mediaQueryHeight * 0.03),
+                  child: SizedBox(
+                      width: mediaQueryWidth * 0.9,
+                      child: MaterialButton(
+                        color: const Color(0xFFE55604),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onPressed: compressAndAddData,
+                        child: Padding(
+                          padding: EdgeInsets.all(mediaQueryHeight * 0.02),
+                          child: Text("Submit",
+                              style: TextStyle(
+                                color: const Color(0xFFFFFFFF),
+                                fontSize: mediaQueryWidth * 0.06,
+                                fontWeight: FontWeight.w500,
+                              )),
+                        ),
+                      )),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

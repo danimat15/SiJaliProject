@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/api_config.dart';
+import 'package:sijaliproject/detail_searching.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -7,9 +8,14 @@ class CustomContainer extends StatelessWidget {
   final List<Map<String, dynamic>> filteredData;
   final int index;
 
-  const CustomContainer(
-      {Key? key, required this.filteredData, required this.index})
-      : super(key: key);
+  final VoidCallback? onTap;
+
+  const CustomContainer({
+    Key? key,
+    required this.filteredData,
+    required this.index,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,87 +27,90 @@ class CustomContainer extends StatelessWidget {
       uraianKegiatan = uraianKegiatan.substring(0, 100) + '...';
     }
     // Your existing code here
-    return Container(
-      margin: EdgeInsets.only(bottom: mediaQueryHeight * 0.02),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Container(
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(bottom: mediaQueryHeight * 0.02),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                height: mediaQueryHeight * 0.15,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                  ),
+                  color: Colors.grey,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: mediaQueryHeight * 0.02,
+                      left: mediaQueryWidth * 0.02,
+                      right: mediaQueryWidth * 0.02,
+                      bottom: mediaQueryHeight * 0.02),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Kode KBLI: ',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: mediaQueryHeight * 0.018,
+                        ),
+                      ),
+                      SizedBox(height: mediaQueryHeight * 0.02),
+                      Text(
+                        filteredData[index]['kd_kbli'],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: mediaQueryHeight * 0.03,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
               height: mediaQueryHeight * 0.15,
+              width: mediaQueryWidth * 0.66,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
                 ),
-                color: Colors.grey,
+                color: Color(0xFFFFFFFF),
               ),
               child: Padding(
                 padding: EdgeInsets.only(
                     top: mediaQueryHeight * 0.02,
                     left: mediaQueryWidth * 0.02,
-                    right: mediaQueryWidth * 0.02,
-                    bottom: mediaQueryHeight * 0.02),
+                    right: mediaQueryWidth * 0.02),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Kode KBLI: ',
+                      'Uraian Kegiatan: ',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: mediaQueryHeight * 0.018,
-                      ),
+                          color: Colors.black,
+                          fontSize: mediaQueryHeight * 0.018,
+                          fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: mediaQueryHeight * 0.02),
                     Text(
-                      filteredData[index]['kd_kbli'],
+                      uraianKegiatan,
+                      textAlign: TextAlign.justify,
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: mediaQueryHeight * 0.03,
+                        color: Colors.black,
+                        fontSize: mediaQueryHeight * 0.02,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-          Container(
-            height: mediaQueryHeight * 0.15,
-            width: mediaQueryWidth * 0.66,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
-              color: Color(0xFFFFFFFF),
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: mediaQueryHeight * 0.02,
-                  left: mediaQueryWidth * 0.02,
-                  right: mediaQueryWidth * 0.02),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Uraian Kegiatan: ',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: mediaQueryHeight * 0.018,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    uraianKegiatan,
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: mediaQueryHeight * 0.02,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -155,7 +164,12 @@ class _SearchingState extends State<Searching> {
     return data
         .where((map) =>
             map['uraian_kegiatan'].toString().contains(query) ||
-            map['kd_kbli'].toString().contains(query))
+            map['kd_kbli'].toString().contains(query) ||
+            map['jenis_usaha'].toString().contains(query) ||
+            map['kd_kategori'].toString().contains(query) ||
+            map['rincian_kategori'].toString().contains(query) ||
+            map['deskripsi_kbli'].toString().contains(query))
+        // tambahkan ini
         .toList();
   }
 
@@ -278,6 +292,16 @@ class _SearchingState extends State<Searching> {
                           return CustomContainer(
                             filteredData: filteredData,
                             index: index,
+                            onTap: () {
+                              // Navigasi ke halaman lain di sini
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailSearching(
+                                      data: filteredData[index]),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),

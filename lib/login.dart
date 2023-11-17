@@ -5,6 +5,8 @@ import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:sijaliproject/home_supervisor.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -85,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => Home(
+                  builder: (_) => HomeSupervisor(
                     initialScreen: const Dashboard(),
                     initialTab: 0,
                   ),
