@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:image/image.dart' as img;
@@ -37,7 +38,8 @@ class _BantuanState extends State<Bantuan> {
   }
 
   void addData() async {
-    var url = Uri.parse("http://192.168.110.58/sijali/insert-bantuan.php");
+    var url =
+        Uri.parse("http://${IpConfig.serverIp}/sijali/insert-bantuan.php");
 
     try {
       var request = http.MultipartRequest('POST', url);

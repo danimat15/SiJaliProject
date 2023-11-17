@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/home.dart';
 import 'package:sijaliproject/dashboard.dart';
+import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   startLogin() async {
-    String apiurl = "http://192.168.0.10/sijali/login.php"; //api url
+    String apiurl = "http://${IpConfig.serverIp}/sijali/login.php"; //api url
 
     try {
       var response = await http.post(
@@ -108,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("$role Login successful."),
+              content: Text("Login successful as $role "),
               duration: Duration(seconds: 2),
               backgroundColor: Colors.green,
               // adjust position of SnackBar

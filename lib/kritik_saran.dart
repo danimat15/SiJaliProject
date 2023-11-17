@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,7 +17,8 @@ class _DashboardState extends State<KritikSaran> {
   Future<void> insertrecord() async {
     if (kritik.text != "" || saran.text != "") {
       try {
-        String uri = "http://192.168.110.58/sijali/insert-kritik-saran.php";
+        String uri =
+            "http://${IpConfig.serverIp}/sijali/insert-kritik-saran.php";
         var res = await http.post(Uri.parse(uri),
             body: {"kritik": kritik.text, "saran": saran.text});
 

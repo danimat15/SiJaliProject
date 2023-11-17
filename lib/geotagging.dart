@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:sijaliproject/api_config.dart';
 
 class Geotagging extends StatefulWidget {
   const Geotagging({super.key});
@@ -31,7 +32,8 @@ class _GeotaggingState extends State<Geotagging> {
   }
 
   void addData() async {
-    var url = Uri.parse("http://192.168.110.58/sijali/insert-geotagging.php");
+    var url =
+        Uri.parse("http://${IpConfig.serverIp}/sijali/insert-geotagging.php");
 
     try {
       var request = http.MultipartRequest('POST', url);

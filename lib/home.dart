@@ -1,4 +1,3 @@
-import 'package:sijaliproject/dropdown.dart';
 import 'package:sijaliproject/geotagging.dart';
 import 'package:sijaliproject/kritik_saran.dart';
 import 'package:sijaliproject/searching.dart';
@@ -102,7 +101,7 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                         setState(() {
-                          currentScreen = const dropdown();
+                          currentScreen = const Dashboard();
                           currentTab = 0;
                         });
                       },
@@ -183,14 +182,14 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.place_outlined,
+                            Icons.update_outlined,
                             size: mediaQueryWidth * 0.1,
                             color: currentTab == 2
                                 ? const Color(0xFF26577C)
                                 : Colors.grey,
                           ),
                           Text(
-                            'Geotagging',
+                            'Update',
                             style: TextStyle(
                                 fontSize: mediaQueryWidth * 0.03,
                                 color: currentTab == 2

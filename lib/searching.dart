@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sijaliproject/api_config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -92,8 +93,8 @@ class _SearchingState extends State<Searching> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(
-        Uri.parse('http://192.168.110.58/sijali/searching-kasus-batas.php'));
+    final response = await http.get(Uri.parse(
+        'http://${IpConfig.serverIp}/sijali/searching-kasus-batas.php'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
