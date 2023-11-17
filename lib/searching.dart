@@ -15,6 +15,11 @@ class CustomContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
     final mediaQueryWidth = MediaQuery.of(context).size.width;
+
+    String uraianKegiatan = filteredData[index]['uraian_kegiatan'];
+    if (uraianKegiatan.length > 100) {
+      uraianKegiatan = uraianKegiatan.substring(0, 100) + '...';
+    }
     // Your existing code here
     return Container(
       margin: EdgeInsets.only(bottom: mediaQueryHeight * 0.02),
@@ -30,14 +35,31 @@ class CustomContainer extends StatelessWidget {
                 ),
                 color: Colors.grey,
               ),
-              child: Center(
-                child: Text(
-                  filteredData[index]['kd_kbli'],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: mediaQueryHeight * 0.03,
-                  ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: mediaQueryHeight * 0.02,
+                    left: mediaQueryWidth * 0.02,
+                    right: mediaQueryWidth * 0.02,
+                    bottom: mediaQueryHeight * 0.02),
+                child: Column(
+                  children: [
+                    Text(
+                      'Kode KBLI: ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: mediaQueryHeight * 0.018,
+                      ),
+                    ),
+                    SizedBox(height: mediaQueryHeight * 0.02),
+                    Text(
+                      filteredData[index]['kd_kbli'],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: mediaQueryHeight * 0.03,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -52,21 +74,32 @@ class CustomContainer extends StatelessWidget {
               ),
               color: Color(0xFFFFFFFF),
             ),
-            child: Center(
-                child: Padding(
+            child: Padding(
               padding: EdgeInsets.only(
                   top: mediaQueryHeight * 0.02,
                   left: mediaQueryWidth * 0.02,
-                  right: mediaQueryWidth * 0.02,
-                  bottom: mediaQueryHeight * 0.02),
-              child: Text(
-                filteredData[index]['uraian_kegiatan'],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: mediaQueryHeight * 0.02,
-                ),
+                  right: mediaQueryWidth * 0.02),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Uraian Kegiatan: ',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: mediaQueryHeight * 0.018,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    uraianKegiatan,
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: mediaQueryHeight * 0.02,
+                    ),
+                  ),
+                ],
               ),
-            )),
+            ),
           ),
         ],
       ),
@@ -101,6 +134,19 @@ class _SearchingState extends State<Searching> {
       return data.cast<Map<String, dynamic>>().toList();
     } else {
       throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> addData(String keyword) async {
+    final response = await http.post(
+      Uri.parse('http://${IpConfig.serverIp}/sijali/insert-kata-kunci.php'),
+      body: {'keyword': keyword},
+    );
+
+    if (response.statusCode == 200) {
+      print('Keyword added successfully');
+    } else {
+      print('Failed to add keyword');
     }
   }
 
@@ -159,9 +205,9 @@ class _SearchingState extends State<Searching> {
                       ),
                       child: TextField(
                         controller: searchController,
-                        onChanged: (query) {
+                        onSubmitted: (query) {
                           setState(() {
-                            futureData = fetchData(); // Reset futureData
+                            futureData = fetchData();
                           });
                         },
                         decoration: InputDecoration(
@@ -177,14 +223,20 @@ class _SearchingState extends State<Searching> {
                   ),
                   Container(
                     padding: EdgeInsets.only(left: mediaQueryWidht * 0.02),
-                    child: Icon(Icons.search,
-                        color: Color(0xFF26577C),
-                        size: mediaQueryHeight * 0.04),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          futureData = fetchData();
+                        });
+                      },
+                      child: Icon(Icons.search,
+                          color: Color(0xFF26577C),
+                          size: mediaQueryHeight * 0.04),
+                    ),
                   ),
                 ],
               ),
               SizedBox(height: mediaQueryHeight * 0.02),
-              // Wrap ListView.builder with a Container for a fixed height
               FutureBuilder<List<Map<String, dynamic>>>(
                 future: futureData,
                 builder: (context, snapshot) {
@@ -195,6 +247,27 @@ class _SearchingState extends State<Searching> {
                   } else {
                     List<Map<String, dynamic>> filteredData =
                         filterData(snapshot.data!, searchController.text);
+
+                    if (filteredData.isEmpty) {
+                      // Show "not found" image
+                      return Padding(
+                        padding: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+                        child: Text(
+                          'Kasus batas tidak ditemukan. Silakan coba kembali dengan kata kunci lain atau tanyakan pada menu Bantuan',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: mediaQueryHeight * 0.02,
+                            color: Color(0xFF26577C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    } else {
+                      if (searchController.text.isNotEmpty) {
+                        addData(searchController.text);
+                      }
+                    }
+
                     return Container(
                       margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
                       height: MediaQuery.of(context).size.height * 0.6,
@@ -212,7 +285,6 @@ class _SearchingState extends State<Searching> {
                   }
                 },
               ),
-              // ...
             ],
           ),
         ),
