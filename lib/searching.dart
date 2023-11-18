@@ -276,11 +276,12 @@ class _SearchingState extends State<Searching> {
                           ),
                         ),
                       );
-                    } else {
-                      if (searchController.text.isNotEmpty) {
-                        addData(searchController.text);
-                      }
                     }
+                    // } else {
+                    //   if (searchController.text.isNotEmpty) {
+                    //     addData(searchController.text);
+                    //   }
+                    // }
 
                     return Container(
                       margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
@@ -293,6 +294,7 @@ class _SearchingState extends State<Searching> {
                             filteredData: filteredData,
                             index: index,
                             onTap: () {
+                              addData(filteredData[index]['jenis_usaha']);
                               // Navigasi ke halaman lain di sini
                               Navigator.push(
                                 context,
