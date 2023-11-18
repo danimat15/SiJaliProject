@@ -203,6 +203,7 @@ class DetailSearching extends StatelessWidget {
                     color: Color(0xFF26577C),
                   ),
                 ),
+                // UNTUK ROLE SUPERVISOR
                 Padding(
                   padding: EdgeInsets.only(
                     top: mediaQueryHeight * 0.05,
