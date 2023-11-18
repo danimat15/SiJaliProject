@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
                 : const Color(0xFFE55604),
             child: Icon(
               Icons.search,
-              size: mediaQueryWidth * 0.15,
+              size: mediaQueryWidth * 0.14,
               color: Colors.white,
             ),
             onPressed: () {

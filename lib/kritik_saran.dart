@@ -43,16 +43,40 @@ class _DashboardState extends State<KritikSaran> {
             print("insert success!");
             kritik.text = "";
             saran.text = "";
+            showSuccessNotification();
           } else {
             print("gagal");
+            showErrorNotification();
           }
         }
       } catch (e) {
         print(e);
+        showErrorNotification();
       }
     } else {
       print("tidak bole kosong!!!");
     }
+  }
+
+  void showSuccessNotification() {
+    final snackBar = SnackBar(
+      content: Text('Kritik dan saran berhasil dikirimkan.'),
+      backgroundColor: Colors.green,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showErrorNotification() {
+    final snackBar = SnackBar(
+      content: Text('Kritik dan saran gagal dikirimkan. Silakan coba kembali'),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    );
+
+    // show notification on the top of the mediaQuery
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -72,7 +96,6 @@ class _DashboardState extends State<KritikSaran> {
                 margin: EdgeInsets.only(
                   top: screenHeight * 0.02,
                   left: screenWidth * 0.05,
-                  bottom: screenHeight * 0.02,
                 ),
                 child: Text(
                   'KRITIK DAN SARAN',
@@ -89,18 +112,17 @@ class _DashboardState extends State<KritikSaran> {
                 alignment: Alignment.center,
                 child: Image(
                   image: AssetImage('images/kritikSaran.png'),
-                  width: screenWidth * 0.5, // Adjusted image width
+                  width: screenWidth * 0.7, // Adjusted image width
                 ),
               ),
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(
-                  top: screenHeight * 0.02,
+                  top: screenHeight * 0.01,
                   left: screenWidth * 0.05,
-                  bottom: screenHeight * 0.02,
                 ),
                 child: Text(
-                  'KRITIK',
+                  'Kritik',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontFamily: "poppins",
@@ -116,7 +138,7 @@ class _DashboardState extends State<KritikSaran> {
                   vertical: screenHeight * 0.015, // Adjusted vertical padding
                 ),
                 margin: EdgeInsets.only(
-                  // top: screenHeight * 0.02,
+                  top: screenHeight * 0.01,
                   left: screenWidth * 0.05,
                   right: screenWidth * 0.05,
                   bottom: screenHeight * 0.05,
@@ -138,10 +160,9 @@ class _DashboardState extends State<KritikSaran> {
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(
                   left: screenWidth * 0.05,
-                  bottom: screenHeight * 0.02,
                 ),
                 child: Text(
-                  'SARAN',
+                  'Saran',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontFamily: "poppins",
@@ -157,7 +178,7 @@ class _DashboardState extends State<KritikSaran> {
                   vertical: screenHeight * 0.015, // Adjusted vertical padding
                 ),
                 margin: EdgeInsets.only(
-                  top: screenHeight * 0.02,
+                  top: screenHeight * 0.01,
                   left: screenWidth * 0.05,
                   right: screenWidth * 0.05,
                   bottom: screenHeight * 0.05,
@@ -201,7 +222,7 @@ class _DashboardState extends State<KritikSaran> {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize:
-                                  screenWidth * 0.04, // Adjusted font size
+                                  screenWidth * 0.06, // Adjusted font size
                               fontWeight: FontWeight.w900,
                             ),
                           ),

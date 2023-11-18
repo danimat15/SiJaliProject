@@ -1,4 +1,4 @@
-import 'package:sijaliproject/kritik_saran.dart';
+import 'package:sijaliproject/read_kritik_saran.dart';
 import 'package:sijaliproject/searching.dart';
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/dashboard.dart';
@@ -62,7 +62,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                 : const Color(0xFFE55604),
             child: Icon(
               Icons.search,
-              size: mediaQueryWidth * 0.15,
+              size: mediaQueryWidth * 0.14,
               color: Colors.white,
             ),
             onPressed: () {
@@ -135,7 +135,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                           bottom: 0),
                       onPressed: () {
                         setState(() {
-                          currentScreen = const KritikSaran();
+                          currentScreen = const SupervisorKritikSaran();
                           currentTab = 1;
                         });
                       },
