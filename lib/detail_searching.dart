@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sijaliproject/api_config.dart';
+import 'package:sijaliproject/update_kasus_batas.dart';
 
 class DetailSearching extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -216,7 +217,15 @@ class DetailSearching extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  UpdateKasusBatas(data: data),
+                            ),
+                          );
+                        },
                         child: Padding(
                           padding: EdgeInsets.all(mediaQueryWidth * 0.03),
                           child: Text("Update",
