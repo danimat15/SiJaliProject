@@ -103,35 +103,79 @@ class _DashboardState extends State<SupervisorKritikSaran> {
                                     right: screenWidth * 0.02,
                                     bottom: screenHeight * 0.01,
                                   ), // Sesuaikan dengan kebutuhan
+                                  // child: Column(
+                                  //   children: [
+                                  //     Text(
+                                  //       'Kritik: ',
+                                  //       style: TextStyle(
+                                  //           fontWeight: FontWeight.bold,
+                                  //           fontSize: screenHeight * 0.02),
+                                  //     ),
+                                  //     Text(
+                                  //       '${ks['kritik']}',
+                                  //       textAlign: TextAlign.left,
+                                  //       maxLines: 3,
+                                  //       overflow: TextOverflow.ellipsis,
+                                  //     ),
+                                  //     SizedBox(height: screenHeight * 0.01),
+                                  //     Text(
+                                  //       'Saran: ',
+                                  //       style: TextStyle(
+                                  //           fontWeight: FontWeight.bold,
+                                  //           fontSize: screenHeight * 0.02),
+                                  //     ),
+                                  //     Text(
+                                  //       '${ks['saran']}',
+                                  //       textAlign: TextAlign.left,
+                                  //       maxLines: 3,
+                                  //       overflow: TextOverflow.ellipsis,
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   child: Column(
                                     children: [
-                                      Text(
-                                        'Kritik: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: screenHeight * 0.02),
-                                      ),
-                                      Text(
-                                        '${ks['kritik']}',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Kritik: ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: screenHeight * 0.02,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              '${ks['kritik']}',
+                                              textAlign: TextAlign.left,
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(height: screenHeight * 0.01),
-                                      Text(
-                                        'Saran: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: screenHeight * 0.02),
-                                      ),
-                                      Text(
-                                        '${ks['saran']}',
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Saran: ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: screenHeight * 0.02,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              '${ks['saran']}',
+                                              textAlign: TextAlign.left,
+                                              maxLines: 3,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
+
                                 ),
                               ],
                             ),
