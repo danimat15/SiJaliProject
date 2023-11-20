@@ -37,9 +37,9 @@ class _BantuanState extends State<Bantuan> {
     return await Geolocator.getCurrentPosition();
   }
 
-  void addData() async {
-    var url =
-        Uri.parse("http://${IpConfig.serverIp}/sijali/insert-bantuan.php");
+  void addUsulan() async {
+    var url = Uri.parse(
+        "http://${IpConfig.serverIp}/sijali/insert-bantuan-usulan.php");
 
     try {
       var request = http.MultipartRequest('POST', url);
@@ -60,6 +60,39 @@ class _BantuanState extends State<Bantuan> {
         // Show success notification
         showSuccessNotification();
 
+        // Clear the form or perform any other actions as needed
+        clearForm();
+      } else {
+        // Show error notification
+        showErrorNotification();
+      }
+    } catch (error) {
+      // Handle network or other errors
+      print("Error: $error");
+      showErrorNotification();
+    }
+  }
+
+  void addPermasalahan() async {
+    var url = Uri.parse(
+        "http://${IpConfig.serverIp}/sijali/insert-bantuan-permasalahan.php");
+
+    try {
+      var request = http.MultipartRequest('POST', url);
+      request.fields['jenis_bantuan'] = selectedValue;
+      request.fields['deskripsi'] = controllerDesc.text;
+
+      if (image != null) {
+        var imageFile = await http.MultipartFile.fromPath('foto', image!.path);
+        request.files.add(imageFile);
+      }
+
+      var response = await request.send();
+
+      // Check if the data insertion was successful
+      if (response.statusCode == 200) {
+        // Show success notification
+        showSuccessNotification();
         // Clear the form or perform any other actions as needed
         clearForm();
       } else {
@@ -117,8 +150,12 @@ class _BantuanState extends State<Bantuan> {
       }
     }
 
+    if (selectedValue == 'Usulan Kasus Batas') {
+      addUsulan();
+    } else {
+      addPermasalahan();
+    }
     // Proceed to add data to the database
-    addData();
   }
 
   void clearForm() {
