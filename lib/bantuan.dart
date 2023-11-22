@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sijaliproject/api_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sijaliproject/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:image/image.dart' as img;
@@ -43,6 +45,7 @@ class _BantuanState extends State<Bantuan> {
 
     try {
       var request = http.MultipartRequest('POST', url);
+      request.fields['id_user'] = id.toString();
       request.fields['jenis_bantuan'] = selectedValue;
       request.fields['deskripsi'] = controllerDesc.text;
       request.fields['longitude'] = controllerLongitude.text;
@@ -79,6 +82,7 @@ class _BantuanState extends State<Bantuan> {
 
     try {
       var request = http.MultipartRequest('POST', url);
+      request.fields['id_user'] = id.toString();
       request.fields['jenis_bantuan'] = selectedValue;
       request.fields['deskripsi'] = controllerDesc.text;
 
@@ -202,6 +206,32 @@ class _BantuanState extends State<Bantuan> {
 
   Future<void> resetImageFoto() async {
     await getImageFoto(); // Buka galeri untuk memilih gambar
+  }
+
+  int id = 0;
+  getPref() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var islogin = pref.getBool("is_login");
+    if (islogin != null && islogin == true) {
+      setState(() {
+        id = pref.getInt("id") ?? 0;
+      });
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const LoginScreen(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
   }
 
   @override
