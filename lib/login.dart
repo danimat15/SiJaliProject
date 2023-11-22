@@ -4,6 +4,7 @@ import 'package:sijaliproject/dashboard.dart';
 import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sijaliproject/home_supervisor.dart';
 
@@ -23,6 +24,38 @@ class _LoginScreenState extends State<LoginScreen> {
   var _password = TextEditingController();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Future<int?> getUserId(String username) async {
+    String apiurl = "http://${IpConfig.serverIp}/sijali/get-user-id.php";
+
+    try {
+      var response = await http.post(
+        Uri.parse(apiurl),
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: {
+          'username': username,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("User ID response: ${response.body}");
+        var jsondata = json.decode(response.body);
+
+        if (jsondata["success"]) {
+          return jsondata["id"];
+        } else {
+          print('Failed to get user ID');
+          return null;
+        }
+      } else {
+        print("Error during connecting to the server.");
+        return null;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
 
   startLogin() async {
     String apiurl = "http://${IpConfig.serverIp}/sijali/login.php"; //api url
@@ -65,50 +98,40 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           });
         } else if (jsondata["success"]) {
+          print("JSON Response: $jsondata");
+
           print('json success');
           setState(() {
             error = false;
             showprogress = false;
           });
           role = jsondata["role"];
-          if (role == 'mitra') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (_) => Home(
-                  initialScreen: const Dashboard(),
-                  initialTab: 0,
-                ),
-              ),
-            );
-            print('mitra');
-          } else {
-            if (role == 'supervisor') {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => HomeSupervisor(
-                    initialScreen: const Dashboard(),
-                    initialTab: 0,
-                  ),
-                ),
-              );
-              print('supervisor');
-            } else {
-              if (role == 'admin') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => Home(
-                      initialScreen: const Dashboard(),
-                      initialTab: 0,
-                    ),
-                  ),
-                );
-                print('admin');
-              }
-            }
-          }
+
+          // if (role == 'mitra') {
+          //   saveSession(username!);
+          //   // Navigator.pushReplacement(
+          //   //   context,
+          //   //   MaterialPageRoute(
+          //   //     builder: (_) => Home(
+          //   //       initialScreen: const Dashboard(),
+          //   //       initialTab: 0,
+          //   //     ),
+          //   //   ),
+          //   // );
+          //   print('mitra');
+          // } else {
+          //   saveSession(username!);
+          //   // Navigator.pushReplacement(
+          //   //   context,
+          //   //   MaterialPageRoute(
+          //   //     builder: (_) => HomeSupervisor(
+          //   //       initialScreen: const Dashboard(),
+          //   //       initialTab: 0,
+          //   //     ),
+          //   //   ),
+          //   // );
+          //   print('supervisor');
+          // }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Login successful as $role "),
@@ -118,8 +141,12 @@ class _LoginScreenState extends State<LoginScreen> {
               behavior: SnackBarBehavior.floating,
             ),
           );
+          String loggedInUsername = username ?? '';
+          // Get user ID based on the username
+          int? userId = await getUserId(loggedInUsername);
+          saveSession(loggedInUsername, role, userId);
 
-          // ignore: use_build_context_synchronously
+          print("User ID: $userId");
         } else {
           showprogress = false;
           error = true;
@@ -136,8 +163,73 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     } catch (e) {
-      print('Error try');
+      print('Error try1');
       print("Error: $e");
+    }
+  }
+
+  saveSession(String username, String? role, int? userId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("username", username);
+    await pref.setString("role", role ?? '');
+    await pref.setInt("id", userId ?? 0);
+    await pref.setBool("is_login", true);
+
+    if (role == 'mitra') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Home(
+            initialScreen: const Dashboard(),
+            initialTab: 0,
+          ),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomeSupervisor(
+            initialScreen: const Dashboard(),
+            initialTab: 0,
+          ),
+        ),
+      );
+    }
+  }
+
+  void checkLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var islogin = pref.getBool("is_login");
+    if (islogin != null && islogin) {
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (BuildContext context) => const HomePage(),
+      //   ),
+      //   (route) => false,
+      // );
+      if (role == 'mitra') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Home(
+              initialScreen: const Dashboard(),
+              initialTab: 0,
+            ),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HomeSupervisor(
+              initialScreen: const Dashboard(),
+              initialTab: 0,
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -148,6 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
     errormsg = "";
     error = false;
     showprogress = false;
+    checkLogin();
 
     super.initState();
   }
