@@ -24,7 +24,7 @@ class CustomContainer extends StatelessWidget {
 
     String uraianKegiatan = filteredData[index]['uraian_kegiatan'];
     if (uraianKegiatan.length > 100) {
-      uraianKegiatan = uraianKegiatan.substring(0, 100) + '...';
+      uraianKegiatan = uraianKegiatan.substring(0, 75) + '...';
     }
     // Your existing code here
     return InkWell(
@@ -161,15 +161,16 @@ class _SearchingState extends State<Searching> {
 
   List<Map<String, dynamic>> filterData(
       List<Map<String, dynamic>> data, String query) {
+    String lowercaseQuery = query.toLowerCase();
+
     return data
         .where((map) =>
-            map['uraian_kegiatan'].toString().contains(query) ||
-            map['kd_kbli'].toString().contains(query) ||
-            map['jenis_usaha'].toString().contains(query) ||
-            map['kd_kategori'].toString().contains(query) ||
-            map['rincian_kategori'].toString().contains(query) ||
-            map['deskripsi_kbli'].toString().contains(query))
-        // tambahkan ini
+            map['uraian_kegiatan'].toLowerCase().contains(lowercaseQuery) ||
+            map['kd_kbli'].toLowerCase().contains(lowercaseQuery) ||
+            map['jenis_usaha'].toLowerCase().contains(lowercaseQuery) ||
+            map['kd_kategori'].toLowerCase().contains(lowercaseQuery) ||
+            map['rincian_kategori'].toLowerCase().contains(lowercaseQuery) ||
+            map['deskripsi_kbli'].toLowerCase().contains(lowercaseQuery))
         .toList();
   }
 
@@ -259,8 +260,8 @@ class _SearchingState extends State<Searching> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    List<Map<String, dynamic>> filteredData =
-                        filterData(snapshot.data!, searchController.text);
+                    List<Map<String, dynamic>> filteredData = filterData(
+                        snapshot.data!, searchController.text.toLowerCase());
 
                     if (filteredData.isEmpty) {
                       // Show "not found" image
@@ -277,11 +278,6 @@ class _SearchingState extends State<Searching> {
                         ),
                       );
                     }
-                    // } else {
-                    //   if (searchController.text.isNotEmpty) {
-                    //     addData(searchController.text);
-                    //   }
-                    // }
 
                     return Container(
                       margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
@@ -306,6 +302,8 @@ class _SearchingState extends State<Searching> {
                             },
                           );
                         },
+                        padding:
+                            EdgeInsets.only(bottom: mediaQueryHeight * 0.15),
                       ),
                     );
                   }
