@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sijaliproject/login.dart';
 
 class KritikSaran extends StatefulWidget {
   const KritikSaran({super.key});
@@ -19,19 +21,11 @@ class _DashboardState extends State<KritikSaran> {
       try {
         String uri =
             "http://${IpConfig.serverIp}/sijali/insert-kritik-saran.php";
-        var res = await http.post(Uri.parse(uri),
-            body: {"kritik": kritik.text, "saran": saran.text});
-
-        // var response=jsonDecode(res.body);
-        // // String jsonsDataString = response.data.toString();
-        // if(response[]=="true") {
-        //   print("insert success!");
-        //   kritik.text = "";
-        //   saran.text = "";
-        // }
-        // else {
-        //   print("gagalll");
-        // }
+        var res = await http.post(Uri.parse(uri), body: {
+          "kritik": kritik.text,
+          "saran": saran.text,
+          "id_user": id.toString()
+        });
 
         if (res.headers['content-type']?.contains('application/json') ??
             false) {
@@ -77,6 +71,32 @@ class _DashboardState extends State<KritikSaran> {
 
     // show notification on the top of the mediaQuery
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  int id = 0;
+  getPref() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var islogin = pref.getBool("is_login");
+    if (islogin != null && islogin == true) {
+      setState(() {
+        id = pref.getInt("id") ?? 0;
+      });
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const LoginScreen(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
   }
 
   @override
@@ -133,9 +153,11 @@ class _DashboardState extends State<KritikSaran> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.02,
-                  vertical: screenHeight * 0.015, // Adjusted vertical padding
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.04,
+                  right: screenWidth * 0.02,
+                  bottom: screenHeight * 0.01,
+                  // Adjusted vertical padding
                 ),
                 margin: EdgeInsets.only(
                   top: screenHeight * 0.01,
@@ -149,7 +171,7 @@ class _DashboardState extends State<KritikSaran> {
                 ),
                 child: TextField(
                   controller: kritik,
-                  maxLines: 4,
+                  maxLines: 10,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Masukkan kritik Anda disini',
@@ -173,9 +195,11 @@ class _DashboardState extends State<KritikSaran> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.02,
-                  vertical: screenHeight * 0.015, // Adjusted vertical padding
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.04,
+                  right: screenWidth * 0.02,
+                  bottom: screenHeight * 0.01,
+                  // Adjusted vertical padding
                 ),
                 margin: EdgeInsets.only(
                   top: screenHeight * 0.01,
@@ -189,7 +213,7 @@ class _DashboardState extends State<KritikSaran> {
                 ),
                 child: TextField(
                   controller: saran,
-                  maxLines: 4,
+                  maxLines: 10,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Masukkan saran Anda disini',

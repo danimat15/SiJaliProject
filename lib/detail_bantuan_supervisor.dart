@@ -1,5 +1,6 @@
 import 'package:sijaliproject/bantuan_supervisor.dart';
 import 'package:sijaliproject/api_config.dart';
+import 'package:sijaliproject/home_supervisor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +48,11 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => BantuanSupervisor()),
+            MaterialPageRoute(
+                builder: (context) => HomeSupervisor(
+                      initialScreen: BantuanSupervisor(),
+                      initialTab: 3,
+                    )),
           );
         } else {
           // Show error notification

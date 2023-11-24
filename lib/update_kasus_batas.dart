@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/api_config.dart';
+import 'package:sijaliproject/home_supervisor.dart';
 import 'package:sijaliproject/searching.dart';
-import 'package:sijaliproject/home.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
@@ -231,7 +231,7 @@ class _UpdateKasusBatasState extends State<UpdateKasusBatas> {
         clearForm();
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => Home(
+            builder: (context) => HomeSupervisor(
               initialScreen: const Searching(),
               initialTab: 4,
             ),

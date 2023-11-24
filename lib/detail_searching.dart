@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sijaliproject/api_config.dart';
 import 'package:sijaliproject/update_kasus_batas.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sijaliproject/login.dart';
 
-class DetailSearching extends StatelessWidget {
+class DetailSearching extends StatefulWidget {
   final Map<String, dynamic> data;
 
   const DetailSearching({Key? key, required this.data}) : super(key: key);
 
+  @override
+  _DetailSearchingState createState() => _DetailSearchingState();
+}
+
+class _DetailSearchingState extends State<DetailSearching> {
+  late bool confirmed;
+
   Future<void> deleteData(BuildContext context) async {
-    bool confirmed = false;
+    confirmed = false;
 
     await showDialog(
       context: context,
@@ -23,7 +32,9 @@ class DetailSearching extends StatelessWidget {
           actions: [
             ElevatedButton.icon(
               onPressed: () {
-                confirmed = true;
+                setState(() {
+                  confirmed = true;
+                });
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
@@ -52,7 +63,7 @@ class DetailSearching extends StatelessWidget {
       final response = await http.post(
         Uri.parse('http://${IpConfig.serverIp}/sijali/delete-kasus-batas.php'),
         body: {
-          'id': data['id'],
+          'id': widget.data['id'],
         },
       );
 
@@ -76,6 +87,36 @@ class DetailSearching extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
+  }
+
+  int id = 0;
+  String role = "";
+
+  getPref() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var islogin = pref.getBool("is_login");
+    if (islogin != null && islogin == true) {
+      setState(() {
+        role = pref.getString("role")!;
+        id = pref.getInt("id") ??
+            0; // Provide a default value (e.g., 0) if id is null
+      });
+    } else {
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const LoginScreen(),
+        ),
+        (route) => false,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
   }
 
   @override
@@ -112,7 +153,7 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data['jenis_usaha']}',
+                  '${widget.data['jenis_usaha']}',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.02,
@@ -129,7 +170,7 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data['uraian_kegiatan']}',
+                  '${widget.data['uraian_kegiatan']}',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.02,
@@ -146,7 +187,7 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data['kd_kategori']}',
+                  '${widget.data['kd_kategori']}',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.03,
@@ -163,7 +204,7 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data['rincian_kategori']}',
+                  '${widget.data['rincian_kategori']}',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.02,
@@ -180,7 +221,7 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data['kd_kbli']}',
+                  '${widget.data['kd_kbli']}',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.03,
@@ -197,7 +238,7 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${data['deskripsi_kbli']}',
+                  '${widget.data['deskripsi_kbli']}',
                   textAlign: TextAlign.justify,
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.02,
@@ -205,57 +246,58 @@ class DetailSearching extends StatelessWidget {
                   ),
                 ),
                 // UNTUK ROLE SUPERVISOR
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: mediaQueryHeight * 0.05,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MaterialButton(
-                        color: const Color(0xFF26577C),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  UpdateKasusBatas(data: data),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(mediaQueryWidth * 0.03),
-                          child: Text("Update",
-                              style: TextStyle(
-                                color: const Color(0xFFFFFFFF),
-                                fontSize: mediaQueryHeight * 0.02,
-                                fontWeight: FontWeight.w500,
-                              )),
-                        ),
-                      ),
-                      MaterialButton(
-                          color: Colors.red,
+                if (role == "supervisor")
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: mediaQueryHeight * 0.05,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MaterialButton(
+                          color: const Color(0xFF26577C),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                           onPressed: () async {
-                            await deleteData(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    UpdateKasusBatas(data: widget.data),
+                              ),
+                            );
                           },
                           child: Padding(
                             padding: EdgeInsets.all(mediaQueryWidth * 0.03),
-                            child: Text("Delete",
+                            child: Text("Update",
                                 style: TextStyle(
                                   color: const Color(0xFFFFFFFF),
                                   fontSize: mediaQueryHeight * 0.02,
                                   fontWeight: FontWeight.w500,
                                 )),
-                          )),
-                    ],
+                          ),
+                        ),
+                        MaterialButton(
+                            color: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            onPressed: () async {
+                              await deleteData(context);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(mediaQueryWidth * 0.03),
+                              child: Text("Delete",
+                                  style: TextStyle(
+                                    color: const Color(0xFFFFFFFF),
+                                    fontSize: mediaQueryHeight * 0.02,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            )),
+                      ],
+                    ),
                   ),
-                ),
                 // Tambahkan widget lain sesuai kebutuhan
               ],
             ),

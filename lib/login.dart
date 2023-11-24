@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await pref.setBool("is_login", true);
 
     if (role == 'mitra') {
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (_) => Home(
@@ -184,9 +184,10 @@ class _LoginScreenState extends State<LoginScreen> {
             initialTab: 0,
           ),
         ),
+        (route) => false,
       );
     } else {
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (_) => HomeSupervisor(
@@ -194,6 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
             initialTab: 0,
           ),
         ),
+        (route) => false,
       );
     }
   }
@@ -201,16 +203,12 @@ class _LoginScreenState extends State<LoginScreen> {
   void checkLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var islogin = pref.getBool("is_login");
+
     if (islogin != null && islogin) {
-      // Navigator.pushAndRemoveUntil(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (BuildContext context) => const HomePage(),
-      //   ),
-      //   (route) => false,
-      // );
-      if (role == 'mitra') {
-        Navigator.pushReplacement(
+      String loggedInRole = pref.getString("role") ?? '';
+
+      if (loggedInRole == 'mitra') {
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (_) => Home(
@@ -218,9 +216,10 @@ class _LoginScreenState extends State<LoginScreen> {
               initialTab: 0,
             ),
           ),
+          (route) => false,
         );
       } else {
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (_) => HomeSupervisor(
@@ -228,6 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
               initialTab: 0,
             ),
           ),
+          (route) => false,
         );
       }
     }

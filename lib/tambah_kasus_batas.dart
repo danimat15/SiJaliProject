@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'dart:typed_data';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 class TambahKasusBatas extends StatefulWidget {
   const TambahKasusBatas({Key? key}) : super(key: key);
@@ -146,6 +147,8 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
       request.fields['deskripsi_kbli'] = _deskripsiKBLIController.text;
       request.fields['uraian_kegiatan'] = _uraianKegiatanController.text;
       request.fields['jenis_usaha'] = _jenisUsahaController.text;
+      request.fields['tanggal'] =
+          DateFormat('yyyy-MM-dd').format(DateTime.now());
 
       if (image != null) {
         var imageFile = await http.MultipartFile.fromPath('foto', image!.path);

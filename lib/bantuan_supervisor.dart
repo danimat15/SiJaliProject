@@ -117,6 +117,7 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                           ? Center(
                               child: Text(
                                 'Tidak ada usulan kasus batas',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: mediaQueryHeight * 0.025,
                                   fontWeight: FontWeight.bold,
@@ -128,6 +129,7 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                               ? Center(
                                   child: Text(
                                     'Semua usulan kasus batas sudah ditanggapi',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: mediaQueryHeight * 0.025,
                                       fontWeight: FontWeight.bold,
@@ -214,6 +216,7 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                           ? Center(
                               child: Text(
                                 'Tidak ada permasalahan',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: mediaQueryHeight * 0.025,
                                   fontWeight: FontWeight.bold,
@@ -225,6 +228,7 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                               ? Center(
                                   child: Text(
                                     'Semua permasalahan sudah ditanggapi',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: mediaQueryHeight * 0.025,
                                       fontWeight: FontWeight.bold,
