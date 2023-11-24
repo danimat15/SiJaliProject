@@ -1,9 +1,9 @@
+import 'package:sijaliproject/bantuan_supervisor.dart';
 import 'package:sijaliproject/read_kritik_saran.dart';
 import 'package:sijaliproject/searching.dart';
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/dashboard.dart';
 import 'package:sijaliproject/sidebar.dart';
-import 'package:sijaliproject/bantuan.dart';
 import 'package:sijaliproject/tambah_kasus_batas.dart';
 
 class HomeSupervisor extends StatefulWidget {
@@ -204,7 +204,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                       padding: EdgeInsets.all(0),
                       onPressed: () {
                         setState(() {
-                          currentScreen = const Bantuan();
+                          currentScreen = const BantuanSupervisor();
                           currentTab = 3;
                         });
                       },
