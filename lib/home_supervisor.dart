@@ -1,5 +1,5 @@
 import 'package:sijaliproject/bantuan_supervisor.dart';
-import 'package:sijaliproject/read_kritik_saran.dart';
+import 'package:sijaliproject/kritik_saran_supervisor.dart';
 import 'package:sijaliproject/searching.dart';
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/dashboard.dart';
