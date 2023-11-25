@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'dart:typed_data';
 import 'dart:io';
-import 'package:intl/intl.dart';
 
 class TambahKasusBatas extends StatefulWidget {
   const TambahKasusBatas({Key? key}) : super(key: key);
@@ -15,8 +14,6 @@ class TambahKasusBatas extends StatefulWidget {
 }
 
 class _TambahKasusBatasState extends State<TambahKasusBatas> {
-  // TextEditingController _kodeKBLIController = TextEditingController();
-  // TextEditingController _deskripsiKBLIController = TextEditingController();
   String selectedValue = 'A. Pertanian, Kehutanan, dan Perikanan';
   List<String> dropdownItems = [
     'A. Pertanian, Kehutanan, dan Perikanan',
@@ -44,6 +41,7 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
 
   String kategori = "";
   String deskripsi = "";
+  DateTime currentDateTime = DateTime.now();
 
   final TextEditingController _kodeKBLIController = TextEditingController();
   final TextEditingController _deskripsiKBLIController =
@@ -138,6 +136,10 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
           "Aktivitas Badan Internasional Dan Badan Ekstra Internasional Lainnya";
     }
 
+    String tanggal = currentDateTime.toIso8601String().split('T')[0];
+    String waktu =
+        currentDateTime.toIso8601String().split('T')[1].split('.')[0];
+
     try {
       var request = http.MultipartRequest('POST', url);
 
@@ -147,8 +149,8 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
       request.fields['deskripsi_kbli'] = _deskripsiKBLIController.text;
       request.fields['uraian_kegiatan'] = _uraianKegiatanController.text;
       request.fields['jenis_usaha'] = _jenisUsahaController.text;
-      request.fields['tanggal'] =
-          DateFormat('yyyy-MM-dd').format(DateTime.now());
+      request.fields['tanggal'] = tanggal;
+      request.fields['waktu'] = waktu;
 
       if (image != null) {
         var imageFile = await http.MultipartFile.fromPath('foto', image!.path);

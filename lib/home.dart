@@ -1,5 +1,5 @@
-import 'package:sijaliproject/geotagging.dart';
 import 'package:sijaliproject/kritik_saran.dart';
+import 'package:sijaliproject/notifikasi.dart';
 import 'package:sijaliproject/searching.dart';
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/dashboard.dart';
@@ -174,7 +174,7 @@ class _HomeState extends State<Home> {
                           bottom: 0),
                       onPressed: () {
                         setState(() {
-                          currentScreen = const Geotagging();
+                          currentScreen = const Notifikasi();
                           currentTab = 2;
                         });
                       },

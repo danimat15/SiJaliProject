@@ -15,6 +15,7 @@ dependencies:
   image: ^3.0.1
   shared_preferences: ^2.2.2
   intl: ^0.18.1
+  word_cloud: ^1.0.1
   
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,4 @@ flutter:
   - images/empty-image.jpg
   - images/tambah_kasus_batas.png
   - images/update_kasus_batas.png
+  - images/notifikasi.png
