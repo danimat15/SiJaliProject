@@ -67,7 +67,7 @@ class _DashboardState extends State<AboutApp> {
                         right: screenWidth * 0.02,
                         bottom: screenHeight * 0.05),
                     child: Text(
-                      "Aplikasi ini adalah aplikasi untuk membantu mitra dalam menentukan kode KBLI untuk UMKM yang termasuk dalam kasus batas. Aplikasi ini dikembangkan oleh mahasiswa Politeknik Statistika STIS, Program Studi Komputasi Statistik dengan Peminatan Sains Data kelas 3SD2 angkatan 63. \n \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam facilisis sem vel libero consectetur, sit amet gravida quam malesuada. Fusce nec ipsum eu libero commodo tincidunt. Phasellus lacinia orci ut dapibus. Quisque euismod nisl a sem hendrerit, a ultrices urna fringilla. Sed at lectus quam. Proin quis feugiat nisi, nec tincidunt dolor. In hac habitasse platea dictumst. Sed dignissim bibendum ante, id bibendum felis varius non. Curabitur id augue quis libero dapibus auctor eu eu ex. Sed efficitur efficitur dolor, at viverra justo blandit ut.",
+                      "Aplikasi ini adalah aplikasi untuk membantu mitra dalam menentukan kode KBLI untuk UMKM yang termasuk dalam kasus batas. Aplikasi ini dikembangkan oleh mahasiswa Politeknik Statistika STIS, Program Studi Komputasi Statistik dengan Peminatan Sains Data kelas 3SD2 angkatan 63.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,

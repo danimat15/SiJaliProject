@@ -190,7 +190,7 @@ class _HomeSupervisorState extends State<HomeSupervisor> {
                                 : Colors.grey,
                           ),
                           Text(
-                            'Tambah KB',
+                            'Kasus Batas',
                             style: TextStyle(
                                 fontSize: mediaQueryWidth * 0.03,
                                 color: currentTab == 2

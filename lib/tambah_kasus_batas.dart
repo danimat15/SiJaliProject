@@ -51,6 +51,38 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
   final TextEditingController _jenisUsahaController = TextEditingController();
 
   void addData() async {
+    if (_kodeKBLIController.text.isEmpty ||
+        _deskripsiKBLIController.text.isEmpty ||
+        _uraianKegiatanController.text.isEmpty ||
+        _jenisUsahaController.text.isEmpty ||
+        image == null) {
+      // Tampilkan SnackBar untuk memberi tahu pengguna
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text("Isian tidak boleh kosong. Silakan isi terlebih dahulu."),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    int? kodeKBLI = int.tryParse(_kodeKBLIController.text);
+    if (kodeKBLI == null) {
+      // Tampilkan SnackBar untuk memberi tahu pengguna
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Isian Kode KBLI harus berupa angka"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     var url =
         Uri.parse("http://${IpConfig.serverIp}/sijali/tambah-kasus-batas.php");
 
@@ -175,7 +207,7 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
 
   void showSuccessNotification() {
     final snackBar = SnackBar(
-      content: Text('Kasus Batas berhasil dikirimkan.'),
+      content: Text('Kasus Batas berhasil dikirimkan'),
       backgroundColor: Colors.green,
       behavior: SnackBarBehavior.floating,
     );
@@ -185,7 +217,7 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
 
   void showErrorNotification() {
     final snackBar = SnackBar(
-      content: Text('Kasus Batas gagal dikirimkan.'),
+      content: Text('Kasus Batas gagal dikirimkan'),
       backgroundColor: Colors.red,
       behavior: SnackBarBehavior.floating,
     );

@@ -182,14 +182,14 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.update_outlined,
+                            Icons.notifications_outlined,
                             size: mediaQueryWidth * 0.1,
                             color: currentTab == 2
                                 ? const Color(0xFF26577C)
                                 : Colors.grey,
                           ),
                           Text(
-                            'Update',
+                            'Notifikasi',
                             style: TextStyle(
                                 fontSize: mediaQueryWidth * 0.03,
                                 color: currentTab == 2

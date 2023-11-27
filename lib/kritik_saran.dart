@@ -49,6 +49,7 @@ class _DashboardState extends State<KritikSaran> {
       }
     } else {
       print("tidak bole kosong!!!");
+      showEmptyResponseError();
     }
   }
 
@@ -70,6 +71,16 @@ class _DashboardState extends State<KritikSaran> {
     );
 
     // show notification on the top of the mediaQuery
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showEmptyResponseError() {
+    final snackBar = SnackBar(
+      content: Text('Isian tidak boleh kosong. Silakan isi terlebih dahulu.'),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    );
+
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 

@@ -5,6 +5,7 @@ import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sijaliproject/home_supervisor.dart';
 
@@ -58,6 +59,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   startLogin() async {
+    if (username == null ||
+        username!.isEmpty ||
+        password == null ||
+        password!.isEmpty) {
+      // Tampilkan SnackBar untuk memberi tahu pengguna
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Username atau password tidak boleh kosong"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     String apiurl = "http://${IpConfig.serverIp}/sijali/login.php"; //api url
 
     try {
@@ -89,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Show SnackBar for incorrect username or password
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("Username or password is incorrect."),
+                content: Text("Username atau Password salah"),
                 duration: Duration(seconds: 2),
                 backgroundColor: Colors.red,
                 // adjust position of SnackBar
@@ -134,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Login successful as $role "),
+              content: Text("Berhasil login sebagai $role "),
               duration: Duration(seconds: 2),
               backgroundColor: Colors.green,
               // adjust position of SnackBar
@@ -233,6 +250,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  launchWhatsApp() async {
+    final whatsappUrl =
+        "https://wa.me/6281234567890"; // Replace with the desired WhatsApp number
+    try {
+      if (await canLaunch(whatsappUrl)) {
+        await launch(whatsappUrl);
+      } else {
+        // Handle if the URL can't be launched
+        print("Could not launch WhatsApp");
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the launch process
+      print("Error launching WhatsApp: $e");
+    }
+  }
+
   @override
   void initState() {
     username = "";
@@ -314,6 +347,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: TextFormField(
                       controller: _username,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Username tidak boleh kosong"),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red,
+                              // adjust position of SnackBar
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                        ;
+                        return null;
+                      },
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Username',
@@ -344,6 +392,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Password',
                       ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Password tidak boleh kosong"),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red,
+                              // adjust position of SnackBar
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                        ;
+                        return null;
+                      },
                       onChanged: (value) {
                         setState(() {
                           password = value;
@@ -352,7 +415,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.09),
+                TextButton(
+                  onPressed: () {
+                    // Handle action when "lupa password?" is pressed
+                    // Misalnya, pindahkan pengguna ke halaman reset password
+                    launchWhatsApp();
+                  },
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Lupa password?",
+                      style: TextStyle(
+                        color: const Color(0xFFE55604),
+                        fontSize: screenWidth * 0.04,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.06),
                 Row(
                   children: [
                     Expanded(

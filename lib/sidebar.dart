@@ -57,7 +57,7 @@ class _SidebarState extends State<Sidebar> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("Logout successfully"),
+        content: Text("Berhasil Logout"),
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
         // adjust position of SnackBar

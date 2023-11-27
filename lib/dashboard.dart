@@ -67,7 +67,7 @@ class _DashboardState extends State<Dashboard> {
               ),
               Container(
                 margin: const EdgeInsets.all(10),
-                height: mediaQueryHeight * 0.25,
+                height: mediaQueryHeight * 0.7,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(0xFFFFFFFF),
@@ -108,27 +108,93 @@ class _DashboardState extends State<Dashboard> {
 // You need to replace it with the actual widget you're using for the word cloud.
 class WordCloud extends StatefulWidget {
   final List<Map<String, dynamic>> keywordData;
-  WordCloud({required this.keywordData});
+  const WordCloud({super.key, required this.keywordData});
 
   @override
   State<WordCloud> createState() => _WordCloudState();
 }
 
 class _WordCloudState extends State<WordCloud> {
-  List<Map<String, dynamic>> word_list = [];
+  List<Map<String, dynamic>> wordList = [];
   int count = 0;
   String wordstring = '';
 
   @override
   void initState() {
     super.initState();
-    word_list = widget.keywordData;
+    wordList = widget.keywordData;
   }
 
   @override
   Widget build(BuildContext context) {
+    WordCloudData wcdata = WordCloudData(
+      data: wordList
+          .map((item) => {
+                'keyword': item['keyword'],
+                'value':
+                    int.parse(item['value']), // Convert 'value' to an integer
+              })
+          .toList(),
+    );
+
+    WordCloudTap wordtaps = WordCloudTap();
+
+    //WordCloudTap Setting
+    for (int i = 0; i < wordList.length; i++) {
+      void tap() {
+        setState(() {
+          count += 1;
+          wordstring = wordList[i]['keyword'];
+        });
+      }
+
+      wordtaps.addWordtap(wordList[i]['keyword'], tap);
+    }
+
     return Center(
-      child: Text("wordcloud"),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          WordCloudTapView(
+            data: wcdata,
+            wordtap: wordtaps,
+            mapcolor: const Color.fromARGB(255, 174, 183, 235),
+            mapwidth: 200,
+            mapheight: 200,
+            fontWeight: FontWeight.bold,
+            shape: WordCloudCircle(radius: 10),
+            colorlist: [Colors.black, Colors.redAccent, Colors.indigoAccent],
+          ),
+          // print item value
+
+          Text(
+            'Clicked Word : ${wordstring}',
+            style: TextStyle(fontSize: 20),
+          ),
+          Text('Clicked Count : ${count}', style: TextStyle(fontSize: 20)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 15,
+                width: 30,
+              ),
+              WordCloudView(
+                data: wcdata,
+                mapcolor: Color.fromARGB(255, 174, 183, 235),
+                mapwidth: 200,
+                mapheight: 200,
+                fontWeight: FontWeight.bold,
+                colorlist: [
+                  Colors.black,
+                  Colors.redAccent,
+                  Colors.indigoAccent
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

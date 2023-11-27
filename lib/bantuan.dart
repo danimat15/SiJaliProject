@@ -40,6 +40,23 @@ class _BantuanState extends State<Bantuan> {
   }
 
   void addUsulan() async {
+    if (controllerDesc.text.isEmpty ||
+        controllerLongitude.text.isEmpty ||
+        controllerLatitude.text.isEmpty ||
+        image == null) {
+      // Tampilkan SnackBar untuk memberi tahu pengguna
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text("Isian tidak boleh kosong. Silakan isi terlebih dahulu."),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     var url = Uri.parse(
         "http://${IpConfig.serverIp}/sijali/insert-bantuan-usulan.php");
 
@@ -77,6 +94,20 @@ class _BantuanState extends State<Bantuan> {
   }
 
   void addPermasalahan() async {
+    if (controllerDesc.text.isEmpty || image == null) {
+      // Tampilkan SnackBar untuk memberi tahu pengguna
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text("Isian tidak boleh kosong. Silakan isi terlebih dahulu."),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     var url = Uri.parse(
         "http://${IpConfig.serverIp}/sijali/insert-bantuan-permasalahan.php");
 
@@ -424,6 +455,7 @@ class _BantuanState extends State<Bantuan> {
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
+                              enabled: false,
                             ),
                           )),
                       SizedBox(height: mediaQueryHeight * 0.02),
@@ -459,6 +491,7 @@ class _BantuanState extends State<Bantuan> {
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
+                              enabled: false,
                             ),
                           )),
                     ],

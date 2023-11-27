@@ -75,6 +75,8 @@ class _DashboardState extends State<Notifikasi> {
                       List<Map<String, dynamic>> notifikasiList =
                           snapshot.data as List<Map<String, dynamic>>;
 
+                      notifikasiList
+                          .sort((a, b) => b['Waktu'].compareTo(a['Waktu']));
                       return Column(
                         children: notifikasiList.map((notif) {
                           return GestureDetector(
