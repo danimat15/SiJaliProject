@@ -146,17 +146,49 @@ class _SearchingState extends State<Searching> {
     }
   }
 
-  Future<void> addData(String keyword) async {
-    final response = await http.post(
-      Uri.parse('http://${IpConfig.serverIp}/sijali/insert-kata-kunci.php'),
-      body: {'keyword': keyword},
-    );
+  // Define a list of stopwords
+  List<String> stopwords = [
+    'dan',
+    'dari',
+    'yang',
+    'di',
+    'ke',
+    'pada',
+    /* add more stopwords as needed */
+  ];
 
-    if (response.statusCode == 200) {
-      print('Keyword added successfully');
-    } else {
-      print('Failed to add keyword');
+// Other existing imports and code...
+
+  Future<void> addData(String keyword) async {
+    // Tokenize the input string, remove punctuation, and filter out stopwords
+    List<String> tokens = tokenizeRemovePunctuationAndStopwords(keyword);
+
+    // Add each token to the database
+    for (String token in tokens) {
+      final response = await http.post(
+        Uri.parse('http://${IpConfig.serverIp}/sijali/insert-kata-kunci.php'),
+        body: {'keyword': token},
+      );
+
+      if (response.statusCode == 200) {
+        print('Token added successfully: $token');
+      } else {
+        print('Failed to add token: $token');
+      }
     }
+  }
+
+  List<String> tokenizeRemovePunctuationAndStopwords(String input) {
+    // Use a regular expression to replace non-alphanumeric characters with an empty string
+    List<String> tokens = input.replaceAll(RegExp(r'[^\w\s]'), '').split(' ');
+
+    // Convert tokens to lowercase
+    tokens = tokens.map((token) => token.toLowerCase()).toList();
+
+    // Filter out stopwords
+    tokens = tokens.where((token) => !stopwords.contains(token)).toList();
+
+    return tokens;
   }
 
   List<Map<String, dynamic>> filterData(

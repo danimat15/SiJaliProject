@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:sijaliproject/api_config.dart';
-import 'package:word_cloud/word_cloud_data.dart';
-import 'package:word_cloud/word_cloud_shape.dart';
-import 'package:word_cloud/word_cloud_tap.dart';
-import 'package:word_cloud/word_cloud_tap_view.dart';
-import 'package:word_cloud/word_cloud_view.dart';
+import 'package:sijaliproject/word_cloud/word_cloud.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -67,10 +63,19 @@ class _DashboardState extends State<Dashboard> {
               ),
               Container(
                 margin: const EdgeInsets.all(10),
-                height: mediaQueryHeight * 0.7,
+                height: mediaQueryHeight * 0.3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(0xFFFFFFFF),
+                  // add shadow effects
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: FutureBuilder<List<Map<String, dynamic>>>(
                   future: getKeyword(),
@@ -88,10 +93,11 @@ class _DashboardState extends State<Dashboard> {
                         child: Text('No keywords found'),
                       );
                     } else {
-                      List<Map<String, dynamic>> keywordData = snapshot.data!;
+                      List<Map> keywordData = snapshot.data!;
 
                       // Use keywordData to update your UI or perform other tasks
                       return WordCloud(keywordData: keywordData);
+                      // return MyHomePage(title: 'Word Cloud');
                     }
                   },
                 ),
@@ -104,20 +110,18 @@ class _DashboardState extends State<Dashboard> {
   }
 }
 
-// YourWordCloudWidget is a placeholder for the widget you use to display the word cloud.
-// You need to replace it with the actual widget you're using for the word cloud.
+// YourWordCloudWidget is a placeholder for the widget you use to display the keyword cloud.
+// You need to replace it with the actual widget you're using for the keyword cloud.
 class WordCloud extends StatefulWidget {
-  final List<Map<String, dynamic>> keywordData;
   const WordCloud({super.key, required this.keywordData});
+  final List<Map> keywordData;
 
   @override
   State<WordCloud> createState() => _WordCloudState();
 }
 
 class _WordCloudState extends State<WordCloud> {
-  List<Map<String, dynamic>> wordList = [];
-  int count = 0;
-  String wordstring = '';
+  List<Map> wordList = [];
 
   @override
   void initState() {
@@ -127,70 +131,29 @@ class _WordCloudState extends State<WordCloud> {
 
   @override
   Widget build(BuildContext context) {
-    WordCloudData wcdata = WordCloudData(
-      data: wordList
-          .map((item) => {
-                'keyword': item['keyword'],
-                'value':
-                    int.parse(item['value']), // Convert 'value' to an integer
-              })
-          .toList(),
-    );
-
-    WordCloudTap wordtaps = WordCloudTap();
-
-    //WordCloudTap Setting
-    for (int i = 0; i < wordList.length; i++) {
-      void tap() {
-        setState(() {
-          count += 1;
-          wordstring = wordList[i]['keyword'];
-        });
-      }
-
-      wordtaps.addWordtap(wordList[i]['keyword'], tap);
-    }
-
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
+    final mediaQueryHeight = MediaQuery.of(context).size.height;
+    WordCloudData wcdata = WordCloudData(data: wordList);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          WordCloudTapView(
+          WordCloudView(
             data: wcdata,
-            wordtap: wordtaps,
-            mapcolor: const Color.fromARGB(255, 174, 183, 235),
-            mapwidth: 200,
-            mapheight: 200,
+            // mapcolor: Color.fromARGB(255, 174, 183, 235),
+            // mapwidth: 350,
+            mapwidth: mediaQueryWidth * 0.8,
+            // mapheight: 200,
+            mapheight: mediaQueryHeight * 0.3,
+            maxtextsize: 40,
             fontWeight: FontWeight.bold,
-            shape: WordCloudCircle(radius: 10),
-            colorlist: [Colors.black, Colors.redAccent, Colors.indigoAccent],
-          ),
-          // print item value
-
-          Text(
-            'Clicked Word : ${wordstring}',
-            style: TextStyle(fontSize: 20),
-          ),
-          Text('Clicked Count : ${count}', style: TextStyle(fontSize: 20)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 15,
-                width: 30,
-              ),
-              WordCloudView(
-                data: wcdata,
-                mapcolor: Color.fromARGB(255, 174, 183, 235),
-                mapwidth: 200,
-                mapheight: 200,
-                fontWeight: FontWeight.bold,
-                colorlist: [
-                  Colors.black,
-                  Colors.redAccent,
-                  Colors.indigoAccent
-                ],
-              ),
+            // shape: WordCloudCircle(radius: 180),
+            shape: WordCloudEllipse(majoraxis: 200, minoraxis: 150),
+            colorlist: [
+              Colors.green,
+              Colors.redAccent,
+              Colors.indigoAccent,
+              Colors.yellow
             ],
           ),
         ],
@@ -198,3 +161,112 @@ class _WordCloudState extends State<WordCloud> {
     );
   }
 }
+
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
+
+//   final String title;
+
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   //example data list
+//   List<Map> word_list = [
+//     {'keyword': 'Apple', 'value': 100},
+//     {'keyword': 'Samsung S1', 'value': 60},
+//     {'keyword': 'Intel', 'value': 55},
+//     {'keyword': 'Tesla', 'value': 50},
+//     {'keyword': 'AMD', 'value': 40},
+//     {'keyword': 'Google', 'value': 35},
+//     {'keyword': 'Qualcom', 'value': 31},
+//     {'keyword': 'Netflix', 'value': 27},
+//     {'keyword': 'Meta', 'value': 27},
+//     {'keyword': 'Amazon', 'value': 26},
+//     {'keyword': 'Nvidia', 'value': 25},
+//     {'keyword': 'Microsoft', 'value': 25},
+//     {'keyword': 'TSMC', 'value': 24},
+//     {'keyword': 'PayPal', 'value': 24},
+//     {'keyword': 'AT&T', 'value': 24},
+//     {'keyword': 'Oracle', 'value': 23},
+//     {'keyword': 'Unity', 'value': 23},
+//     {'keyword': 'Roblox', 'value': 23},
+//     {'keyword': 'Lucid', 'value': 22},
+//     {'keyword': 'Naver', 'value': 20},
+//     {'keyword': 'Kakao', 'value': 18},
+//     {'keyword': 'NC Soft', 'value': 18},
+//     {'keyword': 'LG', 'value': 16},
+//     {'keyword': 'Hyundai', 'value': 16},
+//     {'keyword': 'KIA', 'value': 16},
+//     {'keyword': 'twitter', 'value': 16},
+//     {'keyword': 'Tencent', 'value': 15},
+//     {'keyword': 'Alibaba', 'value': 15},
+//     {'keyword': 'LG', 'value': 16},
+//     {'keyword': 'Hyundai', 'value': 16},
+//     {'keyword': 'KIA', 'value': 16},
+//     {'keyword': 'twitter', 'value': 16},
+//     {'keyword': 'Tencent', 'value': 15},
+//     {'keyword': 'Alibaba', 'value': 15},
+//     {'keyword': 'Disney', 'value': 14},
+//     {'keyword': 'Spotify', 'value': 14},
+//     {'keyword': 'Udemy', 'value': 13},
+//     {'keyword': 'Quizlet', 'value': 13},
+//     {'keyword': 'Visa', 'value': 12},
+//     {'keyword': 'Lucid', 'value': 22},
+//     {'keyword': 'Naver', 'value': 20},
+//     {'keyword': 'Hyundai', 'value': 16},
+//     {'keyword': 'KIA', 'value': 16},
+//     {'keyword': 'twitter', 'value': 16},
+//     {'keyword': 'Tencent', 'value': 15},
+//     {'keyword': 'Alibaba', 'value': 15},
+//     {'keyword': 'Disney', 'value': 14},
+//     {'keyword': 'Spotify', 'value': 14},
+//     {'keyword': 'Visa', 'value': 12},
+//     {'keyword': 'Microsoft', 'value': 10},
+//     {'keyword': 'TSMC', 'value': 10},
+//     {'keyword': 'PayPal', 'value': 24},
+//     {'keyword': 'AT&T', 'value': 10},
+//     {'keyword': 'Oracle', 'value': 10},
+//     {'keyword': 'Unity', 'value': 10},
+//     {'keyword': 'Roblox', 'value': 10},
+//     {'keyword': 'Lucid', 'value': 10},
+//     {'keyword': 'Naver', 'value': 10},
+//     {'keyword': 'Kakao', 'value': 18},
+//     {'keyword': 'NC Soft', 'value': 18},
+//     {'keyword': 'LG', 'value': 16},
+//     {'keyword': 'Hyundai', 'value': 16},
+//     {'keyword': 'KIA', 'value': 16},
+//     {'keyword': 'twitter', 'value': 16},
+//     {'keyword': 'Tencent', 'value': 10},
+//     {'keyword': 'Alibaba', 'value': 10},
+//     {'keyword': 'Disney', 'value': 14},
+//     {'keyword': 'Spotify', 'value': 14},
+//     {'keyword': 'Udemy', 'value': 13},
+//     {'keyword': 'NC Soft', 'value': 12},
+//     {'keyword': 'LG', 'value': 16},
+//     {'keyword': 'Hyundai hh', 'value': 10},
+//     {'keyword': 'KIA', 'value': 16},
+//   ];
+//   @override
+//   Widget build(BuildContext context) {
+//     WordCloudData wcdata = WordCloudData(data: word_list);
+//     print(word_list);
+
+//     return Scaffold(
+//       body: Center(
+//         child: WordCloudView(
+//           data: wcdata,
+//           mapcolor: Color.fromARGB(255, 174, 183, 235),
+//           mapwidth: 300,
+//           mapheight: 300,
+//           maxtextsize: 60,
+//           fontWeight: FontWeight.bold,
+//           shape: WordCloudCircle(radius: 150),
+//           // shape: WordCloudEllipse(majoraxis: 250, minoraxis: 200),
+//           colorlist: [Colors.black, Colors.redAccent, Colors.indigoAccent],
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -251,14 +251,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   launchWhatsApp() async {
+    final phoneNumber =
+        "6285156570260"; // Replace with the desired WhatsApp number
+    final message =
+        "Halo, saya butuh bantuan dengan akun Sijali. Saya mengalami kendala lupa password";
+
     final whatsappUrl =
-        "https://wa.me/6281234567890"; // Replace with the desired WhatsApp number
+        "whatsapp://send?phone=$phoneNumber&text=${Uri.encodeQueryComponent(message)}";
+
     try {
       if (await canLaunch(whatsappUrl)) {
         await launch(whatsappUrl);
       } else {
-        // Handle if the URL can't be launched
-        print("Could not launch WhatsApp");
+        // If WhatsApp is not installed, try opening in a browser
+        final webUrl =
+            "https://wa.me/$phoneNumber/?text=${Uri.encodeQueryComponent(message)}";
+        await launch(webUrl);
       }
     } catch (e) {
       // Handle any exceptions that occur during the launch process

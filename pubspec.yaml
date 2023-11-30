@@ -15,7 +15,6 @@ dependencies:
   image: ^3.0.1
   shared_preferences: ^2.2.2
   intl: ^0.18.1
-  word_cloud: ^1.0.1
   url_launcher: ^6.2.1
   
 dev_dependencies:
