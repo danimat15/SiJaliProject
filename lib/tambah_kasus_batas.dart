@@ -83,8 +83,7 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
       return;
     }
 
-    var url =
-        Uri.parse("http://${IpConfig.serverIp}/sijali/tambah-kasus-batas.php");
+    var url = Uri.parse("https://${IpConfig.serverIp}/tambah-kasus-batas.php");
 
     String kategori = "";
     String deskripsi = "";

@@ -124,8 +124,7 @@ class _UpdateKasusBatasState extends State<UpdateKasusBatas> {
   final TextEditingController _jenisUsahaController = TextEditingController();
 
   void updateData() async {
-    var url =
-        Uri.parse("http://${IpConfig.serverIp}/sijali/update-kasus-batas.php");
+    var url = Uri.parse("https://${IpConfig.serverIp}/update-kasus-batas.php");
 
     String kategori = "";
     String deskripsi = "";

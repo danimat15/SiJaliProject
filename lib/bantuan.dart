@@ -57,8 +57,8 @@ class _BantuanState extends State<Bantuan> {
       return;
     }
 
-    var url = Uri.parse(
-        "http://${IpConfig.serverIp}/sijali/insert-bantuan-usulan.php");
+    var url =
+        Uri.parse("https://${IpConfig.serverIp}/insert-bantuan-usulan.php");
 
     try {
       var request = http.MultipartRequest('POST', url);
@@ -109,7 +109,7 @@ class _BantuanState extends State<Bantuan> {
     }
 
     var url = Uri.parse(
-        "http://${IpConfig.serverIp}/sijali/insert-bantuan-permasalahan.php");
+        "https://${IpConfig.serverIp}/insert-bantuan-permasalahan.php");
 
     try {
       var request = http.MultipartRequest('POST', url);

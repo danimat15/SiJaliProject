@@ -14,7 +14,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   Future<List<Map<String, dynamic>>> getKeyword() async {
     try {
-      var url = 'http://${IpConfig.serverIp}/sijali/read-keyword.php';
+      var url = 'http://${IpConfig.serverIp}/read-keyword.php';
       var response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {

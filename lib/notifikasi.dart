@@ -13,7 +13,7 @@ class Notifikasi extends StatefulWidget {
 
 class _DashboardState extends State<Notifikasi> {
   Future<List<Map<String, dynamic>>> getNotifikasi() async {
-    var url = 'http://${IpConfig.serverIp}/sijali/read-notifikasi.php';
+    var url = 'https://${IpConfig.serverIp}/read-notifikasi.php';
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

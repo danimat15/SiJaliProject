@@ -17,7 +17,7 @@ class SupervisorKritikSaran extends StatefulWidget {
 
 class _DashboardState extends State<SupervisorKritikSaran> {
   Future<List<Map<String, dynamic>>> getKritikSaran() async {
-    var url = 'http://${IpConfig.serverIp}/sijali/read-kritik-saran.php';
+    var url = 'https://${IpConfig.serverIp}/read-kritik-saran.php';
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

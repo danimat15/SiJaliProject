@@ -6,8 +6,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'dart:io';
 import 'package:sijaliproject/home_supervisor.dart';
+import 'package:sijaliproject/searching_offline.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<int?> getUserId(String username) async {
-    String apiurl = "http://${IpConfig.serverIp}/sijali/get-user-id.php";
+    String apiurl = "https://${IpConfig.serverIp}/get-user-id.php";
 
     try {
       var response = await http.post(
@@ -58,7 +59,55 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  void showOfflineModePopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tidak Ada Koneksi Internet"),
+          content: Text(
+              "Anda dalam mode offline. Silakan aktifkan koneksi internet untuk melanjutkan."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text("Kembali"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SearchingOffline(),
+                  ),
+                ); // Close the dialog
+              },
+              child: Text("Mode Offline"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   startLogin() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      showOfflineModePopup();
+      return;
+    }
     if (username == null ||
         username!.isEmpty ||
         password == null ||
@@ -75,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    String apiurl = "http://${IpConfig.serverIp}/sijali/login.php"; //api url
+    String apiurl = "https://${IpConfig.serverIp}/login.php"; //api url
 
     try {
       var response = await http.post(

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sijaliproject/dashboard.dart';
+import 'package:sijaliproject/home.dart';
+import 'package:sijaliproject/home_supervisor.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -9,6 +13,45 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
+  void checkLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var islogin = pref.getBool("is_login");
+
+    if (islogin != null && islogin) {
+      String loggedInRole = pref.getString("role") ?? '';
+
+      if (loggedInRole == 'mitra') {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Home(
+              initialScreen: const Dashboard(),
+              initialTab: 0,
+            ),
+          ),
+          (route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HomeSupervisor(
+              initialScreen: const Dashboard(),
+              initialTab: 0,
+            ),
+          ),
+          (route) => false,
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    checkLogin();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;

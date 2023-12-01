@@ -19,8 +19,7 @@ class _DashboardState extends State<KritikSaran> {
   Future<void> insertrecord() async {
     if (kritik.text != "" || saran.text != "") {
       try {
-        String uri =
-            "http://${IpConfig.serverIp}/sijali/insert-kritik-saran.php";
+        String uri = "https://${IpConfig.serverIp}/insert-kritik-saran.php";
         var res = await http.post(Uri.parse(uri), body: {
           "kritik": kritik.text,
           "saran": saran.text,

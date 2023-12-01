@@ -24,8 +24,7 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
       showEmptyResponseError();
       return;
     } else {
-      var url =
-          Uri.parse("http://${IpConfig.serverIp}/sijali/update-bantuan.php");
+      var url = Uri.parse("https://${IpConfig.serverIp}/update-bantuan.php");
 
       try {
         var request = http.MultipartRequest('POST', url);
@@ -373,7 +372,7 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                             borderRadius: BorderRadius.circular(
                                 10.0), // Set the border radius as needed
                             child: Image.network(
-                              'http://${IpConfig.serverIp}/sijali/${widget.detail['foto']}',
+                              'http://${IpConfig.serverIp}/${widget.detail['foto']}',
                               fit: BoxFit.cover,
                             ),
                           ),

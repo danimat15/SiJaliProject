@@ -61,7 +61,7 @@ class _DetailSearchingState extends State<DetailSearching> {
 
     if (confirmed) {
       final response = await http.post(
-        Uri.parse('http://${IpConfig.serverIp}/sijali/delete-kasus-batas.php'),
+        Uri.parse('https://${IpConfig.serverIp}/delete-kasus-batas.php'),
         body: {
           'id': widget.data['id'],
         },

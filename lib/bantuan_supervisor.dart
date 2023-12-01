@@ -15,7 +15,7 @@ class BantuanSupervisor extends StatefulWidget {
 class _BantuanSupervisorState extends State<BantuanSupervisor> {
   Future<List<Map<String, dynamic>>> getUsulan() async {
     try {
-      var url = 'http://${IpConfig.serverIp}/sijali/read-bantuan-usulan.php';
+      var url = 'https://${IpConfig.serverIp}/read-bantuan-usulan.php';
       var response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
@@ -34,8 +34,7 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
 
   Future<List<Map<String, dynamic>>> getPermasalahan() async {
     try {
-      var url =
-          'http://${IpConfig.serverIp}/sijali/read-bantuan-permasalahan.php';
+      var url = 'https://${IpConfig.serverIp}/read-bantuan-permasalahan.php';
       var response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {

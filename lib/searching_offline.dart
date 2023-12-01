@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:sijaliproject/api_config.dart';
-import 'package:sijaliproject/detail_searching.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:sijaliproject/local_database/database_helper.dart';
+// import 'package:sijaliproject/detail_searchingoffline.dart';
 
 class CustomContainer extends StatelessWidget {
+  final VoidCallback? onTap;
+  final String uraianKegiatan;
   final List<Map<String, dynamic>> filteredData;
   final int index;
 
-  final VoidCallback? onTap;
-
-  const CustomContainer({
-    Key? key,
-    required this.filteredData,
-    required this.index,
-    this.onTap,
-  }) : super(key: key);
+  const CustomContainer(
+      {Key? key,
+      this.onTap,
+      required this.filteredData,
+      required this.uraianKegiatan,
+      required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,7 @@ class CustomContainer extends StatelessWidget {
     if (uraianKegiatan.length > 100) {
       uraianKegiatan = uraianKegiatan.substring(0, 75) + '...';
     }
-    // Your existing code here
+
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -117,113 +115,62 @@ class CustomContainer extends StatelessWidget {
   }
 }
 
-class Searching extends StatefulWidget {
-  const Searching({Key? key}) : super(key: key);
+class SearchingOffline extends StatefulWidget {
+  const SearchingOffline({super.key});
 
   @override
-  State<Searching> createState() => _SearchingState();
+  State<SearchingOffline> createState() => _SearchingOfflineState();
 }
 
-class _SearchingState extends State<Searching> {
-  TextEditingController searchController = TextEditingController();
-  Future<List<Map<String, dynamic>>>? futureData;
+class _SearchingOfflineState extends State<SearchingOffline> {
   DatabaseHelper dbHelper = DatabaseHelper();
+  TextEditingController searchController = TextEditingController();
+  Future<void>? futureData;
+  List<Map<String, dynamic>> searchResults = [];
+  List<Map<String, dynamic>> filteredData = [];
 
   @override
   void initState() {
     super.initState();
     // Initialize futureData here
-    futureData = fetchData();
+    fetchData();
   }
 
-  Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(
-        Uri.parse('http://${IpConfig.serverIp}/searching-kasus-batas.php'));
+  Future<void> fetchData() async {
+    String searchQuery = searchController.text.toLowerCase();
+    List<Map<String, dynamic>> result = await dbHelper.getAllData();
+    print('Data dari database lokal: $result');
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.cast<Map<String, dynamic>>().toList();
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
+    setState(() {
+      filteredData = result.where((record) {
+        String uraianKegiatan = record['uraian_kegiatan'].toLowerCase();
+        return uraianKegiatan.contains(searchQuery);
+      }).toList();
+    });
 
-  // Define a list of stopwords
-  List<String> stopwords = [
-    'dan',
-    'dari',
-    'yang',
-    'di',
-    'ke',
-    'pada',
-    /* add more stopwords as needed */
-  ];
-
-// Other existing imports and code...
-
-  Future<void> addData(String keyword) async {
-    // Tokenize the input string, remove punctuation, and filter out stopwords
-    List<String> tokens = tokenizeRemovePunctuationAndStopwords(keyword);
-
-    // Add each token to the database
-    for (String token in tokens) {
-      final response = await http.post(
-        Uri.parse('http://${IpConfig.serverIp}/insert-kata-kunci.php'),
-        body: {'keyword': token},
-      );
-
-      if (response.statusCode == 200) {
-        print('Token added successfully: $token');
-      } else {
-        print('Failed to add token: $token');
-      }
-    }
-  }
-
-  List<String> tokenizeRemovePunctuationAndStopwords(String input) {
-    // Use a regular expression to replace non-alphanumeric characters with an empty string
-    List<String> tokens = input.replaceAll(RegExp(r'[^\w\s]'), '').split(' ');
-
-    // Convert tokens to lowercase
-    tokens = tokens.map((token) => token.toLowerCase()).toList();
-
-    // Filter out stopwords
-    tokens = tokens.where((token) => !stopwords.contains(token)).toList();
-
-    return tokens;
-  }
-
-  List<Map<String, dynamic>> filterData(
-      List<Map<String, dynamic>> data, String query) {
-    String lowercaseQuery = query.toLowerCase();
-
-    return data
-        .where((map) =>
-            map['uraian_kegiatan'].toLowerCase().contains(lowercaseQuery) ||
-            map['kd_kbli'].toLowerCase().contains(lowercaseQuery) ||
-            map['jenis_usaha'].toLowerCase().contains(lowercaseQuery) ||
-            map['kd_kategori'].toLowerCase().contains(lowercaseQuery) ||
-            map['rincian_kategori'].toLowerCase().contains(lowercaseQuery) ||
-            map['deskripsi_kbli'].toLowerCase().contains(lowercaseQuery))
-        .toList();
-  }
-
-  Future<void> fetchDataFromDatabase() async {
-    // Panggil metode untuk menyinkronkan data dari MySQL ke SQLite
-    await dbHelper.syncDataToLocalDatabase();
+    // Gunakan data yang sudah terfilter
+    print('Data yang sudah terfilter: $filteredData');
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryHeight = MediaQuery.of(context).size.height;
-    final mediaQueryWidht = MediaQuery.of(context).size.width;
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color(0xFFEBE4D1),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF26577C),
+        title: Text(
+          'SiJali BPS',
+          style: TextStyle(
+              color: Color(0xFFEBE4D1), fontSize: mediaQueryWidth * 0.06),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.only(
-            left: mediaQueryWidht * 0.05,
+            left: mediaQueryWidth * 0.05,
             top: mediaQueryHeight * 0.05,
-            right: mediaQueryWidht * 0.05,
+            right: mediaQueryWidth * 0.05,
             bottom: mediaQueryHeight * 0.01),
         child: SingleChildScrollView(
           child: Column(
@@ -261,6 +208,7 @@ class _SearchingState extends State<Searching> {
                         controller: searchController,
                         onSubmitted: (query) {
                           setState(() {
+                            // Panggil metode pencarian
                             futureData = fetchData();
                           });
                         },
@@ -276,10 +224,11 @@ class _SearchingState extends State<Searching> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: mediaQueryWidht * 0.02),
+                    padding: EdgeInsets.only(left: mediaQueryWidth * 0.02),
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
+                          // Panggil metode pencarian
                           futureData = fetchData();
                         });
                       },
@@ -288,37 +237,14 @@ class _SearchingState extends State<Searching> {
                           size: mediaQueryHeight * 0.04),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: mediaQueryWidht * 0.02),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          fetchDataFromDatabase();
-                        });
-                      },
-                      child: Icon(Icons.sync,
-                          color: Color(0xFF26577C),
-                          size: mediaQueryHeight * 0.04),
-                    ),
-                  ),
                 ],
               ),
               SizedBox(height: mediaQueryHeight * 0.02),
-              FutureBuilder<List<Map<String, dynamic>>>(
-                future: futureData,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    List<Map<String, dynamic>> filteredData = filterData(
-                        snapshot.data!, searchController.text.toLowerCase());
-
-                    if (filteredData.isEmpty) {
-                      // Show "not found" image
-                      return Padding(
-                        padding: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+              Container(
+                margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: filteredData.isEmpty
+                    ? Center(
                         child: Text(
                           'Kasus batas tidak ditemukan. Silakan coba kembali dengan kata kunci lain atau tanyakan pada menu Bantuan',
                           textAlign: TextAlign.center,
@@ -328,13 +254,8 @@ class _SearchingState extends State<Searching> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      );
-                    }
-
-                    return Container(
-                      margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      child: ListView.builder(
+                      )
+                    : ListView.builder(
                         shrinkWrap: true,
                         itemCount: filteredData.length,
                         itemBuilder: (context, index) {
@@ -342,29 +263,45 @@ class _SearchingState extends State<Searching> {
                             filteredData: filteredData,
                             index: index,
                             onTap: () {
-                              addData(filteredData[index]['jenis_usaha']);
+                              // addData(filteredData[index]['jenis_usaha']);
                               // Navigasi ke halaman lain di sini
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetailSearching(
-                                      data: filteredData[index]),
-                                ),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => DetailSearchingOffline(
+                              //         data: filteredData[index]),
+                              //   ),
+                              // );
                             },
+                            uraianKegiatan: filteredData[index]
+                                ['uraian_kegiatan'],
                           );
                         },
                         padding:
                             EdgeInsets.only(bottom: mediaQueryHeight * 0.15),
                       ),
-                    );
-                  }
-                },
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> fetchDataFromDatabase() async {
+    // Panggil metode untuk menyinkronkan data dari MySQL ke SQLite
+    // await dbHelper.syncDataToLocalDatabase();
+
+    // Ambil data dari tabel lokal
+    List<Map<String, dynamic>> result =
+        await (await dbHelper.database)!.query('kasusbatas');
+
+    // Gunakan data yang diambil
+    print('ini di offline');
+    print(result);
+    print('ini di offline');
+
+    // Tutup koneksi database jika perlu
+    // dbHelper.database!.close();
   }
 }
