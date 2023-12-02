@@ -3,6 +3,8 @@ import 'package:sijaliproject/about_app.dart';
 import 'package:sijaliproject/login.dart';
 import 'package:sijaliproject/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'pesan_masuk_mitra.dart'; // Import the new files
+import 'pesan_masuk_supervisor.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -23,8 +25,7 @@ class _SidebarState extends State<Sidebar> {
       setState(() {
         username = pref.getString("username")!;
         role = pref.getString("role")!;
-        id = pref.getInt("id") ??
-            0; // Provide a default value (e.g., 0) if id is null
+        id = pref.getInt("id") ?? 0;
       });
     } else {
       Navigator.of(context, rootNavigator: true).pop();
@@ -60,10 +61,35 @@ class _SidebarState extends State<Sidebar> {
         content: Text("Berhasil Logout"),
         duration: Duration(seconds: 2),
         backgroundColor: Colors.green,
-        // adjust position of SnackBar
         behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  // Updated method to handle "Pesan Masuk" tap
+  handlePesanMasukTap() {
+    if (role == 'mitra') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Home(
+            initialScreen: PesanMasukMitra(),
+            initialTab: 5,
+          ),
+        ),
+      );
+    } else if (role == 'supervisor') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Home(
+            initialScreen: PesanMasukSupervisor(),
+            initialTab: 5,
+          ),
+        ),
+      );
+    }
+    // Add additional conditions if needed for other roles
   }
 
   @override
@@ -111,7 +137,7 @@ class _SidebarState extends State<Sidebar> {
               style: TextStyle(
                   color: Color(0xFFEBE4D1), fontSize: mediaQueryWidth * 0.04),
             ),
-            onTap: () {},
+            onTap: handlePesanMasukTap,
           ),
           ListTile(
             leading: Icon(
