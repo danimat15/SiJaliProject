@@ -35,8 +35,21 @@ class PesanMasukSupervisor extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text('This is the Pesan Masuk Supervisor page'),
+      body: ListView.builder(
+        itemCount: 5, // Set the number of messages as needed
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.person), // Icon user
+                title: Text('User Name'), // Name of the user
+                subtitle: Text('Message content here'), // Message content
+                trailing: Text('Timestamp'), // Timestamp
+              ),
+              Divider(), // Divider between messages
+            ],
+          );
+        },
       ),
     );
   }
