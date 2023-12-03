@@ -42,7 +42,7 @@ class CustomContainer extends StatelessWidget {
                     topLeft: Radius.circular(15),
                     bottomLeft: Radius.circular(15),
                   ),
-                  color: Colors.grey,
+                  color: Color(0xFF26577C),
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(

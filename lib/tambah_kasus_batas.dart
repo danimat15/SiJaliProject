@@ -83,6 +83,18 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
       return;
     }
 
+    if (kodeKBLI != 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Kode KBLI harus berupa 5 karakter"),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     var url = Uri.parse("https://${IpConfig.serverIp}/tambah-kasus-batas.php");
 
     String kategori = "";

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/local_database/database_helper.dart';
-// import 'package:sijaliproject/detail_searchingoffline.dart';
+import 'package:sijaliproject/detail_searching_offline.dart';
 
 class CustomContainer extends StatelessWidget {
   final VoidCallback? onTap;
@@ -40,7 +40,7 @@ class CustomContainer extends StatelessWidget {
                     topLeft: Radius.circular(15),
                     bottomLeft: Radius.circular(15),
                   ),
-                  color: Colors.grey,
+                  color: Color(0xFF26577C),
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -168,121 +168,118 @@ class _SearchingOfflineState extends State<SearchingOffline> {
       ),
       body: Padding(
         padding: EdgeInsets.only(
-            left: mediaQueryWidth * 0.05,
-            top: mediaQueryHeight * 0.05,
-            right: mediaQueryWidth * 0.05,
-            bottom: mediaQueryHeight * 0.01),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'PENCARIAN KASUS BATAS',
-                  style: TextStyle(
-                    fontSize: mediaQueryHeight * 0.03,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF26577C),
-                  ),
+          left: mediaQueryWidth * 0.05,
+          top: mediaQueryHeight * 0.06,
+          right: mediaQueryWidth * 0.05,
+        ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                'PENCARIAN KASUS BATAS',
+                style: TextStyle(
+                  fontSize: mediaQueryHeight * 0.03,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF26577C),
                 ),
               ),
-              SizedBox(height: mediaQueryHeight * 0.02),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(3, 3),
-                          ),
-                        ],
-                      ),
-                      child: TextField(
-                        controller: searchController,
-                        onSubmitted: (query) {
-                          setState(() {
-                            // Panggil metode pencarian
-                            futureData = fetchData();
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Search',
-                          hintStyle: TextStyle(
-                            fontSize: mediaQueryHeight * 0.02,
-                            color: Colors.grey,
-                          ),
+            ),
+            SizedBox(height: mediaQueryHeight * 0.02),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(3, 3),
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: mediaQueryWidth * 0.02),
-                    child: GestureDetector(
-                      onTap: () {
+                    child: TextField(
+                      controller: searchController,
+                      onSubmitted: (query) {
                         setState(() {
                           // Panggil metode pencarian
                           futureData = fetchData();
                         });
                       },
-                      child: Icon(Icons.search,
-                          color: Color(0xFF26577C),
-                          size: mediaQueryHeight * 0.04),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                          fontSize: mediaQueryHeight * 0.02,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: mediaQueryHeight * 0.02),
-              Container(
-                margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: filteredData.isEmpty
-                    ? Center(
-                        child: Text(
-                          'Kasus batas tidak ditemukan. Silakan coba kembali dengan kata kunci lain atau tanyakan pada menu Bantuan',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: mediaQueryHeight * 0.02,
-                            color: Color(0xFF26577C),
-                            fontWeight: FontWeight.bold,
-                          ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: mediaQueryWidth * 0.02),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        // Panggil metode pencarian
+                        futureData = fetchData();
+                      });
+                    },
+                    child: Icon(Icons.search,
+                        color: Color(0xFF26577C),
+                        size: mediaQueryHeight * 0.04),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: mediaQueryHeight * 0.02),
+            Container(
+              margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: filteredData.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Kasus batas tidak ditemukan. Silakan coba kembali dengan kata kunci lain atau tanyakan pada menu Bantuan',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: mediaQueryHeight * 0.02,
+                          color: Color(0xFF26577C),
+                          fontWeight: FontWeight.bold,
                         ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: filteredData.length,
-                        itemBuilder: (context, index) {
-                          return CustomContainer(
-                            filteredData: filteredData,
-                            index: index,
-                            onTap: () {
-                              // addData(filteredData[index]['jenis_usaha']);
-                              // Navigasi ke halaman lain di sini
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => DetailSearchingOffline(
-                              //         data: filteredData[index]),
-                              //   ),
-                              // );
-                            },
-                            uraianKegiatan: filteredData[index]
-                                ['uraian_kegiatan'],
-                          );
-                        },
-                        padding:
-                            EdgeInsets.only(bottom: mediaQueryHeight * 0.15),
                       ),
-              ),
-            ],
-          ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: filteredData.length,
+                      itemBuilder: (context, index) {
+                        return CustomContainer(
+                          filteredData: filteredData,
+                          index: index,
+                          onTap: () {
+                            // addData(filteredData[index]['jenis_usaha']);
+                            // Navigasi ke halaman lain di sini
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailSearchingOffline(
+                                    data: filteredData[index]),
+                              ),
+                            );
+                          },
+                          uraianKegiatan: filteredData[index]
+                              ['uraian_kegiatan'],
+                        );
+                      },
+                      padding: EdgeInsets.only(bottom: mediaQueryHeight * 0.50),
+                    ),
+            ),
+          ],
         ),
       ),
     );

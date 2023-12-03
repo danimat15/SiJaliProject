@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sijaliproject/get_started.dart';
 import 'package:sijaliproject/home.dart';
 import 'package:sijaliproject/dashboard.dart';
 import 'package:sijaliproject/api_config.dart';
@@ -68,6 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> checkInternetOnReturn() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      showOfflineModePopup();
+    }
+  }
+
   void showOfflineModePopup() {
     showDialog(
       context: context,
@@ -78,8 +86,15 @@ class _LoginScreenState extends State<LoginScreen> {
               "Anda dalam mode offline. Silakan aktifkan koneksi internet untuk melanjutkan."),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the dialog
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => Welcome(),
+                  ),
+                );
               },
               child: Text("Kembali"),
             ),
@@ -92,7 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(
                     builder: (_) => SearchingOffline(),
                   ),
-                ); // Close the dialog
+                ).then((_) {
+                  // Check internet when returning from SearchingOffline
+                  checkInternetOnReturn();
+                }); // Close the dialog
               },
               child: Text("Mode Offline"),
             ),
@@ -331,8 +349,16 @@ class _LoginScreenState extends State<LoginScreen> {
     error = false;
     showprogress = false;
     checkLogin();
+    checkInternetOnPageOpen();
 
     super.initState();
+  }
+
+  void checkInternetOnPageOpen() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      showOfflineModePopup();
+    }
   }
 
   @override
