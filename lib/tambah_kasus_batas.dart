@@ -83,7 +83,7 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
       return;
     }
 
-    if (kodeKBLI != 5) {
+    if (_kodeKBLIController.text.length != 5) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Kode KBLI harus berupa 5 karakter"),
