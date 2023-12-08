@@ -26,6 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
   var _username = TextEditingController();
   var _password = TextEditingController();
 
+  bool isOffline = false;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<int?> getUserId(String username) async {
@@ -72,13 +74,21 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> checkInternetOnReturn() async {
     bool isConnected = await checkInternet();
     if (!isConnected) {
+      setState(() {
+        isOffline = true;
+      });
       showOfflineModePopup();
+    } else {
+      setState(() {
+        isOffline = false;
+      });
     }
   }
 
   void showOfflineModePopup() {
     showDialog(
       context: context,
+      barrierDismissible: false, // Make it not dismissible
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Tidak Ada Koneksi Internet"),
@@ -87,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                // Handle action when "Mode Offline" is pressed
+                // Handle action when "Kembali" is pressed
                 // Add your offline mode logic here
                 Navigator.pushReplacement(
                   context,
@@ -350,8 +360,14 @@ class _LoginScreenState extends State<LoginScreen> {
     showprogress = false;
     checkLogin();
     checkInternetOnPageOpen();
+    initAsyncState();
 
     super.initState();
+  }
+
+  Future<void> initAsyncState() async {
+    isOffline = !(await checkInternet());
+    // Rest of your initState logic...
   }
 
   void checkInternetOnPageOpen() async {

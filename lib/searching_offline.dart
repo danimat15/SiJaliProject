@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/local_database/database_helper.dart';
 import 'package:sijaliproject/detail_searching_offline.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomContainer extends StatelessWidget {
   final VoidCallback? onTap;
@@ -128,28 +129,44 @@ class _SearchingOfflineState extends State<SearchingOffline> {
   Future<void>? futureData;
   List<Map<String, dynamic>> searchResults = [];
   List<Map<String, dynamic>> filteredData = [];
+  String lastSyncDateTime = 'N/A';
 
   @override
   void initState() {
     super.initState();
     // Initialize futureData here
     fetchData();
+    getLastSyncDateTime();
   }
 
   Future<void> fetchData() async {
     String searchQuery = searchController.text.toLowerCase();
+    List<String> searchKeywords = searchQuery.split(' ');
+
     List<Map<String, dynamic>> result = await dbHelper.getAllData();
-    print('Data dari database lokal: $result');
 
     setState(() {
       filteredData = result.where((record) {
         String uraianKegiatan = record['uraian_kegiatan'].toLowerCase();
-        return uraianKegiatan.contains(searchQuery);
+        String kdKbli = record['kd_kbli'].toLowerCase();
+        String jenisUsaha = record['jenis_usaha'].toLowerCase();
+
+        // Check if any keyword is present in any of the fields
+        return searchKeywords.any((keyword) =>
+            uraianKegiatan.contains(keyword) ||
+            kdKbli.contains(keyword) ||
+            jenisUsaha.contains(keyword));
       }).toList();
     });
+  }
 
-    // Gunakan data yang sudah terfilter
-    print('Data yang sudah terfilter: $filteredData');
+  Future<void> getLastSyncDateTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String lastSyncDateTimeValue = prefs.getString('lastSyncDateTime') ?? 'N/A';
+
+    setState(() {
+      lastSyncDateTime = lastSyncDateTimeValue;
+    });
   }
 
   @override
@@ -163,7 +180,9 @@ class _SearchingOfflineState extends State<SearchingOffline> {
         title: Text(
           'SiJali BPS',
           style: TextStyle(
-              color: Color(0xFFEBE4D1), fontSize: mediaQueryWidth * 0.06),
+            color: Color(0xFFEBE4D1),
+            fontSize: mediaQueryWidth * 0.06,
+          ),
         ),
       ),
       body: Padding(
@@ -172,133 +191,148 @@ class _SearchingOfflineState extends State<SearchingOffline> {
           top: mediaQueryHeight * 0.06,
           right: mediaQueryWidth * 0.05,
         ),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                'PENCARIAN KASUS BATAS',
-                style: TextStyle(
-                  fontSize: mediaQueryHeight * 0.03,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF26577C),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'PENCARIAN KASUS BATAS',
+                  style: TextStyle(
+                    fontSize: mediaQueryHeight * 0.03,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF26577C),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: mediaQueryHeight * 0.02),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(3, 3),
+              SizedBox(height: mediaQueryHeight * 0.02),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(3, 3),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: searchController,
+                        onSubmitted: (query) {
+                          setState(() {
+                            // Panggil metode pencarian
+                            futureData = fetchData();
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Search',
+                          hintStyle: TextStyle(
+                            fontSize: mediaQueryHeight * 0.02,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ],
+                      ),
                     ),
-                    child: TextField(
-                      controller: searchController,
-                      onSubmitted: (query) {
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: mediaQueryWidth * 0.02),
+                    child: GestureDetector(
+                      onTap: () {
                         setState(() {
                           // Panggil metode pencarian
                           futureData = fetchData();
                         });
                       },
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search',
-                        hintStyle: TextStyle(
-                          fontSize: mediaQueryHeight * 0.02,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: mediaQueryWidth * 0.02),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        // Panggil metode pencarian
-                        futureData = fetchData();
-                      });
-                    },
-                    child: Icon(Icons.search,
+                      child: Icon(
+                        Icons.search,
                         color: Color(0xFF26577C),
-                        size: mediaQueryHeight * 0.04),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: mediaQueryHeight * 0.02),
-            Container(
-              margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: filteredData.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Kasus batas tidak ditemukan. Silakan coba kembali dengan kata kunci lain atau tanyakan pada menu Bantuan',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: mediaQueryHeight * 0.02,
-                          color: Color(0xFF26577C),
-                          fontWeight: FontWeight.bold,
-                        ),
+                        size: mediaQueryHeight * 0.04,
                       ),
-                    )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: filteredData.length,
-                      itemBuilder: (context, index) {
-                        return CustomContainer(
-                          filteredData: filteredData,
-                          index: index,
-                          onTap: () {
-                            // addData(filteredData[index]['jenis_usaha']);
-                            // Navigasi ke halaman lain di sini
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailSearchingOffline(
-                                    data: filteredData[index]),
-                              ),
-                            );
-                          },
-                          uraianKegiatan: filteredData[index]
-                              ['uraian_kegiatan'],
-                        );
-                      },
-                      padding: EdgeInsets.only(bottom: mediaQueryHeight * 0.50),
                     ),
-            ),
-          ],
+                  ),
+                ],
+              ),
+              SizedBox(height: mediaQueryHeight * 0.02),
+              Row(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Terakhir diperbarui: ',
+                      style: TextStyle(
+                        fontSize: mediaQueryHeight * 0.015,
+                        color: Color(0xFF26577C),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    lastSyncDateTime,
+                    style: TextStyle(
+                      fontSize: mediaQueryHeight * 0.015,
+                      color: Color(0xFF26577C),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: mediaQueryHeight * 0.01),
+              Container(
+                margin: EdgeInsets.only(top: mediaQueryHeight * 0.04),
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: filteredData.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Kasus batas tidak ditemukan. Silakan coba kembali dengan kata kunci lain atau tanyakan pada menu Bantuan',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: mediaQueryHeight * 0.02,
+                            color: Color(0xFF26577C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: filteredData.length,
+                        itemBuilder: (context, index) {
+                          return CustomContainer(
+                            filteredData: filteredData,
+                            index: index,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailSearchingOffline(
+                                    data: filteredData[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            uraianKegiatan: filteredData[index]
+                                ['uraian_kegiatan'],
+                          );
+                        },
+                        padding:
+                            EdgeInsets.only(bottom: mediaQueryHeight * 0.50),
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<void> fetchDataFromDatabase() async {
-    // Panggil metode untuk menyinkronkan data dari MySQL ke SQLite
-    // await dbHelper.syncDataToLocalDatabase();
-
-    // Ambil data dari tabel lokal
     List<Map<String, dynamic>> result =
         await (await dbHelper.database)!.query('kasusbatas');
-
-    // Gunakan data yang diambil
-    print('ini di offline');
-    print(result);
-    print('ini di offline');
-
-    // Tutup koneksi database jika perlu
-    // dbHelper.database!.close();
+    print('Data di offline: $result');
   }
 }

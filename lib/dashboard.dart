@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:sijaliproject/api_config.dart';
 import 'package:sijaliproject/word_cloud/word_cloud.dart';
+import 'dart:io';
+import 'package:sijaliproject/searching_offline.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -30,6 +32,60 @@ class _DashboardState extends State<Dashboard> {
       print('Error fetching permasalahan: $e');
       return [];
     }
+  }
+
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  void showOfflineModePopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tidak Ada Koneksi Internet"),
+          content: Text(
+              "Anda dalam mode offline. Silakan aktifkan koneksi internet untuk melanjutkan."),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+              },
+              child: Text("Kembali"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SearchingOffline(),
+                  ),
+                ); // Close the dialog
+              },
+              child: Text("Mode Offline"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkInternet().then((value) {
+      if (!value) {
+        showOfflineModePopup();
+      }
+    });
   }
 
   @override
