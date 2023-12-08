@@ -65,9 +65,10 @@ class _DashboardState extends State<SupervisorKritikSaran> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Color(0xFFEBE4D1),
       body: SingleChildScrollView(
         child: Container(
-          color: Color(0xFFEBE4D1),
+          // color: Color(0xFFEBE4D1),
           padding: EdgeInsets.only(
               top: screenHeight * 0.05,
               left: screenWidth * 0.05,

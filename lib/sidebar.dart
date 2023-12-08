@@ -92,6 +92,44 @@ class _SidebarState extends State<Sidebar> {
     // Add additional conditions if needed for other roles
   }
 
+  Future<void> showLogoutConfirmationDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Konfirmasi Logout',
+              style: TextStyle(color: Color(0xFF26577C))),
+          content: Text('Apakah anda yakin untuk logout dari aplikasi ini?',
+              style: TextStyle(color: Color(0xFF26577C))),
+          backgroundColor: Colors.white,
+          actions: [
+            ElevatedButton.icon(
+              onPressed: () {
+                logOut();
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+              ),
+              icon: Icon(Icons.check),
+              label: SizedBox.shrink(), // Hide the label
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red, // Change the background color to green
+              ),
+              icon: Icon(Icons.clear,
+                  color: Colors.white), // Change the color to white
+              label: SizedBox.shrink(), // Hide the label
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     getPref();
@@ -170,7 +208,7 @@ class _SidebarState extends State<Sidebar> {
                     color: Color(0xFFEBE4D1),
                     fontSize: mediaQueryWidth * 0.04)),
             onTap: () {
-              logOut();
+              showLogoutConfirmationDialog();
             },
           ),
         ],

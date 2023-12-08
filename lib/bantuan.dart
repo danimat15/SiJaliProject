@@ -132,11 +132,14 @@ class _BantuanState extends State<Bantuan> {
         clearForm();
       } else {
         // Show error notification
+        print(response.statusCode);
+        print('gagal');
         showErrorNotification();
       }
     } catch (error) {
       // Handle network or other errors
       print("Error: $error");
+      print('gagal');
       showErrorNotification();
     }
   }

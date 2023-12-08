@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var _password = TextEditingController();
 
   bool isOffline = false;
+  bool _obscureText = true;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -486,10 +487,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: TextFormField(
                       controller: _password,
-                      obscureText: true,
-                      decoration: const InputDecoration(
+                      obscureText:
+                          _obscureText, // Use a variable to toggle visibility
+                      decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Password',
+                        suffixIcon: IconButton(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: const Color(0xFFE55604),
+                          ),
+                          onPressed: () {
+                            // Toggle password visibility
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -498,12 +515,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               content: Text("Password tidak boleh kosong"),
                               duration: Duration(seconds: 2),
                               backgroundColor: Colors.red,
-                              // adjust position of SnackBar
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
                         }
-                        ;
                         return null;
                       },
                       onChanged: (value) {
@@ -514,6 +529,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+
                 TextButton(
                   onPressed: () {
                     // Handle action when "lupa password?" is pressed

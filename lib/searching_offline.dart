@@ -129,7 +129,7 @@ class _SearchingOfflineState extends State<SearchingOffline> {
   Future<void>? futureData;
   List<Map<String, dynamic>> searchResults = [];
   List<Map<String, dynamic>> filteredData = [];
-  String lastSyncDateTime = 'N/A';
+  String lastSyncDateTime = '';
 
   @override
   void initState() {

@@ -1,6 +1,7 @@
 import 'package:sijaliproject/get_started.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, //remove debug banner
       title: 'Sijali App',
       theme: ThemeData(
+        // textTheme: GoogleFonts.poppinsTextTheme(),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
