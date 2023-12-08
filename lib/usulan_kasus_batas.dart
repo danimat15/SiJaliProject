@@ -8,7 +8,7 @@ class UsulanKasusBatas extends StatelessWidget {
         title: Text('Usulan Kasus Batas'),
       ),
       body: Center(
-        child: Text('This is the Usulan Kasus Batas page'),
+        child: const Text('This is the Usulan Kasus Batas page'),
       ),
     );
   }
