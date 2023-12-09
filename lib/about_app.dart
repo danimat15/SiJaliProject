@@ -1,5 +1,10 @@
 import 'package:sijaliproject/sidebar.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:sijaliproject/searching_offline.dart';
+import 'dart:io';
 
 class AboutApp extends StatefulWidget {
   const AboutApp({super.key});
@@ -9,6 +14,107 @@ class AboutApp extends StatefulWidget {
 }
 
 class _DashboardState extends State<AboutApp> {
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+  bool isOffline = false;
+
+  void showOfflineModePopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Make it not dismissible
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tidak Ada Koneksi Internet"),
+          content: Text(
+              "Anda dalam mode offline. Silakan aktifkan koneksi internet untuk melanjutkan."),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Kembali" is pressed
+                // Add your offline mode logic here
+                Navigator.pop(context, 'Cancel');
+                setState(() => isAlertSet = false);
+                isDeviceConnected =
+                    await InternetConnectionChecker().hasConnection;
+                if (!isDeviceConnected && isAlertSet == false) {
+                  showDialogBox();
+                  setState(() => isAlertSet = true);
+                }
+              },
+              child: Text("Oke"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SearchingOffline(),
+                  ),
+                ).then((_) {
+                  // Check internet when returning from SearchingOffline
+                  checkInternetOnReturn();
+                }); // Close the dialog
+              },
+              child: Text("Mode Offline"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            showDialogBox();
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
+  showDialogBox() => showOfflineModePopup();
+
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> checkInternetOnReturn() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      setState(() {
+        isOffline = true;
+      });
+      showOfflineModePopup();
+    } else {
+      setState(() {
+        isOffline = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getConnectivity();
+    checkInternetOnReturn();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

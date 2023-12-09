@@ -10,6 +10,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 import 'package:sijaliproject/home_supervisor.dart';
 import 'package:sijaliproject/searching_offline.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,6 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
 
   Future<int?> getUserId(String username) async {
     String apiurl = "https://${IpConfig.serverIp}/get-user-id.php";
@@ -63,6 +71,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            showDialogBox();
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
   Future<bool> checkInternet() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -86,6 +105,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> initAsyncState() async {
+    isOffline = !(await checkInternet());
+  }
+
+  void checkInternetOnPageOpen() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      showOfflineModePopup();
+    }
+  }
+
   void showOfflineModePopup() {
     showDialog(
       context: context,
@@ -100,14 +130,16 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 // Handle action when "Kembali" is pressed
                 // Add your offline mode logic here
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => Welcome(),
-                  ),
-                );
+                Navigator.pop(context, 'Cancel');
+                setState(() => isAlertSet = false);
+                isDeviceConnected =
+                    await InternetConnectionChecker().hasConnection;
+                if (!isDeviceConnected && isAlertSet == false) {
+                  showDialogBox();
+                  setState(() => isAlertSet = true);
+                }
               },
-              child: Text("Kembali"),
+              child: Text("Oke"),
             ),
             TextButton(
               onPressed: () async {
@@ -202,31 +234,6 @@ class _LoginScreenState extends State<LoginScreen> {
           });
           role = jsondata["role"];
 
-          // if (role == 'mitra') {
-          //   saveSession(username!);
-          //   // Navigator.pushReplacement(
-          //   //   context,
-          //   //   MaterialPageRoute(
-          //   //     builder: (_) => Home(
-          //   //       initialScreen: const Dashboard(),
-          //   //       initialTab: 0,
-          //   //     ),
-          //   //   ),
-          //   // );
-          //   print('mitra');
-          // } else {
-          //   saveSession(username!);
-          //   // Navigator.pushReplacement(
-          //   //   context,
-          //   //   MaterialPageRoute(
-          //   //     builder: (_) => HomeSupervisor(
-          //   //       initialScreen: const Dashboard(),
-          //   //       initialTab: 0,
-          //   //     ),
-          //   //   ),
-          //   // );
-          //   print('supervisor');
-          // }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Berhasil login sebagai $role "),
@@ -362,21 +369,18 @@ class _LoginScreenState extends State<LoginScreen> {
     checkLogin();
     checkInternetOnPageOpen();
     initAsyncState();
+    getConnectivity();
 
     super.initState();
   }
 
-  Future<void> initAsyncState() async {
-    isOffline = !(await checkInternet());
-    // Rest of your initState logic...
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
-  void checkInternetOnPageOpen() async {
-    bool isConnected = await checkInternet();
-    if (!isConnected) {
-      showOfflineModePopup();
-    }
-  }
+  showDialogBox() => showOfflineModePopup();
 
   @override
   Widget build(BuildContext context) {
@@ -390,15 +394,33 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: screenHeight * 0.04,
+              top: screenHeight * 0.01,
               left: screenWidth * 0.08,
               right: screenWidth * 0.08,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: const Color(0xFFE55604),
+                      size: screenHeight * 0.04,
+                    ),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => Welcome(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
                 SizedBox(
-                  height: screenHeight * 0.06,
+                  height: screenHeight * 0.05,
                 ),
                 Image.asset(
                   "images/bg1-removebg-preview.png",

@@ -1,8 +1,12 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/api_config.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:sijaliproject/searching_offline.dart';
+import 'dart:io';
 
 class Notifikasi extends StatefulWidget {
   const Notifikasi({Key? key}) : super(key: key);
@@ -12,16 +16,124 @@ class Notifikasi extends StatefulWidget {
 }
 
 class _DashboardState extends State<Notifikasi> {
-  Future<List<Map<String, dynamic>>> getNotifikasi() async {
-    var url = 'https://${IpConfig.serverIp}/read-notifikasi.php';
-    var response = await http.get(Uri.parse(url));
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+  bool isOffline = false;
 
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      return data.cast<Map<String, dynamic>>();
-    } else {
-      throw Exception('Failed to load data');
+  Future<List<Map<String, dynamic>>> getNotifikasi() async {
+    try {
+      var url = 'https://${IpConfig.serverIp}/read-notifikasi.php';
+      var response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      // Handle the error when there is no internet connection
+      print('Error fetching notifikasi: $e');
+      // You can return an empty list or handle it based on your requirements
+      return [];
     }
+  }
+
+  void showOfflineModePopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Make it not dismissible
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tidak Ada Koneksi Internet"),
+          content: Text(
+              "Anda dalam mode offline. Silakan aktifkan koneksi internet untuk melanjutkan."),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Kembali" is pressed
+                // Add your offline mode logic here
+                Navigator.pop(context, 'Cancel');
+                setState(() => isAlertSet = false);
+                isDeviceConnected =
+                    await InternetConnectionChecker().hasConnection;
+                if (!isDeviceConnected && isAlertSet == false) {
+                  showDialogBox();
+                  setState(() => isAlertSet = true);
+                }
+              },
+              child: Text("Oke"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SearchingOffline(),
+                  ),
+                ).then((_) {
+                  // Check internet when returning from SearchingOffline
+                  checkInternetOnReturn();
+                }); // Close the dialog
+              },
+              child: Text("Mode Offline"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            showDialogBox();
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
+  showDialogBox() => showOfflineModePopup();
+
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> checkInternetOnReturn() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      setState(() {
+        isOffline = true;
+      });
+      showOfflineModePopup();
+    } else {
+      setState(() {
+        isOffline = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getConnectivity();
+    checkInternetOnReturn();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override

@@ -6,6 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:sijaliproject/local_database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:sijaliproject/searching_offline.dart';
+import 'dart:io';
 
 class CustomContainer extends StatelessWidget {
   final List<Map<String, dynamic>> filteredData;
@@ -131,12 +136,10 @@ class _SearchingState extends State<Searching> {
   Future<List<Map<String, dynamic>>>? futureData;
   DatabaseHelper dbHelper = DatabaseHelper();
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize futureData here
-    futureData = fetchData();
-  }
+  late StreamSubscription subscription;
+  bool isDeviceConnected = false;
+  bool isAlertSet = false;
+  bool isOffline = false;
 
   Future<List<Map<String, dynamic>>> fetchData([String? searchQuery]) async {
     final response = await http.get(
@@ -186,21 +189,27 @@ class _SearchingState extends State<Searching> {
 // Other existing imports and code...
 
   Future<void> addData(String keyword) async {
-    // Tokenize the input string, remove punctuation, and filter out stopwords
-    List<String> tokens = tokenizeRemovePunctuationAndStopwords(keyword);
+    try {
+      // Tokenize the input string, remove punctuation, and filter out stopwords
+      List<String> tokens = tokenizeRemovePunctuationAndStopwords(keyword);
 
-    // Add each token to the database
-    for (String token in tokens) {
-      final response = await http.post(
-        Uri.parse('http://${IpConfig.serverIp}/insert-kata-kunci.php'),
-        body: {'keyword': token},
-      );
+      // Add each token to the database
+      for (String token in tokens) {
+        final response = await http.post(
+          Uri.parse('http://${IpConfig.serverIp}/insert-kata-kunci.php'),
+          body: {'keyword': token},
+        );
 
-      if (response.statusCode == 200) {
-        print('Token added successfully: $token');
-      } else {
-        print('Failed to add token: $token');
+        if (response.statusCode == 200) {
+          print('Token added successfully: $token');
+        } else {
+          print('Failed to add token: $token');
+        }
       }
+    } catch (e) {
+      // Handle the error when there is no internet connection or any other issues
+      print('Error adding data: $e');
+      // You can log the error, show a message to the user, or handle it based on your requirements
     }
   }
 
@@ -339,6 +348,103 @@ class _SearchingState extends State<Searching> {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
     prefs.setString('lastSyncDateTime', formattedDate);
+  }
+
+  void showOfflineModePopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Make it not dismissible
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tidak Ada Koneksi Internet"),
+          content: Text(
+              "Anda dalam mode offline. Silakan aktifkan koneksi internet untuk melanjutkan."),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Kembali" is pressed
+                // Add your offline mode logic here
+                Navigator.pop(context, 'Cancel');
+                setState(() => isAlertSet = false);
+                isDeviceConnected =
+                    await InternetConnectionChecker().hasConnection;
+                if (!isDeviceConnected && isAlertSet == false) {
+                  showDialogBox();
+                  setState(() => isAlertSet = true);
+                }
+              },
+              child: Text("Oke"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Handle action when "Mode Offline" is pressed
+                // Add your offline mode logic here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SearchingOffline(),
+                  ),
+                ).then((_) {
+                  // Check internet when returning from SearchingOffline
+                  checkInternetOnReturn();
+                }); // Close the dialog
+              },
+              child: Text("Mode Offline"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            showDialogBox();
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
+  showDialogBox() => showOfflineModePopup();
+
+  Future<bool> checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> checkInternetOnReturn() async {
+    bool isConnected = await checkInternet();
+    if (!isConnected) {
+      setState(() {
+        isOffline = true;
+      });
+      showOfflineModePopup();
+    } else {
+      setState(() {
+        isOffline = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getConnectivity();
+    checkInternetOnReturn();
+    futureData = fetchData();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
