@@ -113,6 +113,50 @@ class _DetailSearchingState extends State<DetailSearching> {
     }
   }
 
+  Future<bool> _checkImageExists(String imagePath) async {
+    try {
+      final response = await http.head(
+        Uri.parse('https://${IpConfig.serverIp}/$imagePath'),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Error checking image existence: $e');
+      return false;
+    }
+  }
+
+  Widget _buildImageWidget(String? imagePath) {
+    if (imagePath != null && imagePath.isNotEmpty) {
+      return FutureBuilder(
+        future: _checkImageExists(imagePath),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == true) {
+              return Image.network(
+                'https://${IpConfig.serverIp}/$imagePath',
+                fit: BoxFit.cover,
+              );
+            } else {
+              // Handle case when image does not exist
+              return Image.network(
+                'https://via.placeholder.com/450x200', // Replace with your empty image URL
+                fit: BoxFit.cover,
+              );
+            }
+          } else {
+            // Handle case while the future is still running
+            return CircularProgressIndicator();
+          }
+        },
+      );
+    } else {
+      return Image.network(
+        'https://via.placeholder.com/450x200', // Replace with your empty image URL
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
   @override
   void initState() {
     getPref();
@@ -243,6 +287,36 @@ class _DetailSearchingState extends State<DetailSearching> {
                   style: TextStyle(
                     fontSize: mediaQueryHeight * 0.02,
                     color: Color(0xFF26577C),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: mediaQueryHeight * 0.05),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(
+                          left: mediaQueryWidth * 0.01,
+                          bottom: mediaQueryHeight * 0.01,
+                        ),
+                        child: Text(
+                          'Contoh Gambar:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: mediaQueryHeight * 0.03,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF26577C),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: mediaQueryHeight * 0.01),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: _buildImageWidget(widget.data['foto']),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 // UNTUK ROLE SUPERVISOR

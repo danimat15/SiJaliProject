@@ -246,318 +246,320 @@ class _DashboardState extends State<Dashboard> {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(top: mediaQueryHeight * 0.01),
-        color: const Color(0xFFEBE4D1),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(
-                  top: mediaQueryHeight * 0.01,
-                  left: mediaQueryWidth * 0.03,
-                ),
-                child: Text(
-                  'WORLDCLOUD JENIS USAHA',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: mediaQueryWidth * 0.06,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFFE55604),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(top: mediaQueryHeight * 0.01),
+          color: const Color(0xFFEBE4D1),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(
+                    top: mediaQueryHeight * 0.01,
+                    left: mediaQueryWidth * 0.03,
+                  ),
+                  child: Text(
+                    'WORLDCLOUD JENIS USAHA',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: mediaQueryWidth * 0.06,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFE55604),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                height: mediaQueryHeight * 0.3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xFFFFFFFF),
-                  // add shadow effects
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: getKeyword(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(
-                        child: Text('No keywords found'),
-                      );
-                    } else {
-                      List<Map> keywordData = snapshot.data!;
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  height: mediaQueryHeight * 0.3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xFFFFFFFF),
+                    // add shadow effects
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                    future: getKeyword(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(
+                          child: Text('No keywords found'),
+                        );
+                      } else {
+                        List<Map> keywordData = snapshot.data!;
 
-                      // Use keywordData to update your UI or perform other tasks
-                      return WordCloud(keywordData: keywordData);
-                      // return MyHomePage(title: 'Word Cloud');
-                    }
-                  },
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(
-                  top: mediaQueryHeight * 0.04,
-                  left: mediaQueryWidth * 0.03,
-                ),
-                child: Text(
-                  'RINGKASAN BULAN INI',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: mediaQueryWidth * 0.06,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFFE55604),
+                        // Use keywordData to update your UI or perform other tasks
+                        return WordCloud(keywordData: keywordData);
+                        // return MyHomePage(title: 'Word Cloud');
+                      }
+                    },
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                height: mediaQueryHeight * 0.3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  // color: const Color(0xFFFFFFFF),
-                  // add shadow effects
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.grey.withOpacity(0.5),
-                  //     spreadRadius: 1,
-                  //     blurRadius: 5,
-                  //     offset: const Offset(0, 3),
-                  //   ),
-                  // ],
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(
+                    top: mediaQueryHeight * 0.04,
+                    left: mediaQueryWidth * 0.03,
+                  ),
+                  child: Text(
+                    'RINGKASAN BULAN INI',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: mediaQueryWidth * 0.06,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFE55604),
+                    ),
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xFFFFFFFF),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.03,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  height: mediaQueryHeight * 0.3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    // color: const Color(0xFFFFFFFF),
+                    // add shadow effects
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.grey.withOpacity(0.5),
+                    //     spreadRadius: 1,
+                    //     blurRadius: 5,
+                    //     offset: const Offset(0, 3),
+                    //   ),
+                    // ],
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xFFFFFFFF),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
                             ),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Total Kasus Batas',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryWidth * 0.045,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFE55604),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.03,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Total Kasus Batas',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: mediaQueryWidth * 0.045,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFE55604),
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.03,
-                              top: mediaQueryHeight * 0.02,
-                              bottom: mediaQueryHeight * 0.02,
-                              right: mediaQueryWidth * 0.03,
-                            ),
-                            margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.3,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            child: FutureBuilder<int>(
-                              future: getAllKasusBatas(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  int allCases =
-                                      snapshot.data ?? 0; // Default to 0
-                                  return Text(
-                                    '$allCases',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: mediaQueryWidth * 0.07,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFE55604),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: mediaQueryHeight * 0.01,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xFFFFFFFF),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.03,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Kasus Batas Ditambahkan',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryWidth * 0.045,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFE55604),
+                            Container(
+                              padding: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.03,
+                                top: mediaQueryHeight * 0.02,
+                                bottom: mediaQueryHeight * 0.02,
+                                right: mediaQueryWidth * 0.03,
+                              ),
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.3,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: FutureBuilder<int>(
+                                future: getAllKasusBatas(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    int allCases =
+                                        snapshot.data ?? 0; // Default to 0
+                                    return Text(
+                                      '$allCases',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: mediaQueryWidth * 0.07,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFE55604),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.03,
-                              top: mediaQueryHeight * 0.02,
-                              bottom: mediaQueryHeight * 0.02,
-                              right: mediaQueryWidth * 0.03,
-                            ),
-                            margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.13,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            child: FutureBuilder<int>(
-                              future: getAddedForCurrentMonth(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  int addedCases =
-                                      snapshot.data ?? 0; // Default to 0
-                                  return Text(
-                                    '$addedCases',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: mediaQueryWidth * 0.07,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green,
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: mediaQueryHeight * 0.01,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xFFFFFFFF),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                      SizedBox(
+                        height: mediaQueryHeight * 0.01,
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.03,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xFFFFFFFF),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
                             ),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Kasus Batas Diperbarui',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryWidth * 0.045,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFFE55604),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.03,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Kasus Batas Ditambahkan',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: mediaQueryWidth * 0.045,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFE55604),
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.03,
-                              top: mediaQueryHeight * 0.02,
-                              bottom: mediaQueryHeight * 0.02,
-                              right: mediaQueryWidth * 0.03,
+                            Container(
+                              padding: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.03,
+                                top: mediaQueryHeight * 0.02,
+                                bottom: mediaQueryHeight * 0.02,
+                                right: mediaQueryWidth * 0.03,
+                              ),
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.13,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: FutureBuilder<int>(
+                                future: getAddedForCurrentMonth(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    int addedCases =
+                                        snapshot.data ?? 0; // Default to 0
+                                    return Text(
+                                      '$addedCases',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: mediaQueryWidth * 0.07,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
                             ),
-                            margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.19,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            child: FutureBuilder<int>(
-                              future: getUpdatedForCurrentMonth(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  int updatedCases =
-                                      snapshot.data ?? 0; // Default to 0
-                                  return Text(
-                                    '$updatedCases',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize: mediaQueryWidth * 0.07,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF26577C),
-                                    ),
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: mediaQueryHeight * 0.01,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xFFFFFFFF),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.03,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Kasus Batas Diperbarui',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: mediaQueryWidth * 0.045,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFFE55604),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.03,
+                                top: mediaQueryHeight * 0.02,
+                                bottom: mediaQueryHeight * 0.02,
+                                right: mediaQueryWidth * 0.03,
+                              ),
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.19,
+                              ),
+                              alignment: Alignment.centerLeft,
+                              child: FutureBuilder<int>(
+                                future: getUpdatedForCurrentMonth(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    int updatedCases =
+                                        snapshot.data ?? 0; // Default to 0
+                                    return Text(
+                                      '$updatedCases',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: mediaQueryWidth * 0.07,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF26577C),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
