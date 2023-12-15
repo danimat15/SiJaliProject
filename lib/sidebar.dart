@@ -4,7 +4,6 @@ import 'package:sijaliproject/login.dart';
 import 'package:sijaliproject/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pesan_masuk_mitra.dart'; // Import the new files
-import 'pesan_masuk_supervisor.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -78,17 +77,8 @@ class _SidebarState extends State<Sidebar> {
           ),
         ),
       );
-    } else if (role == 'supervisor') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => Home(
-            initialScreen: PesanMasukSupervisor(),
-            initialTab: 5,
-          ),
-        ),
-      );
     }
+
     // Add additional conditions if needed for other roles
   }
 
@@ -164,19 +154,20 @@ class _SidebarState extends State<Sidebar> {
               color: Color(0xFFEBE4D1),
             ),
           ),
-          ListTile(
-            leading: Icon(
-              Icons.mail_outline,
-              color: Color(0xFFEBE4D1),
-              size: mediaQueryWidth * 0.07,
+          if (role == "mitra")
+            ListTile(
+              leading: Icon(
+                Icons.mail_outline,
+                color: Color(0xFFEBE4D1),
+                size: mediaQueryWidth * 0.07,
+              ),
+              title: Text(
+                'Pesan Masuk',
+                style: TextStyle(
+                    color: Color(0xFFEBE4D1), fontSize: mediaQueryWidth * 0.04),
+              ),
+              onTap: handlePesanMasukTap,
             ),
-            title: Text(
-              'Pesan Masuk',
-              style: TextStyle(
-                  color: Color(0xFFEBE4D1), fontSize: mediaQueryWidth * 0.04),
-            ),
-            onTap: handlePesanMasukTap,
-          ),
           ListTile(
             leading: Icon(
               Icons.info_outline,
