@@ -33,7 +33,7 @@ class PesanMasukMitra extends StatelessWidget {
                     backgroundImage:
                         NetworkImage('https://via.placeholder.com/50'),
                   ),
-                  title: Text('User ${pesan['id_user']}'),
+                  title: Text('User Id ${pesan['id_user']}'),
                   subtitle: Text('${pesan['balasan']}'),
                   trailing: Text('${pesan['timestamp']}'),
                 );
