@@ -36,17 +36,31 @@ class _BantuanState extends State<Bantuan> {
   bool isAlertSet = false;
   bool isOffline = false;
 
-  Future<Position> _getCurrentLocation() async {
-    servicePermission = await Geolocator.isLocationServiceEnabled();
-    if (!servicePermission) {
-      print("Service disabled");
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+  Future<Position?> _getCurrentLocation() async {
+    try {
+      servicePermission = await Geolocator.isLocationServiceEnabled();
+      if (!servicePermission) {
+        print("Service disabled");
+        // Handle when location service is disabled
+        return null;
+      }
 
-    return await Geolocator.getCurrentPosition();
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print("Permission denied");
+          // Handle when user denies location permission
+          return null;
+        }
+      }
+
+      return await Geolocator.getCurrentPosition();
+    } catch (e) {
+      print("Error getting location: $e");
+      // Handle other errors that may occur
+      return null;
+    }
   }
 
   void addUsulan() async {
@@ -505,11 +519,26 @@ class _BantuanState extends State<Bantuan> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           onPressed: () async {
+                            // Check for location permission before getting the location
                             _currentLocation = await _getCurrentLocation();
-                            controllerLongitude.text =
-                                _currentLocation!.longitude.toString();
-                            controllerLatitude.text =
-                                _currentLocation!.latitude.toString();
+
+                            if (_currentLocation != null) {
+                              controllerLongitude.text =
+                                  _currentLocation!.longitude.toString();
+                              controllerLatitude.text =
+                                  _currentLocation!.latitude.toString();
+                            } else {
+                              // Handle when location is not available or permission is denied
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Tidak dapat mengambil lokasi. Pastikan izin lokasi diaktifkan."),
+                                  duration: Duration(seconds: 2),
+                                  backgroundColor: Colors.red,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
                           },
                           child: Padding(
                             padding: EdgeInsets.all(mediaQueryHeight * 0.02),

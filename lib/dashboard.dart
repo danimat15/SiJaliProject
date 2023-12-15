@@ -208,6 +208,154 @@ class _DashboardState extends State<Dashboard> {
                   },
                 ),
               ),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(
+                  top: mediaQueryHeight * 0.04,
+                  left: mediaQueryWidth * 0.03,
+                ),
+                child: Text(
+                  'RINGKASAN KASUS BATAS',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: mediaQueryWidth * 0.06,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFFE55604),
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(10),
+                height: mediaQueryHeight * 0.3,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: const Color(0xFFFFFFFF),
+                  // add shadow effects
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.5),
+                  //     spreadRadius: 1,
+                  //     blurRadius: 5,
+                  //     offset: const Offset(0, 3),
+                  //   ),
+                  // ],
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xFFFFFFFF),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.03,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Kasus Batas yang Ditambahkan',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: mediaQueryWidth * 0.045,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFE55604),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.03,
+                              top: mediaQueryHeight * 0.02,
+                              bottom: mediaQueryHeight * 0.02,
+                              right: mediaQueryWidth * 0.03,
+                            ),
+                            margin: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.09,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '99',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: mediaQueryWidth * 0.07,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: mediaQueryHeight * 0.01,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xFFFFFFFF),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.03,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Kasus Batas yang Diperbarui',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: mediaQueryWidth * 0.045,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFE55604),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.03,
+                              top: mediaQueryHeight * 0.02,
+                              bottom: mediaQueryHeight * 0.02,
+                              right: mediaQueryWidth * 0.03,
+                            ),
+                            margin: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.145,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              '99',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: mediaQueryWidth * 0.07,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF26577C),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

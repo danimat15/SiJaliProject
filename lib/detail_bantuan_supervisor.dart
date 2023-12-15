@@ -97,6 +97,50 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  Future<bool> _checkImageExists(String imagePath) async {
+    try {
+      final response = await http.head(
+        Uri.parse('https://${IpConfig.serverIp}/$imagePath'),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Error checking image existence: $e');
+      return false;
+    }
+  }
+
+  Widget _buildImageWidget(String? imagePath) {
+    if (imagePath != null && imagePath.isNotEmpty) {
+      return FutureBuilder(
+        future: _checkImageExists(imagePath),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == true) {
+              return Image.network(
+                'https://${IpConfig.serverIp}/$imagePath',
+                fit: BoxFit.cover,
+              );
+            } else {
+              // Handle case when image does not exist
+              return Image.network(
+                'https://via.placeholder.com/450x200', // Replace with your empty image URL
+                fit: BoxFit.cover,
+              );
+            }
+          } else {
+            // Handle case while the future is still running
+            return CircularProgressIndicator();
+          }
+        },
+      );
+    } else {
+      return Image.network(
+        'https://via.placeholder.com/450x200', // Replace with your empty image URL
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
   void clearForm() {
     // Clear the form fields or reset any necessary state variables
     balasan.clear();
@@ -225,13 +269,15 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: mediaQueryWidth * 0.04),
+                              horizontal: mediaQueryWidth * 0.04,
+                            ),
                             child: Text(
                               widget.detail['deskripsi'] ??
                                   'Tidak ada deskripsi',
                               style: TextStyle(
                                 fontSize: mediaQueryWidth * 0.04,
                               ),
+                              textAlign: TextAlign.justify,
                             ),
                           ),
                         ),
@@ -363,106 +409,94 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                         ),
                       ),
                       SizedBox(height: mediaQueryHeight * 0.01),
-                      if (widget.detail['foto'] != null)
-                        Center(
-                          // alignment: Alignment.centerLeft,
-                          // height: mediaQueryHeight * 0.2,
-                          // width: mediaQueryWidth * 0.9,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Set the border radius as needed
-                            child: Image.network(
-                              'http://${IpConfig.serverIp}/${widget.detail['foto']}',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )
-                      else
-                        Center(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
-                              'https://via.placeholder.com/150', // Replace with your empty image URL
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: _buildImageWidget(widget.detail['foto']),
                         ),
+                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: mediaQueryHeight * 0.05),
-                  child: Column(
+                if (widget.detail['jenis_bantuan'] ==
+                    'Permasalahan Kasus Batas')
+                  Column(
                     children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.only(
-                          left: mediaQueryWidth * 0.01,
-                          bottom: mediaQueryHeight * 0.01,
-                        ),
-                        child: Text(
-                          'Tanggapan',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: mediaQueryHeight * 0.03,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF26577C),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: mediaQueryHeight * 0.01),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFFFFFFFF),
-                        ),
+                      Padding(
+                        padding: EdgeInsets.only(top: mediaQueryHeight * 0.05),
                         child: Column(
                           children: [
-                            TextField(
-                              controller: balasan,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 8,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Masukkan Tanggapan...',
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: mediaQueryWidth * 0.04,
-                                  vertical: mediaQueryHeight * 0.02,
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              margin: EdgeInsets.only(
+                                left: mediaQueryWidth * 0.01,
+                                bottom: mediaQueryHeight * 0.01,
+                              ),
+                              child: Text(
+                                'Tanggapan',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: mediaQueryHeight * 0.03,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF26577C),
                                 ),
+                              ),
+                            ),
+                            SizedBox(height: mediaQueryHeight * 0.01),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xFFFFFFFF),
+                              ),
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    controller: balasan,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 8,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Masukkan Tanggapan...',
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: mediaQueryWidth * 0.04,
+                                        vertical: mediaQueryHeight * 0.02,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: mediaQueryHeight * 0.09),
-                  child: SizedBox(
-                    width: mediaQueryWidth * 0.9,
-                    child: MaterialButton(
-                      color: const Color(0xFFE55604),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      onPressed: () {
-                        addData();
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(mediaQueryHeight * 0.02),
-                        child: Text(
-                          "Submit",
-                          style: TextStyle(
-                            color: const Color(0xFFFFFFFF),
-                            fontSize: mediaQueryWidth * 0.06,
-                            fontWeight: FontWeight.w500,
+                      Padding(
+                        padding: EdgeInsets.only(top: mediaQueryHeight * 0.09),
+                        child: SizedBox(
+                          width: mediaQueryWidth * 0.9,
+                          child: MaterialButton(
+                            color: const Color(0xFFE55604),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            onPressed: () {
+                              addData();
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(mediaQueryHeight * 0.02),
+                              child: Text(
+                                "Submit",
+                                style: TextStyle(
+                                  color: const Color(0xFFFFFFFF),
+                                  fontSize: mediaQueryWidth * 0.06,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
               ],
             ),
           ),
