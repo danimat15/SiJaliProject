@@ -125,6 +125,108 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  Future<int> getAllKasusBatas() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://${IpConfig.serverIp}/get-jumlah-kasus-batas.php'),
+      );
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        List<dynamic> dataList = json.decode(response.body);
+
+        // Check if dataList is not empty
+        if (dataList.isNotEmpty) {
+          // Assuming the response is a list with a Map inside
+          Map<String, dynamic> data = dataList[0];
+          // Assuming the key in the map is 'added_cases_count'
+          return data['all_cases_count'];
+        } else {
+          // If the list is empty, return 0
+          return 0;
+        }
+      } else {
+        // If the response status code is not 200, return 0
+        return 0;
+      }
+    } catch (e) {
+      // If an exception occurs, return 0
+      print('Error fetching all cases: $e');
+      return 0;
+    }
+  }
+
+  Future<int> getAddedForCurrentMonth() async {
+    try {
+      DateTime now = DateTime.now();
+      int currentMonth = now.month;
+
+      print(currentMonth);
+      final response = await http.get(
+        Uri.parse(
+            'https://${IpConfig.serverIp}/get-jumlah-kasus-batas-ditambahkan.php?month=$currentMonth'),
+      );
+
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        List<dynamic> dataList = json.decode(response.body);
+
+        // Check if dataList is not empty
+        if (dataList.isNotEmpty) {
+          // Assuming the response is a list with a Map inside
+          Map<String, dynamic> data = dataList[0];
+          // Assuming the key in the map is 'added_cases_count'
+          return data['added_cases_count'];
+        } else {
+          // If the list is empty, return 0
+          return 0;
+        }
+      } else {
+        // If the response status code is not 200, return 0
+        return 0;
+      }
+    } catch (e) {
+      // If an exception occurs, return 0
+      print('Error fetching added cases: $e');
+      return 0;
+    }
+  }
+
+  Future<int> getUpdatedForCurrentMonth() async {
+    try {
+      DateTime now = DateTime.now();
+      int currentMonth = now.month;
+
+      var url =
+          'https://${IpConfig.serverIp}/get-jumlah-kasus-batas-diperbarui.php?month=$currentMonth';
+      var response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        List<dynamic> dataList = json.decode(response.body);
+
+        // Check if dataList is not empty
+        if (dataList.isNotEmpty) {
+          // Assuming the response is a list with a Map inside
+          Map<String, dynamic> data = dataList[0];
+          // Assuming the key in the map is 'updated_cases_count'
+          return data['updated_cases_count'];
+        } else {
+          // If the list is empty, return 0
+          return 0;
+        }
+      } else {
+        // If the response status code is not 200, return 0
+        return 0;
+      }
+    } catch (e) {
+      // If an exception occurs, return 0
+      print('Error fetching updated cases: $e');
+      return 0;
+    }
+  }
+
   @override
   void initState() {
     getConnectivity();
@@ -215,7 +317,7 @@ class _DashboardState extends State<Dashboard> {
                   left: mediaQueryWidth * 0.03,
                 ),
                 child: Text(
-                  'RINGKASAN KASUS BATAS',
+                  'RINGKASAN BULAN INI',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: mediaQueryWidth * 0.06,
@@ -263,7 +365,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Kasus Batas yang Ditambahkan',
+                              'Total Kasus Batas',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: mediaQueryWidth * 0.045,
@@ -280,17 +382,31 @@ class _DashboardState extends State<Dashboard> {
                               right: mediaQueryWidth * 0.03,
                             ),
                             margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.09,
+                              left: mediaQueryWidth * 0.3,
                             ),
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              '99',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryWidth * 0.07,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
-                              ),
+                            child: FutureBuilder<int>(
+                              future: getAllKasusBatas(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  int allCases =
+                                      snapshot.data ?? 0; // Default to 0
+                                  return Text(
+                                    '$allCases',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: mediaQueryWidth * 0.07,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFE55604),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                           ),
                         ],
@@ -320,7 +436,78 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Kasus Batas yang Diperbarui',
+                              'Kasus Batas Ditambahkan',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: mediaQueryWidth * 0.045,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFE55604),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.03,
+                              top: mediaQueryHeight * 0.02,
+                              bottom: mediaQueryHeight * 0.02,
+                              right: mediaQueryWidth * 0.03,
+                            ),
+                            margin: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.13,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: FutureBuilder<int>(
+                              future: getAddedForCurrentMonth(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  int addedCases =
+                                      snapshot.data ?? 0; // Default to 0
+                                  return Text(
+                                    '$addedCases',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: mediaQueryWidth * 0.07,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: mediaQueryHeight * 0.01,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color(0xFFFFFFFF),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: mediaQueryWidth * 0.03,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Kasus Batas Diperbarui',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: mediaQueryWidth * 0.045,
@@ -337,17 +524,31 @@ class _DashboardState extends State<Dashboard> {
                               right: mediaQueryWidth * 0.03,
                             ),
                             margin: EdgeInsets.only(
-                              left: mediaQueryWidth * 0.145,
+                              left: mediaQueryWidth * 0.19,
                             ),
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              '99',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: mediaQueryWidth * 0.07,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF26577C),
-                              ),
+                            child: FutureBuilder<int>(
+                              future: getUpdatedForCurrentMonth(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  int updatedCases =
+                                      snapshot.data ?? 0; // Default to 0
+                                  return Text(
+                                    '$updatedCases',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: mediaQueryWidth * 0.07,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF26577C),
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                           ),
                         ],
