@@ -130,7 +130,7 @@ class _SidebarState extends State<Sidebar> {
   Widget build(BuildContext context) {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
     return Drawer(
-      backgroundColor: const Color(0xFFE55604),
+      backgroundColor: Color(0xFFE55604),
       child: ListView(
         children: [
           UserAccountsDrawerHeader(

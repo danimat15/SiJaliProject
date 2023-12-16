@@ -85,15 +85,18 @@ class _WelcomeState extends State<Welcome> {
                 ),
                 SizedBox(
                     height: screenHeight *
-                        0.03), // Adjusted spacing between text and image
+                        0.01), // Adjusted spacing between text and image
 
                 Image(
                   image: AssetImage('images/welcome.png'),
-                  width: screenWidth * 0.8, // Adjusted image width
+                  width: screenWidth * 0.7, // Sesuaikan dengan kebutuhan
+                  height: screenHeight *
+                      0.5, // Tambahkan height untuk mengatur tinggi gambar
+                  fit: BoxFit.contain, // Sesuaikan fit sesuai kebutuhan
                 ),
                 SizedBox(
                     height: screenHeight *
-                        0.03), // Adjusted spacing between image and text
+                        0.01), // Adjusted spacing between image and text
 
                 Container(
                   margin: EdgeInsets.symmetric(

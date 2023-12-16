@@ -44,11 +44,12 @@ class PesanMasukMitra extends StatelessWidget {
                       ),
                     );
                   },
+                  // leading: Icon(Icon.mail_outline),
                   leading: const CircleAvatar(
                     backgroundImage:
-                        NetworkImage('https://via.placeholder.com/50'),
+                        NetworkImage('https://${IpConfig.serverIp}/email.png'),
                   ),
-                  title: Text('User Id ${pesan['id_user']}'),
+                  title: Text('Kode Permasalahan : #3100-${pesan['id']}'),
                   subtitle: Text(
                     '${pesan['deskripsi']}',
                     maxLines: 3, // Maksimal 3 baris

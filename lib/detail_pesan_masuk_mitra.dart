@@ -82,6 +82,7 @@ class DetailPesanMitra extends StatelessWidget {
                     '${detailPesan['balasan']}',
                     style: TextStyle(fontSize: 16.0),
                   ),
+
                   // Tampilkan data lain sesuai kebutuhan
                 ],
               ),
