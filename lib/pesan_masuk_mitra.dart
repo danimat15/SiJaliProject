@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sijaliproject/api_config.dart';
 
 class PesanMasukMitra extends StatelessWidget {
-  const PesanMasukMitra({super.key});
+  final int userId;
+  const PesanMasukMitra({Key? key, required this.userId}) : super(key: key);
 
   Future<List<dynamic>> _getPesan() async {
-    final response = await http
-        .get(Uri.parse('https://sijali.gaweyan.online/pesan_masuk_mitra.php'));
+    final response = await http.get(Uri.parse(
+        'https://${IpConfig.serverIp}/pesan_masuk_mitra.php?id=$userId'));
 
     if (response.statusCode == 200) {
       List<dynamic> pesan = json.decode(response.body);
@@ -40,10 +42,14 @@ class PesanMasukMitra extends StatelessWidget {
               },
             );
           } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
+            return Center(
+              child: Text("${snapshot.error}"),
+            );
           }
 
-          return const CircularProgressIndicator();
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );

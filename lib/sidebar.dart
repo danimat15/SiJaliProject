@@ -72,7 +72,7 @@ class _SidebarState extends State<Sidebar> {
         context,
         MaterialPageRoute(
           builder: (_) => Home(
-            initialScreen: PesanMasukMitra(),
+            initialScreen: PesanMasukMitra(userId: id),
             initialTab: 5,
           ),
         ),
