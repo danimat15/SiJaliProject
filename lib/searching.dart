@@ -145,7 +145,7 @@ class _SearchingState extends State<Searching> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://${IpConfig.serverIp}/searching-kasus-batas.php?search=${Uri.encodeComponent(searchQuery ?? '')}'),
+            'https://${IpConfig.serverIp}/searching-kasus-batas.php?search=${Uri.encodeComponent(searchQuery ?? '')}'),
       );
 
       if (response.statusCode == 200) {
@@ -202,13 +202,14 @@ class _SearchingState extends State<Searching> {
       // Add each token to the database
       for (String token in tokens) {
         final response = await http.post(
-          Uri.parse('http://${IpConfig.serverIp}/insert-kata-kunci.php'),
+          Uri.parse('https://${IpConfig.serverIp}/insert-kata-kunci.php'),
           body: {'keyword': token},
         );
 
         if (response.statusCode == 200) {
           print('Token added successfully: $token');
         } else {
+          print(response.statusCode);
           print('Failed to add token: $token');
         }
       }
