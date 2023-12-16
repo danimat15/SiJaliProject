@@ -246,6 +246,7 @@ class _DashboardState extends State<Dashboard> {
     final mediaQueryWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFEBE4D1),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(top: mediaQueryHeight * 0.01),

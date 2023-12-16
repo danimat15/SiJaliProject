@@ -16,6 +16,8 @@ class _SidebarState extends State<Sidebar> {
   String username = "";
   int id = 0;
   String role = "";
+  String nama = "";
+  Map<String, dynamic>? userData;
 
   getPref() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -23,6 +25,7 @@ class _SidebarState extends State<Sidebar> {
     if (islogin != null && islogin == true) {
       setState(() {
         username = pref.getString("username")!;
+        nama = pref.getString("nama")!;
         role = pref.getString("role")!;
         id = pref.getInt("id") ?? 0;
       });
@@ -44,6 +47,7 @@ class _SidebarState extends State<Sidebar> {
       preferences.remove("is_login");
       preferences.remove("username");
       preferences.remove("id");
+      preferences.remove("nama");
       preferences.remove("role");
     });
 
@@ -134,10 +138,13 @@ class _SidebarState extends State<Sidebar> {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(username,
-                style: TextStyle(
-                    color: Color(0xFF26577C),
-                    fontSize: mediaQueryWidth * 0.05)),
+            accountName: Text(
+              nama,
+              style: TextStyle(
+                color: Color(0xFF26577C),
+                fontSize: mediaQueryWidth * 0.05,
+              ),
+            ),
             accountEmail: Text(role,
                 style: TextStyle(
                     color: Color(0xFF26577C),

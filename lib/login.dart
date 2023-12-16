@@ -25,7 +25,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String? errormsg;
   bool? error, showprogress;
-  String? username, password, role;
+  String? username, password, role, nama;
 
   var _username = TextEditingController();
   var _password = TextEditingController();
@@ -38,38 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late StreamSubscription subscription;
   bool isDeviceConnected = false;
   bool isAlertSet = false;
-
-  Future<int?> getUserId(String username) async {
-    String apiurl = "https://${IpConfig.serverIp}/get-user-id.php";
-
-    try {
-      var response = await http.post(
-        Uri.parse(apiurl),
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: {
-          'username': username,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("User ID response: ${response.body}");
-        var jsondata = json.decode(response.body);
-
-        if (jsondata["success"]) {
-          return jsondata["id"];
-        } else {
-          print('Failed to get user ID');
-          return null;
-        }
-      } else {
-        print("Error during connecting to the server.");
-        return null;
-      }
-    } catch (e) {
-      print('Error: $e');
-      return null;
-    }
-  }
 
   getConnectivity() =>
       subscription = Connectivity().onConnectivityChanged.listen(
@@ -233,6 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
             showprogress = false;
           });
           role = jsondata["role"];
+          nama = jsondata["nama"];
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -245,8 +214,11 @@ class _LoginScreenState extends State<LoginScreen> {
           );
           String loggedInUsername = username ?? '';
           // Get user ID based on the username
-          int? userId = await getUserId(loggedInUsername);
-          saveSession(loggedInUsername, role, userId);
+          // int? userId = await getUserId(loggedInUsername);
+          int? userId = int.tryParse(jsondata["id"].toString());
+
+          print("User ID: $userId");
+          saveSession(loggedInUsername, role, userId, nama);
 
           print("User ID: $userId");
         } else {
@@ -257,6 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         print("Not 200");
+        print(response.statusCode);
         setState(() {
           showprogress = false;
           error = true;
@@ -270,10 +243,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  saveSession(String username, String? role, int? userId) async {
+  saveSession(String username, String? role, int? userId, String? nama) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString("username", username);
     await pref.setString("role", role ?? '');
+    await pref.setString("nama", nama ?? '');
     await pref.setInt("id", userId ?? 0);
     await pref.setBool("is_login", true);
 
