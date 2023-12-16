@@ -1,7 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:sijaliproject/api_config.dart';
+import 'detail_pesan_masuk_mitra.dart'; // Import halaman detail
 
 class PesanMasukMitra extends StatelessWidget {
   final int userId;
@@ -31,12 +32,29 @@ class PesanMasukMitra extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 var pesan = snapshot.data![index];
                 return ListTile(
+                  onTap: () {
+                    // Navigasi ke halaman detail_pesan_masuk_mitra.dart dengan mengirimkan id pesan
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPesanMitra(
+                          idPesan: pesan['id'],
+                          // Tambahkan parameter lain jika diperlukan
+                        ),
+                      ),
+                    );
+                  },
                   leading: const CircleAvatar(
                     backgroundImage:
                         NetworkImage('https://via.placeholder.com/50'),
                   ),
                   title: Text('User Id ${pesan['id_user']}'),
-                  subtitle: Text('${pesan['balasan']}'),
+                  subtitle: Text(
+                    '${pesan['deskripsi']}',
+                    maxLines: 3, // Maksimal 3 baris
+                    overflow: TextOverflow
+                        .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
+                  ),
                   trailing: Text('${pesan['timestamp']}'),
                 );
               },
