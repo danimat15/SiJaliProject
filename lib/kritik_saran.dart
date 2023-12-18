@@ -26,14 +26,21 @@ class _DashboardState extends State<KritikSaran> {
   bool isAlertSet = false;
   bool isOffline = false;
 
+  DateTime currentDateTime = DateTime.now();
+
   Future<void> insertrecord() async {
     if (kritik.text != "" || saran.text != "") {
+      String tanggal = currentDateTime.toIso8601String().split('T')[0];
+      String waktu =
+          currentDateTime.toIso8601String().split('T')[1].split('.')[0];
       try {
         String uri = "https://${IpConfig.serverIp}/insert-kritik-saran.php";
         var res = await http.post(Uri.parse(uri), body: {
           "kritik": kritik.text,
           "saran": saran.text,
-          "id_user": id.toString()
+          "id_user": id.toString(),
+          "tanggal": tanggal,
+          "waktu": waktu,
         });
 
         if (res.headers['content-type']?.contains('application/json') ??

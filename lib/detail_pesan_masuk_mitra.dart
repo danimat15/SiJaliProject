@@ -60,15 +60,39 @@ class DetailPesanMitra extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
+                  SizedBox(height: screenHeight * 0.009),
+                  Align(
+                    alignment: Alignment.topRight,
                     child: Text(
-                      'Permasalahan',
+                      '${detailPesan['tanggal']} pukul ${detailPesan['waktu']}',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenHeight * 0.03,
+                        fontSize: screenHeight * 0.02,
                       ),
                     ),
                   ),
+
+                  SizedBox(height: screenHeight * 0.04),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        left: screenWidth * 0.03,
+                        right: screenWidth * 0.03,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE55604),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        'Permasalahan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: screenHeight * 0.03,
+                        ),
+                      ),
+                    ),
+                  ),
+
                   SizedBox(height: screenHeight * 0.01),
                   Text(
                     '\n${detailPesan['deskripsi']}',
@@ -77,11 +101,22 @@ class DetailPesanMitra extends StatelessWidget {
                   ),
                   SizedBox(height: screenHeight * 0.05),
                   Center(
-                    child: Text(
-                      'Balasan',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenHeight * 0.03,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        left: screenWidth * 0.03,
+                        right: screenWidth * 0.03,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE55604),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        'Balasan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: screenHeight * 0.03,
+                        ),
                       ),
                     ),
                   ),

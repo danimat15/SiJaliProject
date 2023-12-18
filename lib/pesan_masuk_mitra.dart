@@ -58,14 +58,25 @@ class PesanMasukMitra extends StatelessWidget {
                         leading: const CircleAvatar(
                           backgroundImage: AssetImage('images/pesan.png'),
                         ),
-                        title: Text('Kode Permasalahan : #3100-${pesan['id']}'),
-                        subtitle: Text(
-                          '${pesan['deskripsi']}',
-                          maxLines: 3, // Maksimal 3 baris
-                          overflow: TextOverflow
-                              .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
+                        title: Text('${pesan['jenis_bantuan']}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${pesan['deskripsi']}',
+                              maxLines: 3, // Maksimal 3 baris
+                              overflow: TextOverflow
+                                  .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
+                            ),
+                            Text(
+                              '${pesan['tanggal']} pukul ${pesan['waktu']}',
+                              style: TextStyle(
+                                color: Color(0xFFE55604),
+                              ),
+                            ),
+                          ],
                         ),
-                        trailing: Text('${pesan['timestamp']}'),
+                        // Remove the trailing widget from here
                       ),
                       Divider(
                         color: Color(0xFFE55604),

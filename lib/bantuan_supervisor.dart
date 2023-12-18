@@ -284,6 +284,24 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                                                 Padding(
                                                   padding: EdgeInsets.only(
                                                       top: mediaQueryHeight *
+                                                          0.01,
+                                                      right: mediaQueryWidth *
+                                                          0.02),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: Text(
+                                                      '${kb['tanggal']} pukul ${kb['waktu']}',
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              mediaQueryHeight *
+                                                                  0.015),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: mediaQueryHeight *
                                                           0.02,
                                                       left: mediaQueryHeight *
                                                           0.02),
@@ -398,40 +416,60 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                                                 BorderRadius.circular(10),
                                             color: Color(0xFFFFFFFF),
                                           ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top:
-                                                        mediaQueryHeight * 0.02,
-                                                    left: mediaQueryHeight *
-                                                        0.02),
-                                                child: Text(
-                                                  '${mslh['nama']}',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          mediaQueryHeight *
-                                                              0.02),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: mediaQueryHeight *
+                                                          0.01,
+                                                      right: mediaQueryWidth *
+                                                          0.02),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: Text(
+                                                      '${mslh['tanggal']} pukul ${mslh['waktu']}',
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              mediaQueryHeight *
+                                                                  0.015),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top:
-                                                        mediaQueryHeight * 0.02,
-                                                    left: mediaQueryHeight *
-                                                        0.02),
-                                                child: Text(
-                                                  '${mslh['deskripsi']}',
-                                                  maxLines: 4,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: mediaQueryHeight *
+                                                          0.02,
+                                                      left: mediaQueryHeight *
+                                                          0.02),
+                                                  child: Text(
+                                                    '${mslh['nama']}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            mediaQueryHeight *
+                                                                0.02),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: mediaQueryHeight *
+                                                          0.02,
+                                                      left: mediaQueryHeight *
+                                                          0.02),
+                                                  child: Text(
+                                                    '${mslh['deskripsi']}',
+                                                    maxLines: 4,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

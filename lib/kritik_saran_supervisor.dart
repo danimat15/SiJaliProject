@@ -246,6 +246,14 @@ class _DashboardState extends State<SupervisorKritikSaran> {
                                     ), // Sesuaikan dengan kebutuhan
                                     child: Column(
                                       children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Text(
+                                            '${ks['tanggal']} pukul ${ks['waktu']}',
+                                            style: TextStyle(
+                                                fontSize: screenHeight * 0.015),
+                                          ),
+                                        ),
                                         Text(
                                           'Nama: ',
                                           style: TextStyle(

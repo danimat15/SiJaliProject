@@ -37,6 +37,8 @@ class _BantuanState extends State<Bantuan> {
   bool isAlertSet = false;
   bool isOffline = false;
 
+  DateTime currentDateTime = DateTime.now();
+
   Future<Position?> _getCurrentLocation() async {
     try {
       servicePermission = await Geolocator.isLocationServiceEnabled();
@@ -101,6 +103,10 @@ class _BantuanState extends State<Bantuan> {
     var url =
         Uri.parse("https://${IpConfig.serverIp}/insert-bantuan-usulan.php");
 
+    String tanggal = currentDateTime.toIso8601String().split('T')[0];
+    String waktu =
+        currentDateTime.toIso8601String().split('T')[1].split('.')[0];
+
     try {
       var request = http.MultipartRequest('POST', url);
       request.fields['id_user'] = id.toString();
@@ -108,6 +114,8 @@ class _BantuanState extends State<Bantuan> {
       request.fields['deskripsi'] = controllerDesc.text;
       request.fields['longitude'] = controllerLongitude.text;
       request.fields['latitude'] = controllerLatitude.text;
+      request.fields['tanggal'] = tanggal;
+      request.fields['waktu'] = waktu;
 
       if (image != null) {
         var imageFile = await http.MultipartFile.fromPath('foto', image!.path);
@@ -152,11 +160,17 @@ class _BantuanState extends State<Bantuan> {
     var url = Uri.parse(
         "https://${IpConfig.serverIp}/insert-bantuan-permasalahan.php");
 
+    String tanggal = currentDateTime.toIso8601String().split('T')[0];
+    String waktu =
+        currentDateTime.toIso8601String().split('T')[1].split('.')[0];
+
     try {
       var request = http.MultipartRequest('POST', url);
       request.fields['id_user'] = id.toString();
       request.fields['jenis_bantuan'] = selectedValue;
       request.fields['deskripsi'] = controllerDesc.text;
+      request.fields['tanggal'] = tanggal;
+      request.fields['waktu'] = waktu;
 
       if (image != null) {
         var imageFile = await http.MultipartFile.fromPath('foto', image!.path);

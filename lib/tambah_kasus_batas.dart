@@ -482,7 +482,10 @@ class _TambahKasusBatasState extends State<TambahKasusBatas> {
                     items: dropdownItems.map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,
-                        child: Text(item),
+                        child: Text(
+                          item,
+                          overflow: TextOverflow.ellipsis, // Truncate long text
+                        ),
                       );
                     }).toList(),
                     underline: Container(),
