@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sijaliproject/about_app.dart';
+import 'package:sijaliproject/home_supervisor.dart';
 import 'package:sijaliproject/login.dart';
 import 'package:sijaliproject/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -188,15 +189,27 @@ class _SidebarState extends State<Sidebar> {
                   color: Color(0xFFEBE4D1), fontSize: mediaQueryWidth * 0.04),
             ),
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => Home(
-                    initialScreen: const AboutApp(),
-                    initialTab: 5,
+              if (role == 'mitra') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => Home(
+                      initialScreen: const AboutApp(),
+                      initialTab: 5,
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => HomeSupervisor(
+                      initialScreen: const AboutApp(),
+                      initialTab: 5,
+                    ),
+                  ),
+                );
+              }
             },
           ),
           ListTile(
