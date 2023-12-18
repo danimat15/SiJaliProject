@@ -252,6 +252,8 @@ class _DashboardState extends State<Notifikasi> {
                                           ),
                                           SizedBox(height: screenHeight * 0.01),
                                           Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 'Jenis Usaha: ',
