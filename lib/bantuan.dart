@@ -14,6 +14,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:sijaliproject/searching_offline.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Bantuan extends StatefulWidget {
   const Bantuan({super.key});
@@ -47,11 +48,27 @@ class _BantuanState extends State<Bantuan> {
 
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          print("Permission denied");
-          // Handle when user denies location permission
-          return null;
+        // Request location permission again if denied
+        if (await Permission.location.status.isDenied) {
+          // Request permission
+          await Permission.location.request();
+
+          // Check if the permission is granted now
+          if (await Permission.location.status.isGranted) {
+            // Permission granted, try getting the location again
+            return await Geolocator.getCurrentPosition();
+          } else {
+            // Permission still not granted, handle accordingly
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Akses lokasi ditolak."),
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            return null;
+          }
         }
       }
 
@@ -250,13 +267,61 @@ class _BantuanState extends State<Bantuan> {
 
   Future getImageFoto() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? imagePicked =
-        await picker.pickImage(source: ImageSource.camera);
-    if (imagePicked != null) {
-      image = File(imagePicked.path);
-      setState(() {});
+    try {
+      final XFile? imagePicked =
+          await picker.pickImage(source: ImageSource.camera);
+
+      if (imagePicked != null) {
+        image = File(imagePicked.path);
+        setState(() {});
+      } else {
+        // User canceled the camera operation or denied access
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Operasi kamera dibatalkan."),
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+        // Check and request camera permission again if denied
+        if (await Permission.camera.status.isDenied) {
+          // Request permission
+          await Permission.camera.request();
+
+          // Check if the permission is granted now
+          if (await Permission.camera.status.isGranted) {
+            // Permission granted, try opening the camera again
+            await getImageFoto();
+          } else {
+            // Permission still not granted, handle accordingly
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Akses kamera ditolak."),
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      // Handle any potential errors
+      print("Error picking image: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Terjadi kesalahan saat mengakses kamera."),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
+
+// ...
 
   Future<void> resetImageGalery() async {
     await getImageGalery(); // Buka galeri untuk memilih gambar
