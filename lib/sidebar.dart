@@ -151,11 +151,12 @@ class _SidebarState extends State<Sidebar> {
                     fontSize: mediaQueryWidth * 0.04)),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Text(
-                id.toString(),
-                style: TextStyle(
-                    color: Color(0xFF26577C), fontSize: mediaQueryWidth * 0.05),
-              ),
+              backgroundImage: AssetImage('images/welcome.png'),
+              // child: Text(
+              //   id.toString(),
+              //   style: TextStyle(
+              //       color: Color(0xFF26577C), fontSize: mediaQueryWidth * 0.05),
+              // ),
             ),
             decoration: BoxDecoration(
               color: Color(0xFFEBE4D1),
