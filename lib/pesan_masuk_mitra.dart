@@ -31,32 +31,35 @@ class PesanMasukMitra extends StatelessWidget {
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
                 var pesan = snapshot.data![index];
-                return ListTile(
-                  onTap: () {
-                    // Navigasi ke halaman detail_pesan_masuk_mitra.dart dengan mengirimkan id pesan
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailPesanMitra(
-                          idPesan: pesan['id'],
-                          // Tambahkan parameter lain jika diperlukan
-                        ),
+                return Column(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        // Navigasi ke halaman detail_pesan_masuk_mitra.dart dengan mengirimkan id pesan
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPesanMitra(
+                              idPesan: pesan['id'],
+                              // Tambahkan parameter lain jika diperlukan
+                            ),
+                          ),
+                        );
+                      },
+                      leading: const CircleAvatar(
+                        backgroundImage: AssetImage('images/pesan.png'),
                       ),
-                    );
-                  },
-                  // leading: Icon(Icon.mail_outline),
-                  leading: const CircleAvatar(
-                    backgroundImage:
-                        NetworkImage('https://${IpConfig.serverIp}/email.png'),
-                  ),
-                  title: Text('Kode Permasalahan : #3100-${pesan['id']}'),
-                  subtitle: Text(
-                    '${pesan['deskripsi']}',
-                    maxLines: 3, // Maksimal 3 baris
-                    overflow: TextOverflow
-                        .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
-                  ),
-                  trailing: Text('${pesan['timestamp']}'),
+                      title: Text('Kode Permasalahan : #3100-${pesan['id']}'),
+                      subtitle: Text(
+                        '${pesan['deskripsi']}',
+                        maxLines: 3, // Maksimal 3 baris
+                        overflow: TextOverflow
+                            .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
+                      ),
+                      trailing: Text('${pesan['timestamp']}'),
+                    ),
+                    Divider(), // Tambahkan Divider setelah setiap ListTile
+                  ],
                 );
               },
             );
