@@ -159,6 +159,7 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
   @override
   Widget build(BuildContext context) {
     double mediaQueryHeight = MediaQuery.of(context).size.height;
+    double mediaQueryWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Color(0xFFEBE4D1),
@@ -258,9 +259,11 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                                           );
                                         },
                                         child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                            vertical: 5,
-                                            horizontal: 10,
+                                          margin: EdgeInsets.only(
+                                            top: mediaQueryHeight * 0.01,
+                                            bottom: mediaQueryHeight * 0.01,
+                                            left: mediaQueryWidth * 0.02,
+                                            right: mediaQueryWidth * 0.02,
                                           ),
                                           height: MediaQuery.of(context)
                                                   .size
@@ -271,24 +274,46 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                                                 BorderRadius.circular(10),
                                             color: Color(0xFFFFFFFF),
                                           ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16.0),
-                                                child: Text(
-                                                  '${kb['deskripsi']}',
-                                                  maxLines: 4,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              // mainAxisAlignment:
+                                              //     MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: mediaQueryHeight *
+                                                          0.02,
+                                                      left: mediaQueryHeight *
+                                                          0.02),
+                                                  child: Text(
+                                                    '${kb['nama']}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            mediaQueryHeight *
+                                                                0.02),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: mediaQueryHeight *
+                                                          0.02,
+                                                      left: mediaQueryHeight *
+                                                          0.02,
+                                                      bottom: mediaQueryHeight *
+                                                          0.02),
+                                                  child: Text(
+                                                    '${kb['deskripsi']}',
+                                                    maxLines: 4,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );
@@ -358,9 +383,11 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                                           );
                                         },
                                         child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                            vertical: 5,
-                                            horizontal: 10,
+                                          margin: EdgeInsets.only(
+                                            top: mediaQueryHeight * 0.01,
+                                            bottom: mediaQueryHeight * 0.01,
+                                            left: mediaQueryWidth * 0.02,
+                                            right: mediaQueryWidth * 0.02,
                                           ),
                                           height: MediaQuery.of(context)
                                                   .size
@@ -372,15 +399,31 @@ class _BantuanSupervisorState extends State<BantuanSupervisor> {
                                             color: Color(0xFFFFFFFF),
                                           ),
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16.0),
+                                                padding: EdgeInsets.only(
+                                                    top:
+                                                        mediaQueryHeight * 0.02,
+                                                    left: mediaQueryHeight *
+                                                        0.02),
+                                                child: Text(
+                                                  '${mslh['nama']}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize:
+                                                          mediaQueryHeight *
+                                                              0.02),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top:
+                                                        mediaQueryHeight * 0.02,
+                                                    left: mediaQueryHeight *
+                                                        0.02),
                                                 child: Text(
                                                   '${mslh['deskripsi']}',
                                                   maxLines: 4,

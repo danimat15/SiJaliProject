@@ -193,6 +193,55 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                           bottom: mediaQueryHeight * 0.01,
                         ),
                         child: Text(
+                          'Nama Pengirim',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: mediaQueryHeight * 0.03,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF26577C),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: mediaQueryHeight * 0.01),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        height: mediaQueryHeight * 0.05,
+                        width: mediaQueryWidth * 0.9,
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   color: Color(0xFFFFFFFF),
+                        // ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: mediaQueryWidth * 0.02),
+                              child: Text(
+                                widget.detail['nama'],
+                                style: TextStyle(
+                                  fontSize: mediaQueryWidth * 0.05,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: mediaQueryHeight * 0.05),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        margin: EdgeInsets.only(
+                          left: mediaQueryWidth * 0.01,
+                          bottom: mediaQueryHeight * 0.01,
+                        ),
+                        child: Text(
                           'Jenis Bantuan',
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -207,17 +256,17 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                         alignment: Alignment.centerLeft,
                         height: mediaQueryHeight * 0.05,
                         width: mediaQueryWidth * 0.9,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFFFFFFFF),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   color: Color(0xFFFFFFFF),
+                        // ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: mediaQueryWidth * 0.04),
+                                  horizontal: mediaQueryWidth * 0.02),
                               child: Text(
                                 widget.detail['jenis_bantuan'],
                                 style: TextStyle(
@@ -253,13 +302,11 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                       ),
                       SizedBox(height: mediaQueryHeight * 0.01),
                       Container(
-                        alignment: Alignment.centerLeft,
-                        height: mediaQueryHeight * 0.3,
                         width: mediaQueryWidth * 0.9,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFFFFFFFF),
-                        ),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   color: Color(0xFFFFFFFF),
+                        // ),
                         child: SingleChildScrollView(
                           padding: EdgeInsets.only(
                             top: mediaQueryHeight * 0.01,
@@ -269,7 +316,7 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                              horizontal: mediaQueryWidth * 0.04,
+                              horizontal: mediaQueryWidth * 0.02,
                             ),
                             child: Text(
                               widget.detail['deskripsi'] ??
@@ -312,17 +359,17 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                           alignment: Alignment.centerLeft,
                           height: mediaQueryHeight * 0.05,
                           width: mediaQueryWidth * 0.9,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xFFFFFFFF),
-                          ),
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(10),
+                          //   color: Color(0xFFFFFFFF),
+                          // ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: mediaQueryWidth * 0.04),
+                                    horizontal: mediaQueryWidth * 0.02),
                                 child: Text(
                                   widget.detail['longitude'],
                                   style: TextStyle(
@@ -363,17 +410,17 @@ class _DetailBantuanSupervisorState extends State<DetailBantuanSupervisor> {
                           alignment: Alignment.centerLeft,
                           height: mediaQueryHeight * 0.05,
                           width: mediaQueryWidth * 0.9,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xFFFFFFFF),
-                          ),
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(10),
+                          //   color: Color(0xFFFFFFFF),
+                          // ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: mediaQueryWidth * 0.04),
+                                    horizontal: mediaQueryWidth * 0.02),
                                 child: Text(
                                   widget.detail['latitude'],
                                   style: TextStyle(

@@ -28,7 +28,6 @@ class _DetailSearchingState extends State<DetailSearching> {
               style: TextStyle(color: Color(0xFF26577C))),
           content: Text('Apakah anda yakin untuk menghapus kasus batas ini?',
               style: TextStyle(color: Color(0xFF26577C))),
-          backgroundColor: Color(0xFFEBE4D1),
           actions: [
             ElevatedButton.icon(
               onPressed: () {

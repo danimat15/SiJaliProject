@@ -21,7 +21,10 @@ class DetailPesanMitra extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Color(0xFFEBE4D1),
       appBar: AppBar(
         title: Text(
           'Detail Pesan',
@@ -48,8 +51,12 @@ class DetailPesanMitra extends StatelessWidget {
           } else {
             Map<String, dynamic> detailPesan = snapshot.data!;
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            return Container(
+              padding: EdgeInsets.only(
+                  top: screenHeight * 0.03,
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.05,
+                  bottom: screenHeight * 0.03),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -58,29 +65,31 @@ class DetailPesanMitra extends StatelessWidget {
                       'Permasalahan',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
+                        fontSize: screenHeight * 0.03,
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  SizedBox(height: screenHeight * 0.01),
                   Text(
                     '\n${detailPesan['deskripsi']}',
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: screenHeight * 0.02),
+                    textAlign: TextAlign.justify,
                   ),
-                  SizedBox(height: 16.0),
+                  SizedBox(height: screenHeight * 0.05),
                   Center(
                     child: Text(
                       'Balasan',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
+                        fontSize: screenHeight * 0.03,
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  SizedBox(height: screenHeight * 0.02),
                   Text(
                     '${detailPesan['balasan']}',
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: screenHeight * 0.02),
+                    textAlign: TextAlign.justify,
                   ),
 
                   // Tampilkan data lain sesuai kebutuhan

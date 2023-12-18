@@ -22,7 +22,10 @@ class PesanMasukMitra extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Color(0xFFEBE4D1),
       body: FutureBuilder<List<dynamic>>(
         future: _getPesan(),
         builder: (context, snapshot) {
@@ -31,35 +34,45 @@ class PesanMasukMitra extends StatelessWidget {
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
                 var pesan = snapshot.data![index];
-                return Column(
-                  children: [
-                    ListTile(
-                      onTap: () {
-                        // Navigasi ke halaman detail_pesan_masuk_mitra.dart dengan mengirimkan id pesan
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailPesanMitra(
-                              idPesan: pesan['id'],
-                              // Tambahkan parameter lain jika diperlukan
+                return Container(
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.03,
+                    left: screenWidth * 0.03,
+                    right: screenWidth * 0.05,
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        onTap: () {
+                          // Navigasi ke halaman detail_pesan_masuk_mitra.dart dengan mengirimkan id pesan
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPesanMitra(
+                                idPesan: pesan['id'],
+                                // Tambahkan parameter lain jika diperlukan
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      leading: const CircleAvatar(
-                        backgroundImage: AssetImage('images/pesan.png'),
+                          );
+                        },
+                        leading: const CircleAvatar(
+                          backgroundImage: AssetImage('images/pesan.png'),
+                        ),
+                        title: Text('Kode Permasalahan : #3100-${pesan['id']}'),
+                        subtitle: Text(
+                          '${pesan['deskripsi']}',
+                          maxLines: 3, // Maksimal 3 baris
+                          overflow: TextOverflow
+                              .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
+                        ),
+                        trailing: Text('${pesan['timestamp']}'),
                       ),
-                      title: Text('Kode Permasalahan : #3100-${pesan['id']}'),
-                      subtitle: Text(
-                        '${pesan['deskripsi']}',
-                        maxLines: 3, // Maksimal 3 baris
-                        overflow: TextOverflow
-                            .ellipsis, // Tampilkan ellipsis jika melebihi 3 baris
-                      ),
-                      trailing: Text('${pesan['timestamp']}'),
-                    ),
-                    Divider(), // Tambahkan Divider setelah setiap ListTile
-                  ],
+                      Divider(
+                        color: Color(0xFFE55604),
+                        thickness: 2,
+                      ), // Tambahkan Divider setelah setiap ListTile
+                    ],
+                  ),
                 );
               },
             );
