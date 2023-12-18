@@ -70,7 +70,7 @@ class _DetailKritikSaranState extends State<DetailKritikSaran> {
                   left: screenWidth * 0.05,
                 ),
                 child: Text(
-                  'Id',
+                  'Nama',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontFamily: "poppins",
@@ -83,10 +83,11 @@ class _DetailKritikSaranState extends State<DetailKritikSaran> {
               Container(
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.05,
-                // padding: EdgeInsets.symmetric(
-                //   horizontal: screenWidth * 0.02,
-                //   vertical: screenHeight * 0.1,
-                // ),
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(
+                  top: screenHeight * 0.015,
+                  left: screenWidth * 0.05,
+                ),
                 margin: EdgeInsets.only(
                   top: screenHeight * 0.01,
                   left: screenWidth * 0.05,
@@ -108,7 +109,7 @@ class _DetailKritikSaranState extends State<DetailKritikSaran> {
                 child: Column(
                   children: [
                     Text(
-                      widget.data['id_user'] ?? 'Tidak ada kritik',
+                      widget.data['nama'] ?? 'Nama Tidak Ditemukan',
                       style: TextStyle(
                         fontSize: screenWidth * 0.04,
                       ),
@@ -134,9 +135,11 @@ class _DetailKritikSaranState extends State<DetailKritikSaran> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.02,
-                  vertical: screenHeight * 0.1,
+                padding: EdgeInsets.only(
+                  top: screenHeight * 0.02,
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.02,
+                  bottom: screenHeight * 0.02,
                 ),
                 margin: EdgeInsets.only(
                   top: screenHeight * 0.01,
@@ -164,6 +167,7 @@ class _DetailKritikSaranState extends State<DetailKritikSaran> {
                       style: TextStyle(
                         fontSize: screenWidth * 0.04,
                       ),
+                      textAlign: TextAlign.justify,
                     ),
                   ],
                 ),
@@ -186,9 +190,11 @@ class _DetailKritikSaranState extends State<DetailKritikSaran> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.02,
-                  vertical: screenHeight * 0.1,
+                padding: EdgeInsets.only(
+                  top: screenHeight * 0.02,
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.02,
+                  bottom: screenHeight * 0.02,
                 ),
                 margin: EdgeInsets.only(
                   top: screenHeight * 0.01,
