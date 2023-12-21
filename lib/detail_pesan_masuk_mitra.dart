@@ -92,7 +92,6 @@ class DetailPesanMitra extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   SizedBox(height: screenHeight * 0.01),
                   Text(
                     '\n${detailPesan['deskripsi']}',
@@ -120,7 +119,7 @@ class DetailPesanMitra extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.03),
                   Text(
                     '${detailPesan['balasan']}',
                     style: TextStyle(fontSize: screenHeight * 0.02),

@@ -210,103 +210,146 @@ class _DashboardState extends State<SupervisorKritikSaran> {
                         snapshot.data as List<Map<String, dynamic>>;
 
                     return Column(
-                      children: kritikSaranList.map((ks) {
-                        return GestureDetector(
-                          onTap: () {
-                            //Ketika kotak diklik, pindah ke halaman detail
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    DetailKritikSaran(data: ks),
+                      children: kritikSaranList.isEmpty
+                          ? [
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: screenHeight * 0.01,
+                                  left: screenWidth * 0.02,
+                                  right: screenWidth * 0.02,
+                                ),
+                                height: screenHeight * 0.15,
+                                width: screenWidth * 0.9,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Color(0xFFFFFFFF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Tidak ada kritik dan saran',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: screenHeight * 0.02,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              top: screenHeight * 0.01,
-                              left: screenWidth * 0.02,
-                              right: screenWidth * 0.02,
-                            ),
-                            height: screenHeight * 0.3,
-                            width: screenWidth * 0.9,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Color(0xFFFFFFFF),
-                            ),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: screenHeight * 0.02,
-                                      left: screenWidth * 0.03,
-                                      right: screenWidth * 0.03,
-                                      bottom: screenHeight * 0.02,
-                                    ), // Sesuaikan dengan kebutuhan
+                            ]
+                          : kritikSaranList.map((ks) {
+                              return GestureDetector(
+                                onTap: () {
+                                  //Ketika kotak diklik, pindah ke halaman detail
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailKritikSaran(data: ks),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    top: screenHeight * 0.01,
+                                    left: screenWidth * 0.02,
+                                    right: screenWidth * 0.02,
+                                  ),
+                                  height: screenHeight * 0.3,
+                                  width: screenWidth * 0.9,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                  child: SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            '${ks['tanggal']} pukul ${ks['waktu']}',
-                                            style: TextStyle(
-                                                fontSize: screenHeight * 0.015),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                            top: screenHeight * 0.02,
+                                            left: screenWidth * 0.03,
+                                            right: screenWidth * 0.03,
+                                            bottom: screenHeight * 0.02,
+                                          ), // Sesuaikan dengan kebutuhan
+                                          child: Column(
+                                            children: [
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Text(
+                                                  '${ks['tanggal']} pukul ${ks['waktu']}',
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          screenHeight * 0.015),
+                                                ),
+                                              ),
+                                              Text(
+                                                'Nama: ',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        screenHeight * 0.03),
+                                              ),
+                                              Text(
+                                                '${ks['nama']}',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        screenHeight * 0.02),
+                                                textAlign: TextAlign.left,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              SizedBox(
+                                                  height: screenHeight * 0.02),
+                                              Text(
+                                                'Kritik: ',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        screenHeight * 0.03),
+                                              ),
+                                              Text(
+                                                '${ks['kritik']}',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        screenHeight * 0.02),
+                                                textAlign: TextAlign.left,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              SizedBox(
+                                                  height: screenHeight * 0.02),
+                                              Text(
+                                                'Saran: ',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize:
+                                                        screenHeight * 0.03),
+                                              ),
+                                              Text(
+                                                '${ks['saran']}',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        screenHeight * 0.02),
+                                                textAlign: TextAlign.left,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        Text(
-                                          'Nama: ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: screenHeight * 0.03),
-                                        ),
-                                        Text(
-                                          '${ks['nama']}',
-                                          style: TextStyle(
-                                              fontSize: screenHeight * 0.02),
-                                          textAlign: TextAlign.left,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        SizedBox(height: screenHeight * 0.02),
-                                        Text(
-                                          'Kritik: ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: screenHeight * 0.03),
-                                        ),
-                                        Text(
-                                          '${ks['kritik']}',
-                                          style: TextStyle(
-                                              fontSize: screenHeight * 0.02),
-                                          textAlign: TextAlign.left,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        SizedBox(height: screenHeight * 0.02),
-                                        Text(
-                                          'Saran: ',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: screenHeight * 0.03),
-                                        ),
-                                        Text(
-                                          '${ks['saran']}',
-                                          style: TextStyle(
-                                              fontSize: screenHeight * 0.02),
-                                          textAlign: TextAlign.left,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                                ),
+                              );
+                            }).toList(),
                     );
                   }
                 },

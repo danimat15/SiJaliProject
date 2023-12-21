@@ -30,6 +30,16 @@ class PesanMasukMitra extends StatelessWidget {
         future: _getPesan(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return Center(
+                child: Text(
+                  "Tidak ada permasalahan",
+                  style: TextStyle(
+                      fontSize: screenHeight * 0.03,
+                      fontWeight: FontWeight.bold),
+                ),
+              );
+            }
             return ListView.builder(
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {

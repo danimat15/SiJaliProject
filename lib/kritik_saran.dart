@@ -191,15 +191,13 @@ class _DashboardState extends State<KritikSaran> {
 
   Future<void> checkInternetOnReturn() async {
     bool isConnected = await checkInternet();
+    if (this.mounted) {
+      setState(() {
+        isOffline = !isConnected;
+      });
+    }
     if (!isConnected) {
-      setState(() {
-        isOffline = true;
-      });
       showOfflineModePopup();
-    } else {
-      setState(() {
-        isOffline = false;
-      });
     }
   }
 

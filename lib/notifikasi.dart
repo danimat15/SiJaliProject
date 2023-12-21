@@ -190,119 +190,179 @@ class _DashboardState extends State<Notifikasi> {
                       // notifikasiList
                       //     .sort((a, b) => b['Waktu'].compareTo(a['Waktu']));
                       return Column(
-                        children: notifikasiList.map((notif) {
-                          return GestureDetector(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                top: screenHeight * 0.01,
-                                left: screenWidth * 0.02,
-                                right: screenWidth * 0.02,
-                              ),
-                              height: screenHeight * 0.15,
-                              width: screenWidth * 0.9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color(0xFFFFFFFF),
-                              ),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: screenHeight * 0.01,
-                                        left: screenWidth * 0.02,
-                                        right: screenWidth * 0.02,
-                                        bottom: screenHeight * 0.01,
+                        children: notifikasiList.isEmpty
+                            ? [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: screenHeight * 0.01,
+                                    left: screenWidth * 0.02,
+                                    right: screenWidth * 0.02,
+                                  ),
+                                  height: screenHeight * 0.15,
+                                  width: screenWidth * 0.9,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color(0xFFFFFFFF),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 3),
                                       ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tidak ada pembaruan kasus batas',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: screenHeight * 0.02,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                            : notifikasiList.map((notif) {
+                                return GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      top: screenHeight * 0.01,
+                                      left: screenWidth * 0.02,
+                                      right: screenWidth * 0.02,
+                                    ),
+                                    height: screenHeight * 0.15,
+                                    width: screenWidth * 0.9,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xFFFFFFFF),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 1,
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: SingleChildScrollView(
                                       child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Kasus batas telah ${notif['Status']}!',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: screenHeight * 0.02,
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              top: screenHeight * 0.01,
+                                              left: screenWidth * 0.02,
+                                              right: screenWidth * 0.02,
+                                              bottom: screenHeight * 0.01,
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'Kasus batas telah ${notif['Status']}!',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            screenHeight * 0.02,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Kode KBLI: ',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: screenHeight * 0.02,
+                                                SizedBox(
+                                                    height:
+                                                        screenHeight * 0.01),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'Kode KBLI: ',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            screenHeight * 0.02,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${notif['Kode KBLI']}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        maxLines: 3,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  '${notif['Kode KBLI']}',
-                                                  textAlign: TextAlign.left,
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                SizedBox(
+                                                    height:
+                                                        screenHeight * 0.01),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Jenis Usaha: ',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            screenHeight * 0.02,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${notif['Jenis Usaha']}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        maxLines: 3,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Jenis Usaha: ',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: screenHeight * 0.02,
+                                                SizedBox(
+                                                    height:
+                                                        screenHeight * 0.01),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'Tanggal: ',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize:
+                                                            screenHeight * 0.02,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${notif['Tanggal']} pukul ${notif['Waktu']}',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        maxLines: 3,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  '${notif['Jenis Usaha']}',
-                                                  textAlign: TextAlign.left,
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: screenHeight * 0.01),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Tanggal: ',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: screenHeight * 0.02,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  '${notif['Tanggal']} pukul ${notif['Waktu']}',
-                                                  textAlign: TextAlign.left,
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                                  ),
+                                );
+                              }).toList(),
                       );
                     }
                   },
